@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<symbol version="7" name="bootloader_sd">
+    <symboltype>BLOCK</symboltype>
+    <timestamp>2011-11-7T10:10:1</timestamp>
+    <pin polarity="Input" x="0" y="-672" name="CD_n" />
+    <pin polarity="Input" x="0" y="-464" name="MISO" />
+    <pin polarity="Input" x="0" y="-256" name="FILE_SELECT(7:0)" />
+    <pin polarity="Input" x="0" y="-48" name="CLK50MHz" />
+    <pin polarity="BiDirectional" x="496" y="-544" name="ram_D(7:0)" />
+    <pin polarity="Output" x="496" y="-608" name="MOSI" />
+    <pin polarity="Output" x="496" y="-480" name="ram_A(22:0)" />
+    <pin polarity="Output" x="496" y="-224" name="SCLK" />
+    <pin polarity="Output" x="496" y="-160" name="ram_W_n" />
+    <pin polarity="Output" x="496" y="-96" name="LEDS(7:0)" />
+    <pin polarity="Output" x="496" y="-32" name="SS_n" />
+    <pin polarity="Output" x="496" y="32" name="is_ucpm" />
+    <pin polarity="Output" x="496" y="-288" name="FILE_LOADED" />
+    <graph>
+        <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="248" y="-712" type="symbol" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-672" type="pin CD_n" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-464" type="pin MISO" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-256" type="pin FILE_SELECT(7:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-48" type="pin CLK50MHz" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-544" type="pin ram_D(7:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-608" type="pin MOSI" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-480" type="pin ram_A(22:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-224" type="pin SCLK" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-160" type="pin ram_W_n" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-96" type="pin LEDS(7:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-32" type="pin SS_n" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="32" type="pin is_ucpm" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-288" type="pin FILE_LOADED" />
+        <line x2="496" y1="32" y2="32" x1="432" />
+        <line x2="0" y1="-672" y2="-672" x1="64" />
+        <line x2="0" y1="-464" y2="-464" x1="64" />
+        <rect width="64" x="0" y="-268" height="24" />
+        <line x2="0" y1="-256" y2="-256" x1="64" />
+        <line x2="0" y1="-48" y2="-48" x1="64" />
+        <line x2="496" y1="-608" y2="-608" x1="432" />
+        <rect width="64" x="432" y="-556" height="24" />
+        <line x2="496" y1="-544" y2="-544" x1="432" />
+        <rect width="64" x="432" y="-492" height="24" />
+        <line x2="496" y1="-480" y2="-480" x1="432" />
+        <line x2="496" y1="-288" y2="-288" x1="432" />
+        <line x2="496" y1="-224" y2="-224" x1="432" />
+        <line x2="496" y1="-160" y2="-160" x1="432" />
+        <rect width="64" x="432" y="-108" height="24" />
+        <line x2="496" y1="-96" y2="-96" x1="432" />
+        <line x2="496" y1="-32" y2="-32" x1="432" />
+        <rect width="368" x="64" y="-704" height="748" />
+    </graph>
+</symbol>

@@ -1,0 +1,2 @@
+sch2hdl,-intstyle,ise,-family,spartan3e,-flat,-suppress,-vhdl,E:/BuildYourOwnZ80Computer/amstrad_motherboard.vhf,-w,E:/BuildYourOwnZ80Computer/amstrad_motherboard.sch
+sch2hdl,-intstyle,ise,-family,spartan3e,-flat,-suppress,-vhdl,E:/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.vhf,-w,E:/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.sch
