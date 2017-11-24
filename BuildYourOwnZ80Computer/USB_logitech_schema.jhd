@@ -1,3 +1,0 @@
-MODULE USB_logitech_schema
-	SUBMODULE USB_logitech
-		INSTANCE XLXI_7

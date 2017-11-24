@@ -35,7 +35,7 @@ entity NEXUS_RGB is
            BLUE_FF : in  STD_LOGIC_VECTOR(1 downto 0);
            RED3 : out  STD_LOGIC_VECTOR (2 downto 0);
            GREEN3 : out  STD_LOGIC_VECTOR (2 downto 0);
-           BLUE2 : out  STD_LOGIC_VECTOR (1 downto 0));
+           BLUE3 : out  STD_LOGIC_VECTOR (2 downto 0));
 end NEXUS_RGB;
 
 architecture Behavioral of NEXUS_RGB is
@@ -44,6 +44,6 @@ begin
 RED3<= RED_FF & "1" when RED_FF>"00" else "000";
 --GREEN3<= GREEN_FF & "1" when GREEN_FF>"00" else "000";
 GREEN3<= GREEN_FFF;
-BLUE2<= BLUE_FF;
+BLUE3<= BLUE_FF & "1" when BLUE_FF>"00" else "000";
 end Behavioral;
 

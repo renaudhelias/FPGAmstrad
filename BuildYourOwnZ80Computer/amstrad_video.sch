@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <drawing version="7">
-    <attr value="spartan3e" name="DeviceFamilyName">
+    <attr value="spartan6" name="DeviceFamilyName">
         <trait delete="all:0" />
         <trait editname="all:0" />
         <trait edittrait="all:0" />
@@ -32,7 +32,7 @@
         <signal name="XLXN_694(12:0)" />
         <signal name="RED3(2:0)" />
         <signal name="GREEN3(2:0)" />
-        <signal name="BLUE2(1:0)" />
+        <signal name="BLUE3(2:0)" />
         <signal name="XLXN_701(1:0)" />
         <signal name="XLXN_702(2:0)" />
         <signal name="XLXN_703(1:0)" />
@@ -48,7 +48,7 @@
         <port polarity="Output" name="VSYNC" />
         <port polarity="Output" name="RED3(2:0)" />
         <port polarity="Output" name="GREEN3(2:0)" />
-        <port polarity="Output" name="BLUE2(1:0)" />
+        <port polarity="Output" name="BLUE3(2:0)" />
         <blockdef name="inv">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-32" x1="0" />
@@ -89,7 +89,7 @@
             <line x2="64" y1="-128" y2="-96" x1="64" />
         </blockdef>
         <blockdef name="NEXUS_RGB">
-            <timestamp>2011-12-7T12:12:30</timestamp>
+            <timestamp>2017-11-19T6:8:8</timestamp>
             <rect width="64" x="320" y="-428" height="24" />
             <line x2="384" y1="-416" y2="-416" x1="320" />
             <rect width="64" x="0" y="-396" height="24" />
@@ -233,7 +233,7 @@
             <blockpin signalname="GREEN3(2:0)" name="GREEN3(2:0)" />
             <blockpin signalname="XLXN_702(2:0)" name="GREEN_FFF(2:0)" />
             <blockpin signalname="XLXN_703(1:0)" name="BLUE_FF(1:0)" />
-            <blockpin signalname="BLUE2(1:0)" name="BLUE2(1:0)" />
+            <blockpin signalname="BLUE3(2:0)" name="BLUE3(2:0)" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
@@ -275,14 +275,6 @@
             <wire x2="1952" y1="1808" y2="1808" x1="944" />
         </branch>
         <iomarker fontsize="28" x="352" y="1200" name="crtc_D(7:0)" orien="R180" />
-        <branch name="CLK4MHz">
-            <wire x2="320" y1="880" y2="880" x1="64" />
-            <wire x2="544" y1="880" y2="880" x1="320" />
-            <wire x2="64" y1="880" y2="2416" x1="64" />
-            <wire x2="608" y1="2416" y2="2416" x1="64" />
-            <wire x2="320" y1="672" y2="672" x1="224" />
-            <wire x2="320" y1="672" y2="880" x1="320" />
-        </branch>
         <iomarker fontsize="28" x="224" y="672" name="CLK4MHz" orien="R180" />
         <instance x="0" y="288" name="XLXI_470" orien="R90" />
         <branch name="CLK25MHz">
@@ -385,12 +377,12 @@
         <branch name="GREEN3(2:0)">
             <wire x2="2640" y1="992" y2="992" x1="2576" />
         </branch>
-        <branch name="BLUE2(1:0)">
+        <branch name="BLUE3(2:0)">
             <wire x2="2640" y1="1072" y2="1072" x1="2576" />
         </branch>
         <iomarker fontsize="28" x="2640" y="928" name="RED3(2:0)" orien="R0" />
         <iomarker fontsize="28" x="2640" y="992" name="GREEN3(2:0)" orien="R0" />
-        <iomarker fontsize="28" x="2640" y="1072" name="BLUE2(1:0)" orien="R0" />
+        <iomarker fontsize="28" x="2640" y="1072" name="BLUE3(2:0)" orien="R0" />
         <branch name="XLXN_701(1:0)">
             <wire x2="2080" y1="880" y2="880" x1="1984" />
             <wire x2="2080" y1="880" y2="960" x1="2080" />
@@ -405,6 +397,16 @@
             <wire x2="2032" y1="1008" y2="1008" x1="1984" />
             <wire x2="2032" y1="1008" y2="1104" x1="2032" />
             <wire x2="2192" y1="1104" y2="1104" x1="2032" />
+        </branch>
+        <branch name="CLK4MHz">
+            <wire x2="320" y1="880" y2="880" x1="64" />
+            <wire x2="544" y1="880" y2="880" x1="320" />
+            <wire x2="64" y1="880" y2="2416" x1="64" />
+            <wire x2="208" y1="2416" y2="2416" x1="64" />
+            <wire x2="432" y1="2416" y2="2416" x1="208" />
+            <wire x2="608" y1="2416" y2="2416" x1="432" />
+            <wire x2="320" y1="672" y2="672" x1="224" />
+            <wire x2="320" y1="672" y2="880" x1="320" />
         </branch>
     </sheet>
 </drawing>

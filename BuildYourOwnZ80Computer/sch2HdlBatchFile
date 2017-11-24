@@ -1,2 +1,3 @@
-sch2hdl,-intstyle,ise,-family,spartan3e,-flat,-suppress,-vhdl,E:/BuildYourOwnZ80Computer/amstrad_motherboard.vhf,-w,E:/BuildYourOwnZ80Computer/amstrad_motherboard.sch
-sch2hdl,-intstyle,ise,-family,spartan3e,-flat,-suppress,-vhdl,E:/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.vhf,-w,E:/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.sch
+sch2hdl,-sympath,E:/fpga/ZXUNO/V4/8bit/CPC/ipcore_dir,-intstyle,ise,-family,spartan6,-flat,-suppress,-vhdl,E:/fpga/ZXUNO/V4/8bit/CPC/divideby3.vhf,-w,E:/fpga/ZXUNO/V4/8bit/CPC/divideby3.sch
+sch2hdl,-sympath,E:/fpga/ZXUNO/V4/8bit/CPC/ipcore_dir,-intstyle,ise,-family,spartan6,-flat,-suppress,-vhdl,E:/fpga/ZXUNO/V4/8bit/CPC/amstrad_switch_z80_vga_sd.vhf,-w,E:/fpga/ZXUNO/V4/8bit/CPC/amstrad_switch_z80_vga_sd.sch
+sch2hdl,-sympath,E:/fpga/ZXUNO/V4/8bit/CPC/ipcore_dir,-intstyle,ise,-family,spartan6,-flat,-suppress,-vhdl,E:/fpga/ZXUNO/V4/8bit/CPC/amstrad_switch_z80_vga_sd.vhf,-w,E:/fpga/ZXUNO/V4/8bit/CPC/amstrad_switch_z80_vga_sd.sch

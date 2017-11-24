@@ -89,8 +89,8 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 	 -- 
 --   --modeline label pxcl HDsp HSS HSE HTot VDsp VSS VSE VTot flags
 --   --modeline "640x480@60" 25.2 640 656 752 800 480 490 492 525 -vsync -hsync
-              label_modeline  :string:="640x480@60";--(ignored  by  svgalib) mainly there to be compatible with XF86Config.   I  use  the  format  "Width  x   Height   @   Vert.Refresh", but that's just personal taste...
-              pxcl:string:="25.2"; -- the pixel clock in MHz
+--              label_modeline  :string:="640x480@60";--(ignored  by  svgalib) mainly there to be compatible with XF86Config.   I  use  the  format  "Width  x   Height   @   Vert.Refresh", but that's just personal taste...
+--              pxcl:string:="25.2"; -- the pixel clock in MHz
               HDsp:integer:=640; -- size of the visible area (horizontal/vertical)
               HSS:integer:=656; -- Sync start (horizontal/vertical)
               HSE:integer:=752; -- Sync end (horizontal/vertical)
@@ -145,12 +145,12 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 		21=>"000011",
 		28=>"010000",
 		24=>"010001",
-			29=>"010011",
+		29=>"010011",
 		12=>"110000",
-			5=>"110001",
+		 5=>"110001",
 		13=>"110011",
 		22=>"000100",
-		6=>"000101",
+		 6=>"000101",
 		23=>"000111",
 		30=>"010100",
 		 0=>"010101",
@@ -169,25 +169,25 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 		11=>"111111",
 		
 		-- others color >=27
-		1=>"010101",
-		8=>"110001",
-		9=>"111101",
+		 1=>"010101",
+		 8=>"110001",
+		 9=>"111101",
 		16=>"000001",
 		17=>"001101"
 		);
 	type pen_type is array(15 downto 0) of std_logic_vector(5 downto 0);
 	signal pen:pen_type:=(
-		palette(4),palette(12),palette(21),palette(28),
-		palette(24),palette(29),palette(12),palette(5),
-		palette(13),palette(22),palette(6),palette(23),
-		palette(30),palette(0),palette(31),palette(14)
+		palette( 4),palette(12),palette(21),palette(28),
+		palette(24),palette(29),palette(12),palette( 5),
+		palette(13),palette(22),palette( 6),palette(23),
+		palette(30),palette( 0),palette(31),palette(14)
 	);
 	signal GREEN_FF:std_logic_vector(1 downto 0);
 	signal MODE_select:STD_LOGIC_VECTOR (1 downto 0);
 begin
-
+		
 GREEN<= GREEN_FF & "1" when GREEN_FF>"00" else "000";
-
+		
 aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable horizontal_counter : integer range 0 to HTot:=0;
 	variable vertical_counter : integer range 0 to VTot:=0;
@@ -242,32 +242,32 @@ begin
 					color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel));
 				end if;
 			end loop;
-			if MODE_select="10" then
-				RED<=pen(conv_integer(color(3)))(5 downto 4);
-				GREEN_FF<=pen(conv_integer(color(3)))(3 downto 2);
-				BLUE<=pen(conv_integer(color(3)))(1 downto 0);
-			elsif MODE_select="01" then
-				RED<=pen(conv_integer(color(3 downto 2)))(5 downto 4);
-				GREEN_FF<=pen(conv_integer(color(3 downto 2)))(3 downto 2);
-				BLUE<=pen(conv_integer(color(3 downto 2)))(1 downto 0);
-			elsif MODE_select="00" then
+			if MODE_select="00" then
 				color_patch:=color(3) & color(1) & color(2) & color(0); -- pas relou xD
-				RED<=pen(conv_integer(color_patch))(5 downto 4);
+				RED     <=pen(conv_integer(color_patch))(5 downto 4);
 				GREEN_FF<=pen(conv_integer(color_patch))(3 downto 2);
-				BLUE<=pen(conv_integer(color_patch))(1 downto 0);
+				BLUE    <=pen(conv_integer(color_patch))(1 downto 0);
+			elsif MODE_select="01" then
+				RED     <=pen(conv_integer(color(3 downto 2)))(5 downto 4);
+				GREEN_FF<=pen(conv_integer(color(3 downto 2)))(3 downto 2);
+				BLUE    <=pen(conv_integer(color(3 downto 2)))(1 downto 0);
+			elsif MODE_select="10" then
+				RED     <=pen(conv_integer(color(3)))(5 downto 4);
+				GREEN_FF<=pen(conv_integer(color(3)))(3 downto 2);
+				BLUE    <=pen(conv_integer(color(3)))(1 downto 0);
 			else -- MODE 11
-				RED<="01";
+				RED     <="01";
 				GREEN_FF<="11";
-				BLUE<="01";
+				BLUE    <="01";
 			end if;
 		elsif etat_rgb = DO_BORDER then
-			RED<="00";
+			RED     <="00";
 			GREEN_FF<="00";
-			BLUE<="00";
+			BLUE    <="00";
 		else
-			RED<="00";
+			RED     <="00";
 			GREEN_FF<="00";
-			BLUE<="00";
+			BLUE    <="00";
 		end if;
 		if etat_hsync = DO_HSYNC then
 			hsync<='1' xor nhsync;
@@ -289,6 +289,9 @@ begin
 		elsif palette_action=DO_COLOR then
 			pen(palette_color)<=palette(conv_integer(palette_D));
 		end if;
+		
+--		MODE_select<="01"; -- para pruebas
+
 		if palette_vertical_counter mod VZoom=0 then -- une ligne sur deux déjà...
 			if palette_horizontal_counter<1 then
 				-- mode

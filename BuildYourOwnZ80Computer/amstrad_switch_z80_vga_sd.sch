@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <drawing version="7">
-    <attr value="spartan3e" name="DeviceFamilyName">
+    <attr value="spartan6" name="DeviceFamilyName">
         <trait delete="all:0" />
         <trait editname="all:0" />
         <trait edittrait="all:0" />
@@ -15,7 +15,6 @@
         <signal name="ram_D_U(7:0)" />
         <signal name="CD_n" />
         <signal name="MISO" />
-        <signal name="FILE_SELECT(7:0)" />
         <signal name="MOSI" />
         <signal name="SCLK" />
         <signal name="SS_n" />
@@ -23,7 +22,7 @@
         <signal name="UB1_n" />
         <signal name="LB1_n" />
         <signal name="CE1_n" />
-        <signal name="BLUE2(1:0)" />
+        <signal name="BLUE3(2:0)" />
         <signal name="GREEN3(2:0)" />
         <signal name="RED3(2:0)" />
         <signal name="VSYNC" />
@@ -50,15 +49,17 @@
         <signal name="XLXN_744" />
         <signal name="XLXN_745(12:0)" />
         <signal name="XLXN_746(7:0)" />
+        <signal name="cero,cero,cero,cero,cero,uno,uno,uno">
+        </signal>
+        <signal name="cero" />
+        <signal name="uno" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Output" name="ADV1_n" />
         <port polarity="Output" name="CLK1" />
         <port polarity="Output" name="CRE1" />
         <port polarity="BiDirectional" name="ram_D_U(7:0)" />
-        <port polarity="Input" name="CD_n" />
         <port polarity="Input" name="MISO" />
-        <port polarity="Input" name="FILE_SELECT(7:0)" />
         <port polarity="Output" name="MOSI" />
         <port polarity="Output" name="SCLK" />
         <port polarity="Output" name="SS_n" />
@@ -66,7 +67,7 @@
         <port polarity="Output" name="UB1_n" />
         <port polarity="Output" name="LB1_n" />
         <port polarity="Output" name="CE1_n" />
-        <port polarity="Output" name="BLUE2(1:0)" />
+        <port polarity="Output" name="BLUE3(2:0)" />
         <port polarity="Output" name="GREEN3(2:0)" />
         <port polarity="Output" name="RED3(2:0)" />
         <port polarity="Output" name="VSYNC" />
@@ -185,6 +186,12 @@
             <line x2="448" y1="-32" y2="-32" x1="384" />
             <rect width="320" x="64" y="-768" height="1196" />
         </blockdef>
+        <blockdef name="vcc">
+            <timestamp>2000-1-1T10:10:10</timestamp>
+            <line x2="64" y1="-32" y2="-64" x1="64" />
+            <line x2="64" y1="0" y2="-32" x1="64" />
+            <line x2="32" y1="-64" y2="-64" x1="96" />
+        </blockdef>
         <block symbolname="divideby3" name="XLXI_415">
             <blockpin signalname="CLK50MHz" name="CLKin" />
             <blockpin signalname="XLXN_717" name="CLKout" />
@@ -204,7 +211,7 @@
         <block symbolname="bootloader_sd" name="XLXI_462">
             <blockpin signalname="CD_n" name="CD_n" />
             <blockpin signalname="MISO" name="MISO" />
-            <blockpin signalname="FILE_SELECT(7:0)" name="FILE_SELECT(7:0)" />
+            <blockpin signalname="cero,cero,cero,cero,cero,uno,uno,uno" name="FILE_SELECT(7:0)" />
             <blockpin signalname="CLK8(2)" name="CLK50MHz" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="MOSI" name="MOSI" />
@@ -242,7 +249,7 @@
             <blockpin signalname="VSYNC" name="VSYNC" />
             <blockpin signalname="RED3(2:0)" name="RED3(2:0)" />
             <blockpin signalname="GREEN3(2:0)" name="GREEN3(2:0)" />
-            <blockpin signalname="BLUE2(1:0)" name="BLUE2(1:0)" />
+            <blockpin signalname="BLUE3(2:0)" name="BLUE3(2:0)" />
         </block>
         <block symbolname="amstrad_motherboard" name="XLXI_512">
             <blockpin signalname="XLXN_737(22:0)" name="init_A(22:0)" />
@@ -266,6 +273,15 @@
             <blockpin signalname="XLXN_744" name="palette_W" />
             <blockpin signalname="XLXN_745(12:0)" name="palette_A(12:0)" />
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
+        </block>
+        <block symbolname="gnd" name="XLXI_513">
+            <blockpin signalname="CD_n" name="G" />
+        </block>
+        <block symbolname="gnd" name="XLXI_253">
+            <blockpin signalname="cero" name="G" />
+        </block>
+        <block symbolname="vcc" name="XLXI_256">
+            <blockpin signalname="uno" name="P" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="7040" height="5440">
@@ -296,15 +312,13 @@
         <instance x="6144" y="736" name="XLXI_462" orien="R0">
         </instance>
         <branch name="CD_n">
-            <wire x2="6144" y1="64" y2="64" x1="6064" />
+            <wire x2="5744" y1="64" y2="304" x1="5744" />
+            <wire x2="5792" y1="304" y2="304" x1="5744" />
+            <wire x2="6144" y1="64" y2="64" x1="5744" />
+            <wire x2="5792" y1="224" y2="304" x1="5792" />
         </branch>
         <branch name="MISO">
             <wire x2="6144" y1="272" y2="272" x1="6064" />
-        </branch>
-        <branch name="FILE_SELECT(7:0)">
-            <attrtext style="alignment:SOFT-BCENTER" attrname="Name" x="6080" y="480" type="branch" />
-            <wire x2="6080" y1="480" y2="480" x1="6000" />
-            <wire x2="6144" y1="480" y2="480" x1="6080" />
         </branch>
         <branch name="MOSI">
             <wire x2="6688" y1="128" y2="128" x1="6640" />
@@ -315,7 +329,6 @@
         <branch name="SS_n">
             <wire x2="6688" y1="704" y2="704" x1="6640" />
         </branch>
-        <iomarker fontsize="28" x="6064" y="64" name="CD_n" orien="R180" />
         <iomarker fontsize="28" x="6064" y="272" name="MISO" orien="R180" />
         <iomarker fontsize="28" x="6688" y="704" name="SS_n" orien="R0" />
         <iomarker fontsize="28" x="6672" y="512" name="SCLK" orien="R0" />
@@ -341,13 +354,12 @@
         <iomarker fontsize="28" x="6912" y="3232" name="CE1_n" orien="R90" />
         <instance x="48" y="1120" name="XLXI_500" orien="R0">
         </instance>
-        <iomarker fontsize="28" x="6000" y="480" name="FILE_SELECT(7:0)" orien="R180" />
         <instance x="4320" y="1488" name="XLXI_511" orien="R0">
         </instance>
-        <branch name="BLUE2(1:0)">
+        <branch name="BLUE3(2:0)">
             <wire x2="4848" y1="1440" y2="1440" x1="4784" />
         </branch>
-        <iomarker fontsize="28" x="4848" y="1440" name="BLUE2(1:0)" orien="R0" />
+        <iomarker fontsize="28" x="4848" y="1440" name="BLUE3(2:0)" orien="R0" />
         <branch name="GREEN3(2:0)">
             <wire x2="4848" y1="1328" y2="1328" x1="4784" />
         </branch>
@@ -473,16 +485,6 @@
             <wire x2="6672" y1="16" y2="256" x1="6672" />
             <wire x2="6672" y1="256" y2="256" x1="6640" />
         </branch>
-        <branch name="CLK8(2)">
-            <wire x2="2592" y1="1328" y2="1328" x1="2480" />
-            <wire x2="2592" y1="1328" y2="1456" x1="2592" />
-            <wire x2="3056" y1="1456" y2="1456" x1="2592" />
-            <wire x2="2480" y1="1328" y2="1360" x1="2480" />
-            <wire x2="6144" y1="688" y2="688" x1="2592" />
-            <wire x2="2592" y1="688" y2="1328" x1="2592" />
-            <wire x2="4320" y1="1392" y2="1392" x1="3056" />
-            <wire x2="3056" y1="1392" y2="1456" x1="3056" />
-        </branch>
         <branch name="CLK8(2:0)">
             <wire x2="2480" y1="1456" y2="1456" x1="1872" />
         </branch>
@@ -510,5 +512,30 @@
             <wire x2="4320" y1="1520" y2="1520" x1="3504" />
             <wire x2="3504" y1="1520" y2="2400" x1="3504" />
         </branch>
+        <instance x="5856" y="96" name="XLXI_513" orien="R180" />
+        <branch name="CLK8(2)">
+            <wire x2="2480" y1="1328" y2="1360" x1="2480" />
+            <wire x2="2592" y1="1328" y2="1328" x1="2480" />
+            <wire x2="2592" y1="1328" y2="1456" x1="2592" />
+            <wire x2="3056" y1="1456" y2="1456" x1="2592" />
+            <wire x2="6144" y1="688" y2="688" x1="2592" />
+            <wire x2="2592" y1="688" y2="1328" x1="2592" />
+            <wire x2="4320" y1="1392" y2="1392" x1="3056" />
+            <wire x2="3056" y1="1392" y2="1456" x1="3056" />
+        </branch>
+        <branch name="cero,cero,cero,cero,cero,uno,uno,uno">
+            <attrtext style="alignment:SOFT-RIGHT;fontsize:28;fontname:Arial" attrname="Name" x="5968" y="480" type="branch" />
+            <wire x2="6144" y1="480" y2="480" x1="5968" />
+        </branch>
+        <branch name="cero">
+            <attrtext style="alignment:SOFT-VLEFT" attrname="Name" x="5408" y="480" type="branch" />
+            <wire x2="5408" y1="480" y2="512" x1="5408" />
+        </branch>
+        <instance x="5344" y="640" name="XLXI_253" orien="R0" />
+        <branch name="uno">
+            <attrtext style="alignment:SOFT-VRIGHT" attrname="Name" x="5392" y="368" type="branch" />
+            <wire x2="5392" y1="320" y2="368" x1="5392" />
+        </branch>
+        <instance x="5328" y="320" name="XLXI_256" orien="R0" />
     </sheet>
 </drawing>

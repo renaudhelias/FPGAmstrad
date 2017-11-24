@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <drawing version="7">
-    <attr value="spartan3e" name="DeviceFamilyName">
+    <attr value="spartan6" name="DeviceFamilyName">
         <trait delete="all:0" />
         <trait editname="all:0" />
         <trait edittrait="all:0" />
@@ -10,7 +10,6 @@
         <signal name="CLKin" />
         <signal name="XLXN_34" />
         <signal name="XLXN_35" />
-        <signal name="XLXN_36" />
         <port polarity="Output" name="CLKout" />
         <port polarity="Input" name="CLKin" />
         <blockdef name="cb2ce">
@@ -68,19 +67,6 @@
         </branch>
         <iomarker fontsize="28" x="400" y="848" name="CLKin" orien="R180" />
         <iomarker fontsize="28" x="2752" y="400" name="CLKout" orien="R0" />
-        <branch name="CLKout">
-            <wire x2="1024" y1="800" y2="800" x1="960" />
-            <wire x2="1024" y1="800" y2="1152" x1="1024" />
-            <wire x2="1024" y1="1152" y2="1152" x1="960" />
-            <wire x2="960" y1="1152" y2="1440" x1="960" />
-            <wire x2="1024" y1="1440" y2="1440" x1="960" />
-            <wire x2="1024" y1="1440" y2="1456" x1="1024" />
-            <wire x2="2256" y1="1456" y2="1456" x1="1024" />
-            <wire x2="2608" y1="448" y2="448" x1="2256" />
-            <wire x2="2256" y1="448" y2="1456" x1="2256" />
-            <wire x2="2752" y1="400" y2="400" x1="2608" />
-            <wire x2="2608" y1="400" y2="448" x1="2608" />
-        </branch>
         <instance x="576" y="1120" name="XLXI_24" orien="R0" />
         <branch name="XLXN_34">
             <wire x2="576" y1="928" y2="928" x1="496" />
@@ -90,5 +76,20 @@
             <wire x2="576" y1="1088" y2="1088" x1="496" />
         </branch>
         <instance x="432" y="1216" name="XLXI_26" orien="R0" />
+        <branch name="CLKout">
+            <wire x2="1024" y1="800" y2="800" x1="960" />
+            <wire x2="1024" y1="800" y2="1152" x1="1024" />
+            <wire x2="1024" y1="1152" y2="1152" x1="960" />
+            <wire x2="960" y1="1152" y2="1440" x1="960" />
+            <wire x2="1024" y1="1440" y2="1440" x1="960" />
+            <wire x2="1024" y1="1440" y2="1456" x1="1024" />
+            <wire x2="2256" y1="1456" y2="1456" x1="1024" />
+            <wire x2="2256" y1="448" y2="1456" x1="2256" />
+            <wire x2="2336" y1="448" y2="448" x1="2256" />
+            <wire x2="2560" y1="448" y2="448" x1="2336" />
+            <wire x2="2608" y1="448" y2="448" x1="2560" />
+            <wire x2="2752" y1="400" y2="400" x1="2608" />
+            <wire x2="2608" y1="400" y2="448" x1="2608" />
+        </branch>
     </sheet>
 </drawing>

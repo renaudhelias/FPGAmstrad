@@ -1,5 +1,0 @@
-MODULE amstrad_oscillo
-	SUBMODULE raptor
-		INSTANCE XLXI_2
-	SUBMODULE data_off
-		INSTANCE XLXI_461

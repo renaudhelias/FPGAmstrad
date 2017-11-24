@@ -1,3 +1,0 @@
-MODULE Z80_adresses_test
-	SUBMODULE T80se
-		INSTANCE XLXI_1

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="info" file="LIT" num="243" delta="old" >Logical network <arg fmt="%s" index="1">XLXI_512/AmstradT80/u0/Regs/bG1[7].Reg2L/SPO</arg> has no load.
+</msg>
+
+<msg type="info" file="LIT" num="395" delta="old" >The above <arg fmt="%s" index="1">info</arg> message is repeated <arg fmt="%d" index="2">42</arg> more times for the following (max. 5 shown):
+<arg fmt="%s" index="3">XLXI_512/AmstradT80/u0/Regs/bG1[7].Reg2H/SPO,
+XLXI_512/AmstradT80/u0/Regs/bG1[6].Reg2L/SPO,
+XLXI_512/AmstradT80/u0/Regs/bG1[6].Reg2H/SPO,
+XLXI_512/AmstradT80/u0/Regs/bG1[5].Reg2L/SPO,
+XLXI_512/AmstradT80/u0/Regs/bG1[5].Reg2H/SPO</arg>
+To see the details of these <arg fmt="%s" index="4">info</arg> messages, please use the -detail switch.
+</msg>
+
+<msg type="info" file="MapLib" num="562" delta="old" >No environment variables are currently set.
+</msg>
+
+<msg type="info" file="MapLib" num="159" delta="old" >Net Timing constraints on signal <arg fmt="%s" index="1">CLK50MHz</arg> are pushed forward through input buffer.
+</msg>
+
+<msg type="info" file="Pack" num="1716" delta="old" >Initializing temperature to <arg fmt="%0.3f" index="1">85.000</arg> Celsius. (default - Range: <arg fmt="%0.3f" index="2">0.000</arg> to <arg fmt="%0.3f" index="3">85.000</arg> Celsius)
+</msg>
+
+<msg type="info" file="Pack" num="1720" delta="old" >Initializing voltage to <arg fmt="%0.3f" index="1">1.140</arg> Volts. (default - Range: <arg fmt="%0.3f" index="2">1.140</arg> to <arg fmt="%0.3f" index="3">1.260</arg> Volts)
+</msg>
+
+<msg type="info" file="Map" num="215" delta="old" >The Interim Design Summary has been generated in the MAP Report (.mrp).
+</msg>
+
+<msg type="warning" file="Place" num="837" delta="old" >Partially locked IO Bus is found. 
+<arg fmt="%s" index="1"> Following components of the bus are not locked: 
+	 Comp: JOYSTICK1&lt;7&gt;
+	 Comp: JOYSTICK1&lt;6&gt;
+</arg>
+</msg>
+
+<msg type="warning" file="Place" num="838" delta="old" >An IO Bus with more than one IO standard is found.
+<arg fmt="%s" index="1">Components associated with this bus are as follows: 
+	 Comp: JOYSTICK1&lt;0&gt;   IOSTANDARD = LVCMOS33
+	 Comp: JOYSTICK1&lt;1&gt;   IOSTANDARD = LVCMOS33
+	 Comp: JOYSTICK1&lt;2&gt;   IOSTANDARD = LVCMOS33
+	 Comp: JOYSTICK1&lt;3&gt;   IOSTANDARD = LVCMOS33
+	 Comp: JOYSTICK1&lt;4&gt;   IOSTANDARD = LVCMOS33
+	 Comp: JOYSTICK1&lt;5&gt;   IOSTANDARD = LVCMOS33
+	 Comp: JOYSTICK1&lt;6&gt;   IOSTANDARD = LVCMOS25
+	 Comp: JOYSTICK1&lt;7&gt;   IOSTANDARD = LVCMOS25
+
+</arg>
+</msg>
+
+<msg type="warning" file="Place" num="837" delta="old" >Partially locked IO Bus is found. 
+<arg fmt="%s" index="1"> Following components of the bus are not locked: 
+	 Comp: LEDS&lt;6&gt;
+	 Comp: LEDS&lt;5&gt;
+	 Comp: LEDS&lt;4&gt;
+	 Comp: LEDS&lt;3&gt;
+	 Comp: LEDS&lt;2&gt;
+	 Comp: LEDS&lt;1&gt;
+	 Comp: LEDS&lt;0&gt;
+</arg>
+</msg>
+
+<msg type="warning" file="Place" num="838" delta="old" >An IO Bus with more than one IO standard is found.
+<arg fmt="%s" index="1">Components associated with this bus are as follows: 
+	 Comp: LEDS&lt;0&gt;   IOSTANDARD = LVCMOS25
+	 Comp: LEDS&lt;1&gt;   IOSTANDARD = LVCMOS25
+	 Comp: LEDS&lt;2&gt;   IOSTANDARD = LVCMOS25
+	 Comp: LEDS&lt;3&gt;   IOSTANDARD = LVCMOS25
+	 Comp: LEDS&lt;4&gt;   IOSTANDARD = LVCMOS25
+	 Comp: LEDS&lt;5&gt;   IOSTANDARD = LVCMOS25
+	 Comp: LEDS&lt;6&gt;   IOSTANDARD = LVCMOS25
+	 Comp: LEDS&lt;7&gt;   IOSTANDARD = LVCMOS33
+
+</arg>
+</msg>
+
+<msg type="warning" file="Place" num="837" delta="old" >Partially locked IO Bus is found. 
+<arg fmt="%s" index="1"> Following components of the bus are not locked: 
+	 Comp: ram_A&lt;22&gt;
+	 Comp: ram_A&lt;21&gt;
+</arg>
+</msg>
+
+<msg type="warning" file="Place" num="838" delta="old" >An IO Bus with more than one IO standard is found.
+<arg fmt="%s" index="1">Components associated with this bus are as follows: 
+	 Comp: ram_A&lt;0&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;1&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;2&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;3&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;4&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;5&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;6&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;7&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;8&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;9&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;10&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;11&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;12&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;13&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;14&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;15&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;16&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;17&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;18&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;19&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;20&gt;   IOSTANDARD = LVCMOS33
+	 Comp: ram_A&lt;21&gt;   IOSTANDARD = LVCMOS25
+	 Comp: ram_A&lt;22&gt;   IOSTANDARD = LVCMOS25
+
+</arg>
+</msg>
+
+<msg type="info" file="Place" num="834" delta="old" >Only a subset of IOs are locked. Out of <arg fmt="%d" index="1">90</arg> IOs, <arg fmt="%d" index="2">56</arg> are locked and <arg fmt="%d" index="3">34</arg> are not locked. <arg fmt="%s" index="4">If you would like to print the names of these IOs, please set the environment variable XIL_PAR_DESIGN_CHECK_VERBOSE to 1.</arg> 
+</msg>
+
+<msg type="warning" file="Place" num="1206" delta="old" >This design contains a global buffer instance, &lt;<arg fmt="%s" index="1">XLXI_512/XLXI_221/COUNT_1_BUFG</arg>&gt;, driving the net, &lt;<arg fmt="%s" index="2">CLK8&lt;2&gt;</arg>&gt;, that is driving the following (first <arg fmt="%d" index="3">30</arg>) non-clock load pins off chip.
+<arg fmt="%s" index="4">&lt; PIN: SCLK.O; &gt;
+</arg>This design practice, in Spartan-6, can lead to an unroutable situation due to limitations in the global routing. If the design does route there may be excessive delay or skew on this net. It is recommended to use a Clock Forwarding technique to create a reliable and repeatable low skew solution: instantiate an ODDR2 component; tie the .D0 pin to Logic1; tie the .D1 pin to Logic0; tie the clock net to be forwarded to .C0; tie the inverted clock to .C1. This is normally an ERROR but the CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN &lt;<arg fmt="%s" index="5">XLXI_512/XLXI_221/COUNT_1_BUFG</arg>.<arg fmt="%s" index="6">O</arg>&gt; allowing your design to continue. This constraint disables all clock placer rules related to the specified COMP.PIN.
+</msg>
+
+<msg type="warning" file="Place" num="1137" delta="old" >This design is not guaranteed to be routable! This design contains a global buffer instance, &lt;<arg fmt="%s" index="1">XLXI_512/XLXI_221/COUNT_1_BUFG</arg>&gt;, driving the net, &lt;<arg fmt="%s" index="2">CLK8&lt;2&gt;</arg>&gt;, that is driving the following (first <arg fmt="%d" index="3">30</arg>) non-clock load pins.
+<arg fmt="%s" index="4">&lt; PIN: XLXI_512/XLXI_224/Mmux_n009011.A2; &gt;
+&lt; PIN: XLXI_512/XLXI_224/Mmux_n009021.A2; &gt;
+&lt; PIN: XLXI_512/XLXI_224/Mmux_n009031.A2; &gt;
+&lt; PIN: XLXI_512/XLXI_224/Mmux_n009041.A2; &gt;
+&lt; PIN: XLXI_512/XLXI_224/Mmux_n009051.A2; &gt;
+&lt; PIN: XLXI_512/XLXI_344/_n1952_inv6.A2; &gt;
+&lt; PIN: XLXI_512/XLXI_344/phase_FSM_FFd3-In2.A4; &gt;
+&lt; PIN: XLXI_512/XLXI_344/Mmux_n12851211.A4; &gt;
+&lt; PIN: XLXI_462/XLXI_8.A6; &gt;
+&lt; PIN: XLXI_512/XLXI_344/_n2496_inv.A1; &gt;
+&lt; PIN: XLXI_512/XLXI_224/Mmux_n009061.A1; &gt;
+&lt; PIN: XLXI_512/XLXI_344/_n1796_inv_SW1.A4; &gt;
+&lt; PIN: XLXI_512/XLXI_224/Mmux_n009071.A4; &gt;
+&lt; PIN: XLXI_512/XLXI_224/_n01031.A3; &gt;
+&lt; PIN: XLXI_512/GA_interrupt/CLK8&lt;2&gt;_inv7_INV_0.A6; &gt;
+&lt; PIN: XLXI_512/XLXI_344/_n2271_inv11.A1; &gt;
+&lt; PIN: XLXI_512/XLXI_344/_n2425_inv21.A4; &gt;
+&lt; PIN: XLXI_512/GA_interrupt/_n1086_inv1.A4; &gt;
+&lt; PIN: XLXI_512/XLXI_344/Mmux_n12851221.A3; &gt;
+&lt; PIN: XLXI_512/XLXI_224/CLK8[2]_CLK8[1]_AND_5459_o1.A1; &gt;
+&lt; PIN: SCLK.O; &gt;
+</arg>This is not a recommended design practice in Spartan-6 due to limitations in the global routing that may cause excessive delay, skew or unroutable situations.  It is recommended to only use a BUFG resource to drive clock loads. Please pay extra attention to the timing and routing of this path to ensure the design goals are met. This is normally an ERROR but the CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN &lt;<arg fmt="%s" index="5">XLXI_512/XLXI_221/COUNT_1_BUFG</arg>.<arg fmt="%s" index="6">O</arg>&gt; allowing your design to continue. This constraint disables all clock placer rules related to the specified COMP.PIN.
+</msg>
+
+<msg type="info" file="Pack" num="1650" delta="old" >Map created a placed design.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">XLXI_512/GA_interrupt/CLK8&lt;2&gt;_inv</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">XLXI_512/XLXN_858</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">XLXI_512/XLXI_349/env_reset_GND_286_o_AND_5661_o</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">XLXI_512/XLXI_349/env_reset_GND_286_o_AND_5660_o</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">XLXI_512/XLXI_349/Mram_busctrl_addr</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="367" delta="old" >The signal &lt;<arg fmt="%s" index="1">XLXI_511/XLXI_476/Mram_pen_RAMD_D1_O</arg>&gt; is incomplete. The signal does not drive any load pins in the design.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="367" delta="old" >The signal &lt;<arg fmt="%s" index="1">XLXI_512/GA_interrupt/Mram_pen_RAMD_D1_O</arg>&gt; is incomplete. The signal does not drive any load pins in the design.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="367" delta="old" >The signal &lt;<arg fmt="%s" index="1">XLXI_511/XLXI_476/Mram_pen1_RAMD_D1_O</arg>&gt; is incomplete. The signal does not drive any load pins in the design.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="367" delta="old" >The signal &lt;<arg fmt="%s" index="1">XLXI_511/XLXI_476/Mram_pen2_RAMD_D1_O</arg>&gt; is incomplete. The signal does not drive any load pins in the design.
+</msg>
+
+</messages>
+
