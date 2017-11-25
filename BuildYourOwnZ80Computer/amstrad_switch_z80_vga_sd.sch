@@ -40,7 +40,6 @@
         <signal name="XLXN_731" />
         <signal name="XLXN_732(7:0)" />
         <signal name="crtc_A(14:0)" />
-        <signal name="AUDIO" />
         <signal name="XLXN_736" />
         <signal name="XLXN_737(22:0)" />
         <signal name="CLK8(2)" />
@@ -49,10 +48,12 @@
         <signal name="XLXN_744" />
         <signal name="XLXN_745(12:0)" />
         <signal name="XLXN_746(7:0)" />
-        <signal name="cero,cero,cero,cero,cero,uno,uno,uno">
-        </signal>
+        <signal name="cero,cero,cero,cero,cero,uno,uno,uno" />
         <signal name="cero" />
         <signal name="uno" />
+        <signal name="AUDIO_R" />
+        <signal name="AUDIO_L" />
+        <signal name="XLXN_750" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Output" name="ADV1_n" />
@@ -79,7 +80,8 @@
         <port polarity="Input" name="PS2_CLK" />
         <port polarity="BiDirectional" name="JOYSTICK1(7:0)" />
         <port polarity="BiDirectional" name="JOYSTICK2(7:0)" />
-        <port polarity="Output" name="AUDIO" />
+        <port polarity="Output" name="AUDIO_R" />
+        <port polarity="Output" name="AUDIO_L" />
         <blockdef name="gnd">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-64" y2="-96" x1="64" />
@@ -153,7 +155,7 @@
             <rect width="336" x="64" y="-640" height="816" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2011-12-13T8:47:20</timestamp>
+            <timestamp>2017-11-25T13:25:49</timestamp>
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
             <line x2="448" y1="336" y2="336" x1="384" />
@@ -174,7 +176,6 @@
             <line x2="448" y1="-544" y2="-544" x1="384" />
             <rect width="64" x="384" y="-492" height="24" />
             <line x2="448" y1="-480" y2="-480" x1="384" />
-            <line x2="448" y1="-416" y2="-416" x1="384" />
             <line x2="448" y1="-352" y2="-352" x1="384" />
             <rect width="64" x="384" y="-300" height="24" />
             <line x2="448" y1="-288" y2="-288" x1="384" />
@@ -184,7 +185,10 @@
             <line x2="448" y1="-96" y2="-96" x1="384" />
             <rect width="64" x="384" y="-44" height="24" />
             <line x2="448" y1="-32" y2="-32" x1="384" />
-            <rect width="320" x="64" y="-768" height="1196" />
+            <rect width="320" x="64" y="-768" height="1200" />
+            <line x2="448" y1="-432" y2="-432" x1="384" />
+            <line x2="0" y1="-496" y2="-496" x1="64" />
+            <line x2="448" y1="-384" y2="-384" x1="384" />
         </blockdef>
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -265,7 +269,6 @@
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="OE1_n" name="OE1_n" />
             <blockpin signalname="ram_A(22:0)" name="ram_A(22:0)" />
-            <blockpin signalname="AUDIO" name="audio" />
             <blockpin signalname="crtc_A(15:0)" name="crtc_A(15:0)" />
             <blockpin signalname="XLXN_731" name="crtc_W" />
             <blockpin signalname="ram_W_n" name="ram_W_n" />
@@ -273,6 +276,9 @@
             <blockpin signalname="XLXN_744" name="palette_W" />
             <blockpin signalname="XLXN_745(12:0)" name="palette_A(12:0)" />
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
+            <blockpin signalname="AUDIO_L" name="audio_ab" />
+            <blockpin signalname="XLXN_646" name="clk_PWM" />
+            <blockpin signalname="AUDIO_R" name="audio_bc" />
         </block>
         <block symbolname="gnd" name="XLXI_513">
             <blockpin signalname="CD_n" name="G" />
@@ -394,6 +400,10 @@
         </branch>
         <branch name="XLXN_646">
             <wire x2="576" y1="1088" y2="1088" x1="432" />
+            <wire x2="1248" y1="1088" y2="1088" x1="576" />
+            <wire x2="1264" y1="1088" y2="1088" x1="1248" />
+            <wire x2="1264" y1="1088" y2="1504" x1="1264" />
+            <wire x2="1424" y1="1504" y2="1504" x1="1264" />
             <wire x2="3840" y1="928" y2="928" x1="576" />
             <wire x2="3840" y1="928" y2="1456" x1="3840" />
             <wire x2="4320" y1="1456" y2="1456" x1="3840" />
@@ -467,10 +477,6 @@
             <wire x2="3072" y1="1072" y2="1520" x1="3072" />
             <wire x2="4320" y1="1072" y2="1072" x1="3072" />
         </branch>
-        <branch name="AUDIO">
-            <wire x2="1904" y1="1584" y2="1584" x1="1872" />
-        </branch>
-        <iomarker fontsize="28" x="1904" y="1584" name="AUDIO" orien="R0" />
         <branch name="XLXN_736">
             <wire x2="1424" y1="1360" y2="1360" x1="1136" />
             <wire x2="1136" y1="1360" y2="2880" x1="1136" />
@@ -537,5 +543,13 @@
             <wire x2="5392" y1="320" y2="368" x1="5392" />
         </branch>
         <instance x="5328" y="320" name="XLXI_256" orien="R0" />
+        <branch name="AUDIO_R">
+            <wire x2="1904" y1="1616" y2="1616" x1="1872" />
+        </branch>
+        <iomarker fontsize="28" x="1904" y="1616" name="AUDIO_R" orien="R0" />
+        <branch name="AUDIO_L">
+            <wire x2="1904" y1="1568" y2="1568" x1="1872" />
+        </branch>
+        <iomarker fontsize="28" x="1904" y="1568" name="AUDIO_L" orien="R0" />
     </sheet>
 </drawing>
