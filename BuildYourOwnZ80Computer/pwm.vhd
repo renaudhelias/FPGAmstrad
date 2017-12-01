@@ -24,8 +24,7 @@ entity PWM is
    clk : in std_logic;
    clk_ref : in std_logic;
    PWM_in : in std_logic_vector (7 downto 0) := "00000000";
-   PWM_out1 : out std_logic;
-   PWM_out2 : out std_logic
+   PWM_out : out std_logic
   );
 end PWM;
 
@@ -61,6 +60,5 @@ begin
 		end if;
   end process;
 
-  PWM_out1 <= PWM_Accumulator(8);
-  PWM_out2 <= PWM_Accumulator(8);
+  PWM_out <= PWM_Accumulator(8);
 end PWM_arch;
