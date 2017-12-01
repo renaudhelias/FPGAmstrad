@@ -483,40 +483,40 @@ end;
 -- return : memory address targeting sector start
 subtype address_type is std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0);
 impure function getSector(cluster:std_logic_vector(31 downto 0)) return address_type is
-	--variable cluster41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable deux41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable BPB_SecPerClus41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable FirstDataSector41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable BPB_BytsPerSec41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable tmp_result:std_logic_vector(95 downto 0);
+	variable cluster41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable deux41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable BPB_SecPerClus41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable FirstDataSector41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable BPB_BytsPerSec41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable tmp_result:std_logic_vector(95 downto 0);
 begin
-	--BPB_SecPerClus41(BPB_SecPerClus'range):=BPB_SecPerClus;
-	--FirstDataSector41:=conv_std_logic_vector(FirstDataSector,SPI_ADDRESS_FAT32+9);
-	--BPB_BytsPerSec41(BPB_BytsPerSec'range):=BPB_BytsPerSec;
-	--deux41:=conv_std_logic_vector(2,SPI_ADDRESS_FAT32+9);
-	--cluster41(31 downto 0):=cluster(31 downto 0);
-	--tmp_result:=((((cluster41-deux41)*BPB_SecPerClus41)+FirstDataSector41)*BPB_BytsPerSec41+FAT32_SECTOR0_OFFSET);
-	--return tmp_result(SPI_ADDRESS_FAT32+9-1 downto 0);
+	BPB_SecPerClus41(BPB_SecPerClus'range):=BPB_SecPerClus;
+	FirstDataSector41:=conv_std_logic_vector(FirstDataSector,SPI_ADDRESS_FAT32+9);
+	BPB_BytsPerSec41(BPB_BytsPerSec'range):=BPB_BytsPerSec;
+	deux41:=conv_std_logic_vector(2,SPI_ADDRESS_FAT32+9);
+	cluster41(31 downto 0):=cluster(31 downto 0);
+	tmp_result:=((((cluster41-deux41)*BPB_SecPerClus41)+FirstDataSector41)*BPB_BytsPerSec41+FAT32_SECTOR0_OFFSET);
+	return tmp_result(SPI_ADDRESS_FAT32+9-1 downto 0);
 	-- lost of precision conv_integer (32bits vs 41bits)
-	return (conv_std_logic_vector((((conv_integer(cluster)-2)*conv_integer(BPB_SecPerClus))+FirstDataSector)*conv_integer(BPB_BytsPerSec),32)+FAT32_SECTOR0_OFFSET);
+	--return (conv_std_logic_vector((((conv_integer(cluster(SPI_ADDRESS_FAT32-1 downto 0))-2)*conv_integer(BPB_SecPerClus))+FirstDataSector)*conv_integer(BPB_BytsPerSec),41)+FAT32_SECTOR0_OFFSET);
 end function;
 -- return : memory address targeting next cluster start
 impure function getFAT(cluster:std_logic_vector(31 downto 0)) return address_type is
-	--variable cluster41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable quatre41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable BPB_RsvdSecCnt41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable BPB_BytsPerSec41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
-	--variable tmp_result:std_logic_vector(63 downto 0);
+	variable cluster41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable quatre41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable BPB_RsvdSecCnt41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable BPB_BytsPerSec41:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0):=(others=>'0');
+	variable tmp_result:std_logic_vector(63 downto 0);
 begin
-	--cluster41(31 downto 0):=cluster(31 downto 0);
-	--quatre41:=conv_std_logic_vector(4,SPI_ADDRESS_FAT32+9);
-	--BPB_RsvdSecCnt41(BPB_RsvdSecCnt'range):=BPB_RsvdSecCnt;
-	--BPB_BytsPerSec41(BPB_BytsPerSec'range):=BPB_BytsPerSec;
-	--tmp_result:=BPB_RsvdSecCnt41*BPB_BytsPerSec41+cluster41*quatre41+FAT32_SECTOR0_OFFSET;
-	--return tmp_result(SPI_ADDRESS_FAT32+9-1 downto 0);
+	cluster41(31 downto 0):=cluster(31 downto 0);
+	quatre41:=conv_std_logic_vector(4,SPI_ADDRESS_FAT32+9);
+	BPB_RsvdSecCnt41(BPB_RsvdSecCnt'range):=BPB_RsvdSecCnt;
+	BPB_BytsPerSec41(BPB_BytsPerSec'range):=BPB_BytsPerSec;
+	tmp_result:=BPB_RsvdSecCnt41*BPB_BytsPerSec41+cluster41*quatre41+FAT32_SECTOR0_OFFSET;
+	return tmp_result(SPI_ADDRESS_FAT32+9-1 downto 0);
 	-- lost of precision conv_integer (32bits vs 41bits)
 	--each cluster has 4 bytes
-	return conv_std_logic_vector(conv_integer(BPB_RsvdSecCnt)*conv_integer(BPB_BytsPerSec)+conv_integer(cluster)*4,32)+FAT32_SECTOR0_OFFSET;
+	--return conv_std_logic_vector(conv_integer(BPB_RsvdSecCnt)*conv_integer(BPB_BytsPerSec)+conv_integer(cluster(SPI_ADDRESS_FAT32-1 downto 0))*4,41)+FAT32_SECTOR0_OFFSET;
 end function;
 
 -- Cluster values http://en.wikipedia.org/wiki/Design_of_the_FAT_file_system
@@ -607,49 +607,9 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 				
 				case step_var is
 					when 0 =>
-						--============================================
-						--==  MBR : isFAT32 + FAT32_SECTOR0_OFFSET  ==
-						--============================================
---						-- MiST
---						--get_var1(data_reader1,x"000001FE");
---						-- ZX-Uno
---						get_var1b(data_reader1,x"000001FE");
---						--get_var1(data_reader1,x"00000000"); -- same result for SD and SDHC, x"BA"
---						step_var:=32;
---					when 32 =>
---						-- check data(1FE)=55 (fixed value)
---						if data_reader1 = x"55" then
---							step_var:=33;
---							-- MiST
---							--get_var1(data_reader1,x"000001FF");
---							-- ZX-Uno
---							get_var1b(data_reader1,x"000001FF");
---							--get_var1(data_reader1,x"00400003"); -- 4D
---						end if;
---					when 33 =>
---						-- check data(1FF)=AA (fixed value)
---						if data_reader1 = x"AA" then
---							step_var:=34;
---							--1BE+4=1C2
---							-- MiST
---							--get_var1(data_reader1,x"000001C2");
---							-- ZX-Uno
---							get_var1b(data_reader1,x"000001C2");
---						end if;
---					when 34 =>
---						-- check data(1BE+4)=0B ou 0C (is_FAT32)
---						if data_reader1 = x"0B" or data_reader1 = x"0C" then
-							step_var:=28;
-							-- 1BE+8=1C6
-							-- MiST
-							--get_var4(data_reader4,x"000001C6");
-							-- ZX-Uno
-							get_var4b(data_reader4,x"000001C6");
---						end if;
-					when 28 =>
 						-- load data4Bytes(1BE+8) little endian, x512(=200h) = FAT32_SECTOR0_OFFSET
 						-- * 512 (=200h)
-					   FAT32_SECTOR0_OFFSET:=fix_big_endian4(data_reader4)(SPI_ADDRESS_FAT32-1 downto 0) & "0" & x"00";
+--FIXME FAT32_SECTOR0_OFFSET					   FAT32_SECTOR0_OFFSET:=fix_big_endian4(data_reader4) & "0" & x"00";
 						--=======================
 						--==  FAT32 VARIABLES  ==
 						--=======================
@@ -705,7 +665,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						folder_sector_pointer:=getSector(folder_cluster_pointer);
 						if bc(folder_cluster_pointer) then
 							-- no more next FileEntry... so. (root case)
-							-- STOP HERE step_var:=27;
+							step_var:=27;
 						else
 							step_var:=8;
 							folder_DirStruct_number:=0;
@@ -791,7 +751,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						if bc(folder_cluster_pointer) then
 							-- last FAT pointer : no more next FileEntry. (case root for me)
 							-- end of DIRSTRUCT stepping
-							-- STOP HERE step_var:=28;
+							step_var:=28;
 						else
 							folder_DirStruct_number:=0;
 							step_var:=8;
@@ -821,7 +781,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 					when 24=>
 						file_sector_pointer:=getSector(file_cluster_pointer);
 						if bc(file_cluster_pointer) then
-							-- STOP HERE step_var:=29;
+							step_var:=29;
 						else
 							step_var:=17;
 						end if;
@@ -877,7 +837,7 @@ end if;
 						
 					when 26=>NULL; -- load done
 					when 27=>NULL; -- bad root folder cluster
-					--when 28=>NULL; -- bad next folder cluster
+					when 28=>NULL; -- bad next folder cluster
 					when 29=>NULL; -- bad file cluster
 
 				end case;
