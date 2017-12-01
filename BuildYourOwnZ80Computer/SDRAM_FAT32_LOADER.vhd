@@ -742,12 +742,34 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						step_var:=31;
 					when 31=>
 						if compare_result then
---FIXME hidden file							-- true real nicely hidden file ?
-							--compare12(x"000000000000000000000000",10+folder_sector_pointer+(folder_DirStruct_number-1)*32,false);
-							step_var:=9;
+							-- true real nicely hidden file ?
+							compare12(x"000000000000000000000000",10+folder_sector_pointer+(folder_DirStruct_number-1)*32);
+							step_var:=27;
 						else
 							step_var:=10;
 						end if;
+
+
+
+					when 27=>
+						if compare_result then
+							-- true real nicely hidden file ?
+							compare12(x"000000000000000000000000",20+folder_sector_pointer+(folder_DirStruct_number-1)*32);
+							step_var:=29;
+						else
+							-- strange, perhaps a nice hidden file, go to next file then...
+							step_var:=8;
+						end if;
+					when 29=>
+						if compare_result then
+							step_var:=26; --end of DIRSTRUCT stepping
+						else
+							-- strange, perhaps a nice hidden file, go to next file then...
+							step_var:=8;
+						end if;
+
+
+
 					when 10=>
 						--=======================
 						--== LOOKING ABOUT ROM ==
@@ -876,9 +898,9 @@ end if;
 						
 						
 					when 26=>NULL; -- load done
-					when 27=>NULL; -- bad root folder cluster
+					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
-					when 29=>NULL; -- bad file cluster
+					--when 29=>NULL; -- bad file cluster
 
 				end case;
 end if;
