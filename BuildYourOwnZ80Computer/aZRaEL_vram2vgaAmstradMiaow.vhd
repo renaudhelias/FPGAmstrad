@@ -109,7 +109,8 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 				  VZoom:integer:=2;
 				  
 				  VRAM_HDsp:integer:=800; --suivant les mode, le nombre de pixels affichés est constant !
-				  VRAM_VDsp:integer:=300 --600/2
+				  VRAM_VDsp:integer:=300; --600/2
+				  DEBUG_LEDS_W:integer:=8
 		  );
     Port ( DATA : in  STD_LOGIC_VECTOR (7 downto 0); -- buffer
            ADDRESS : out  STD_LOGIC_VECTOR (14 downto 0);
@@ -120,14 +121,17 @@ entity aZRaEL_vram2vgaAmstradMiaow is
            BLUE : out  STD_LOGIC_VECTOR(1 downto 0);
            VSYNC : out  STD_LOGIC;
            HSYNC : out  STD_LOGIC;
+		   debug_leds:in STD_LOGIC_VECTOR(7 downto 0);
            CLK_25MHz : in  STD_LOGIC
 			  );
 end aZRaEL_vram2vgaAmstradMiaow;
 
 architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
-	constant DO_NOTHING_OUT : integer range 0 to 2:=0;
-	constant DO_READ : integer range 0 to 2:=1;
-	constant DO_BORDER: integer range 0 to 2:=2;
+	constant DO_NOTHING_OUT : integer range 0 to 4:=0;
+	constant DO_READ : integer range 0 to 4:=1;
+	constant DO_BORDER: integer range 0 to 4:=2;
+	constant DO_LED_ON: integer range 0 to 4:=3;
+	constant DO_LED_OFF: integer range 0 to 4:=4;
 	
 	constant DO_NOTHING : STD_LOGIC:='0';
 	constant DO_HSYNC : STD_LOGIC:='1';
@@ -202,7 +206,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable palette_color:integer range 0 to 16-1:=0;
 	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
-	variable etat_rgb : integer range 0 to 2:=DO_NOTHING_OUT;
+	variable etat_rgb : integer range 0 to 4:=DO_NOTHING_OUT;
 	variable etat_hsync : STD_LOGIC:=DO_NOTHING;
 	variable etat_vsync : STD_LOGIC:=DO_NOTHING;
 	variable color : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
@@ -221,6 +225,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable RA:STD_LOGIC_VECTOR(4 downto 0);
 	variable CA:STD_LOGIC_VECTOR(0 downto 0); -- sqrt(CHAR_WIDTH/8)-1 ?
 	variable no_char:integer range 0 to CHAR_WIDTH/8-1;
+	
 begin
 	if rising_edge(CLK_25MHz) then
 		if MODE_select="00" then
@@ -261,6 +266,14 @@ begin
 				BLUE    <="01";
 			end if;
 		elsif etat_rgb = DO_BORDER then
+			RED     <="00";
+			GREEN_FF<="00";
+			BLUE    <="00";
+		elsif etat_rgb = DO_LED_ON then
+			RED     <="11";
+			GREEN_FF<="00";
+			BLUE    <="11";
+		elsif etat_rgb = DO_LED_OFF then
 			RED     <="00";
 			GREEN_FF<="00";
 			BLUE    <="00";
@@ -312,7 +325,13 @@ begin
 		end if;
 		
 		if horizontal_counter<HDsp/HardHZoom and vertical_counter<VDsp then
-			if horizontal_counter+HDecal_negatif<HDecal or vertical_counter+VDecal_negatif<VDecal or horizontal_counter+HDecal_negatif>=HDecal+HZoom*VRAM_HDsp or vertical_counter+VDecal_negatif>=VDecal+VZoom*VRAM_VDsp then
+			if vertical_counter <40 and horizontal_counter/DEBUG_LEDS_W < 8 then
+				if debug_leds(horizontal_counter/DEBUG_LEDS_W) = '1' then
+					etat_rgb:=DO_LED_ON;
+				else
+					etat_rgb:=DO_LED_OFF;
+				end if;
+			elsif horizontal_counter+HDecal_negatif<HDecal or vertical_counter+VDecal_negatif<VDecal or horizontal_counter+HDecal_negatif>=HDecal+HZoom*VRAM_HDsp or vertical_counter+VDecal_negatif>=VDecal+VZoom*VRAM_VDsp then
 				ADDRESS<= (others=>'0');
 				etat_rgb:=DO_BORDER;
 			else

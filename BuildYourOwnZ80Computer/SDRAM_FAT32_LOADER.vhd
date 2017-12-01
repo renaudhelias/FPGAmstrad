@@ -46,7 +46,7 @@ entity SDRAM_FAT32_LOADER is
            spi_Rdo : out  STD_LOGIC;
            spi_Rdone : in  STD_LOGIC;
 			  spi_init_done : in STD_LOGIC;
-			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
+			  leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic
 			  );
 			  	attribute keep : string;
@@ -595,6 +595,8 @@ end function;
 		if rising_edge(CLK) then
 		
 			--leds<=files_loaded & "111";
+			leds<=conv_std_logic_vector(step_var,8);
+			
 			if load_done='0' and spi_init_done='1' then
 			
 				data_Rdo<=false;
