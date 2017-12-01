@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-11-25T13:25:49</timestamp>
+    <timestamp>2017-12-1T15:29:34</timestamp>
     <pin polarity="Input" x="0" y="-736" name="init_A(22:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-544" name="CLK16MHz" />
-    <pin polarity="Input" x="0" y="-448" name="is_ucpm" />
     <pin polarity="Input" x="0" y="-352" name="PS2_CLK" />
     <pin polarity="Input" x="0" y="-256" name="PS2_DATA" />
     <pin polarity="Input" x="0" y="-160" name="RESET_n" />
+    <pin polarity="Input" x="0" y="32" name="PWM_CLK" />
     <pin polarity="BiDirectional" x="448" y="-160" name="ram_D(7:0)" />
     <pin polarity="BiDirectional" x="448" y="-32" name="JOYSTICK2(7:0)" />
     <pin polarity="BiDirectional" x="448" y="-96" name="JOYSTICK1(7:0)" />
     <pin polarity="Output" x="448" y="-544" name="CLK8(2:0)" />
     <pin polarity="Output" x="448" y="-672" name="OE1_n" />
     <pin polarity="Output" x="448" y="-608" name="ram_A(22:0)" />
+    <pin polarity="Output" x="448" y="32" name="audio_ab" />
     <pin polarity="Output" x="448" y="-288" name="crtc_A(15:0)" />
     <pin polarity="Output" x="448" y="-352" name="crtc_W" />
     <pin polarity="Output" x="448" y="-736" name="ram_W_n" />
@@ -22,24 +23,23 @@
     <pin polarity="Output" x="448" y="272" name="palette_W" />
     <pin polarity="Output" x="448" y="336" name="palette_A(12:0)" />
     <pin polarity="Output" x="448" y="400" name="palette_D(7:0)" />
-    <pin polarity="Output" x="448" y="-432" name="audio_ab" />
-    <pin polarity="Input" x="0" y="-496" name="clk_PWM" />
-    <pin polarity="Output" x="448" y="-384" name="audio_bc" />
+    <pin polarity="Output" x="448" y="96" name="audio_bc" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="224" y="-776" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-736" type="pin init_A(22:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-640" type="pin init_W_n" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-544" type="pin CLK16MHz" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-448" type="pin is_ucpm" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-352" type="pin PS2_CLK" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-256" type="pin PS2_DATA" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-160" type="pin RESET_n" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="32" type="pin PWM_CLK" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-160" type="pin ram_D(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-32" type="pin JOYSTICK2(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-96" type="pin JOYSTICK1(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-544" type="pin CLK8(2:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-672" type="pin OE1_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-608" type="pin ram_A(22:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="32" type="pin audio_ab" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-288" type="pin crtc_A(15:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-352" type="pin crtc_W" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-736" type="pin ram_W_n" />
@@ -47,6 +47,7 @@
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="272" type="pin palette_W" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="336" type="pin palette_A(12:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="400" type="pin palette_D(7:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="96" type="pin audio_bc" />
         <line x2="448" y1="272" y2="272" x1="384" />
         <rect width="64" x="384" y="324" height="24" />
         <line x2="448" y1="336" y2="336" x1="384" />
@@ -56,7 +57,6 @@
         <line x2="0" y1="-736" y2="-736" x1="64" />
         <line x2="0" y1="-640" y2="-640" x1="64" />
         <line x2="0" y1="-544" y2="-544" x1="64" />
-        <line x2="0" y1="-448" y2="-448" x1="64" />
         <line x2="0" y1="-352" y2="-352" x1="64" />
         <line x2="0" y1="-256" y2="-256" x1="64" />
         <line x2="0" y1="-160" y2="-160" x1="64" />
@@ -77,11 +77,8 @@
         <rect width="64" x="384" y="-44" height="24" />
         <line x2="448" y1="-32" y2="-32" x1="384" />
         <rect width="320" x="64" y="-768" height="1200" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-432" type="pin audio_ab" />
-        <line x2="448" y1="-432" y2="-432" x1="384" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-496" type="pin clk_PWM" />
-        <line x2="0" y1="-496" y2="-496" x1="64" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-384" type="pin audio_bc" />
-        <line x2="448" y1="-384" y2="-384" x1="384" />
+        <line x2="448" y1="32" y2="32" x1="384" />
+        <line x2="448" y1="96" y2="96" x1="384" />
+        <line x2="0" y1="32" y2="32" x1="64" />
     </graph>
 </symbol>
