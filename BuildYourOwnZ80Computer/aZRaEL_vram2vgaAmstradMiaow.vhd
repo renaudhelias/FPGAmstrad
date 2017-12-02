@@ -110,7 +110,7 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 				  
 				  VRAM_HDsp:integer:=800; --suivant les mode, le nombre de pixels affichés est constant !
 				  VRAM_VDsp:integer:=300; --600/2
-				  DEBUG_LEDS_W:integer:=8
+				  DEBUG_LEDS_W:integer:=32
 		  );
     Port ( DATA : in  STD_LOGIC_VECTOR (7 downto 0); -- buffer
            ADDRESS : out  STD_LOGIC_VECTOR (14 downto 0);
@@ -270,13 +270,13 @@ begin
 			GREEN_FF<="00";
 			BLUE    <="00";
 		elsif etat_rgb = DO_LED_ON then
+			RED     <="00";
+			GREEN_FF<="11";
+			BLUE    <="00";
+		elsif etat_rgb = DO_LED_OFF then
 			RED     <="11";
 			GREEN_FF<="00";
 			BLUE    <="11";
-		elsif etat_rgb = DO_LED_OFF then
-			RED     <="00";
-			GREEN_FF<="00";
-			BLUE    <="00";
 		else
 			RED     <="00";
 			GREEN_FF<="00";
@@ -326,7 +326,9 @@ begin
 		
 		if horizontal_counter<HDsp/HardHZoom and vertical_counter<VDsp then
 			if vertical_counter <40 and horizontal_counter/DEBUG_LEDS_W < 8 then
-				if debug_leds(horizontal_counter/DEBUG_LEDS_W) = '1' then
+				if horizontal_counter mod DEBUG_LEDS_W = 0 then
+					etat_rgb:=DO_NOTHING_OUT;
+				elsif debug_leds(horizontal_counter/DEBUG_LEDS_W) = '1' then
 					etat_rgb:=DO_LED_ON;
 				else
 					etat_rgb:=DO_LED_OFF;

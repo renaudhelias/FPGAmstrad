@@ -161,7 +161,7 @@ begin
 		else transmit_spi_Rdo when switch_br_compare_transmit_dump_mecashark=SWITCH_TRANSMIT
 		else '0';
 
-	-- permet de charger les variable BR, et les autres variables en général
+	-- Permit to load BR values, and also some others variables
 	spi_to_loader: process(CLK) is
 		variable data_step:integer range 0 to 6:=0;
 		variable data_cursor:integer range 0 to 3:=0;
@@ -250,7 +250,7 @@ begin
 							end case;
 						when 5 => -- variable transfert completed
 							data_RWdone<=true;
-							data_step:=0;
+							-- STOP HERE that's all folks !
 						when 6=>NULL; -- over run
 					end case;
 				end if;
@@ -287,11 +287,13 @@ begin
 							if compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_Din then
 								compare_result<=false;
 								compare_done<=true;
+								compare_step:=3;
 							else
 								cursor:=cursor+1;
-								if cursor>=compare_length then
+								if cursor=compare_length then
 									compare_result<=true;
 									compare_done<=true;
+									compare_step:=3;
 								else
 									compare_spi_Rdo<='1';
 									compare_spi_A<=compare_address+cursor;
@@ -367,7 +369,7 @@ begin
 							transmit_done<=true;
 							transmit_step:=3;
 						end if;
-					when 3=>NULL; -- transmit SPI to RAM done
+					when 3=>NULL; -- that's all folks
 					when 4=>NULL; -- over run
 				end case;
 			end if;
@@ -393,10 +395,10 @@ begin
 		variable FirstRootDirSecNum:integer;
 		
 -- The 1st parameter is just here to check variable size before synthesis
---procedure get_var1(var_name: in STD_LOGIC_VECTOR(7 downto 0);var_addr:STD_LOGIC_VECTOR(SPI_ADDRESS_FAT32-1 downto 0)) is
+--procedure get_var1(var_name: in STD_LOGIC_VECTOR(7 downto 0);var_addr:STD_LOGIC_VECTOR(31 downto 0)) is
 --begin
 --	data_length<=1;
---	data_addr<=var_addr;
+--	data_addr<=PREFIX & var_addr;
 --	data_Rdo<=true;
 --	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 --end;
@@ -407,10 +409,10 @@ begin
 	data_Rdo<=true;
 	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 end;
---procedure get_var2(var_name: in STD_LOGIC_VECTOR(15 downto 0);var_addr:STD_LOGIC_VECTOR(SPI_ADDRESS_FAT32-1 downto 0)) is
+--procedure get_var2(var_name: in STD_LOGIC_VECTOR(15 downto 0);var_addr:STD_LOGIC_VECTOR(31 downto 0)) is
 --begin
 --	data_length<=2;
---	data_addr<=var_addr;
+--	data_addr<=PREFIX & var_addr;
 --	data_Rdo<=true;
 --	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 --end;
@@ -421,10 +423,10 @@ begin
 	data_Rdo<=true;
 	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 end;
---procedure get_var4(var_name: in STD_LOGIC_VECTOR(31 downto 0);var_addr:STD_LOGIC_VECTOR(SPI_ADDRESS_FAT32-1 downto 0)) is
+--procedure get_var4(var_name: in STD_LOGIC_VECTOR(31 downto 0);var_addr:STD_LOGIC_VECTOR(31 downto 0)) is
 --begin
 --	data_length<=4;
---	data_addr<=var_addr;
+--	data_addr<=PREFIX & var_addr;
 --	data_Rdo<=true;
 --	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 --end;

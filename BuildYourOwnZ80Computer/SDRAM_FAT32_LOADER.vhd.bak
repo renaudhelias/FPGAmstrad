@@ -46,7 +46,7 @@ entity SDRAM_FAT32_LOADER is
            spi_Rdo : out  STD_LOGIC;
            spi_Rdone : in  STD_LOGIC;
 			  spi_init_done : in STD_LOGIC;
-			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
+			  leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic
 			  );
 			  	attribute keep : string;
@@ -161,9 +161,9 @@ begin
 		else transmit_spi_Rdo when switch_br_compare_transmit_dump_mecashark=SWITCH_TRANSMIT
 		else '0';
 
-	-- permet de charger les variable BR, et les autres variables en général
+	-- Permit to load BR values, and also some others variables
 	spi_to_loader: process(CLK) is
-		variable data_step:integer range 0 to 6:=0;
+		variable data_step:integer range 0 to 7:=0;
 		variable data_cursor:integer range 0 to 3:=0;
 		variable data_reader1_mem:std_logic_vector(7 downto 0):=(others=>'0');
 		variable data_reader2_mem:std_logic_vector(15 downto 0):=(others=>'0');
@@ -250,8 +250,9 @@ begin
 							end case;
 						when 5 => -- variable transfert completed
 							data_RWdone<=true;
-							data_step:=0;
+							data_step:=7;
 						when 6=>NULL; -- over run
+						when 7=>NULL; -- that's all folks !
 					end case;
 				end if;
 			end if;
@@ -284,9 +285,18 @@ begin
 							compare_spi_A<=compare_address+cursor;
 							compare_step:=1;
 						when 1=>
-							if compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_Din then
+							if cursor=compare_length-1 then
+								if compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_Din then
+									compare_result<=false;
+								else
+									compare_result<=true;
+								end if;
+								compare_done<=true;
+								compare_step:=3;
+							elsif compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_Din then
 								compare_result<=false;
 								compare_done<=true;
+								compare_step:=3;
 							else
 								cursor:=cursor+1;
 								if cursor>=compare_length then
@@ -393,10 +403,10 @@ begin
 		variable FirstRootDirSecNum:integer;
 		
 -- The 1st parameter is just here to check variable size before synthesis
---procedure get_var1(var_name: in STD_LOGIC_VECTOR(7 downto 0);var_addr:STD_LOGIC_VECTOR(SPI_ADDRESS_FAT32-1 downto 0)) is
+--procedure get_var1(var_name: in STD_LOGIC_VECTOR(7 downto 0);var_addr:STD_LOGIC_VECTOR(31 downto 0)) is
 --begin
 --	data_length<=1;
---	data_addr<=var_addr;
+--	data_addr<=PREFIX & var_addr;
 --	data_Rdo<=true;
 --	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 --end;
@@ -407,10 +417,10 @@ begin
 	data_Rdo<=true;
 	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 end;
---procedure get_var2(var_name: in STD_LOGIC_VECTOR(15 downto 0);var_addr:STD_LOGIC_VECTOR(SPI_ADDRESS_FAT32-1 downto 0)) is
+--procedure get_var2(var_name: in STD_LOGIC_VECTOR(15 downto 0);var_addr:STD_LOGIC_VECTOR(31 downto 0)) is
 --begin
 --	data_length<=2;
---	data_addr<=var_addr;
+--	data_addr<=PREFIX & var_addr;
 --	data_Rdo<=true;
 --	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 --end;
@@ -421,10 +431,10 @@ begin
 	data_Rdo<=true;
 	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 end;
---procedure get_var4(var_name: in STD_LOGIC_VECTOR(31 downto 0);var_addr:STD_LOGIC_VECTOR(SPI_ADDRESS_FAT32-1 downto 0)) is
+--procedure get_var4(var_name: in STD_LOGIC_VECTOR(31 downto 0);var_addr:STD_LOGIC_VECTOR(31 downto 0)) is
 --begin
 --	data_length<=4;
---	data_addr<=var_addr;
+--	data_addr<=PREFIX & var_addr;
 --	data_Rdo<=true;
 --	switch_br_compare_transmit_dump_mecashark<=SWITCH_BR;
 --end;
@@ -595,6 +605,8 @@ end function;
 		if rising_edge(CLK) then
 		
 			--leds<=files_loaded & "111";
+			leds<=conv_std_logic_vector(step_var,8);
+			
 			if load_done='0' and spi_init_done='1' then
 			
 				data_Rdo<=false;
@@ -742,19 +754,19 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						step_var:=31;
 					when 31=>
 						if compare_result then
---FIXME hidden file							-- true real nicely hidden file ?
-							--compare12(x"000000000000000000000000",10+folder_sector_pointer+(folder_DirStruct_number-1)*32,false);
-							step_var:=9;
+							-- true real nicely hidden file ?
+							compare12(x"000000000000000000000000",10+folder_sector_pointer+(folder_DirStruct_number-1)*32);
+							step_var:=27;
 						else
 							step_var:=10;
 						end if;
 
 
 
-					when 27 63=>
+					when 27=>
 						if compare_result then
 							-- true real nicely hidden file ?
-							compare12(x"000000000000000000000000",20+folder_sector_pointer+(folder_DirStruct_number-1)*32,false);
+							compare12(x"000000000000000000000000",20+folder_sector_pointer+(folder_DirStruct_number-1)*32);
 							step_var:=29;
 						else
 							-- strange, perhaps a nice hidden file, go to next file then...
@@ -898,9 +910,9 @@ end if;
 						
 						
 					when 26=>NULL; -- load done
-					when 27=>NULL; -- bad root folder cluster
+					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
-					when 29=>NULL; -- bad file cluster
+					--when 29=>NULL; -- bad file cluster
 
 				end case;
 end if;

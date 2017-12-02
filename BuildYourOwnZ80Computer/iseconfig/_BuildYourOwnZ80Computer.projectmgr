@@ -8,6 +8,7 @@
       <ClosedNodes>
          <ClosedNodesVersion>2</ClosedNodesVersion>
          <ClosedNode>/T80 - rtl E:|fpga|ZXUNO|V4|8bit|CPC|T80.vhd</ClosedNode>
+         <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_474 - VRAM32Ko_Amstrad</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_462 - bootloader_sd</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard</ClosedNode>
@@ -70,13 +71,13 @@
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>Create Schematic Symbol</SelectedItem>
+         <SelectedItem></SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000000000000000001af000000010000000100000000000000000000000064ffffffff000000810000000000000001000001af0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem>Create Schematic Symbol</CurrentItem>
+      <CurrentItem></CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="" guiview="Process" >
       <ClosedNodes>
