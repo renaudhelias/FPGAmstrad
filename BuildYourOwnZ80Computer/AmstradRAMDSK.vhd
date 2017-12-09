@@ -38,7 +38,7 @@ entity AmstradRAMDSK is
            transmit : in  STD_LOGIC;
 			  crtc_transmit : in  STD_LOGIC;
 			  init_done : in  STD_LOGIC;
-           ram_A : out  STD_LOGIC_VECTOR (22 downto 0)
+           ram_A : out  STD_LOGIC_VECTOR (20 downto 0)
            --ram_LB : out  STD_LOGIC;
            --ram_UB : out  STD_LOGIC
 			  );
@@ -53,7 +53,7 @@ ram_A(17 downto 14)<= init_A(17 downto 14) when init_done='0' else dsk_A(17 down
 ram_A(19 downto 18)<= init_A(19 downto 18) when init_done='0' else dsk_A(19 downto 18) when transmit='1' else (others=>'0'); -- address is solving
 ram_A(20)<=init_A(20) when init_done='0' else '1' when transmit='1' else '0';
 --death byte
-ram_A(22 downto 21)<=(others=>'1');
+--ram_A(22 downto 21)<=(others=>'1');
 -- sim
 --ram_A(22 downto 21)<=(others=>'0');
 
