@@ -34,7 +34,6 @@
         <signal name="XLXN_93" />
         <signal name="XLXN_94(8:0)" />
         <signal name="XLXN_95" />
-        <signal name="LEDS(7:0)" />
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
         <port polarity="Input" name="FILE_SELECT(7:0)" />
@@ -46,7 +45,6 @@
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Output" name="FILE_LOADED" />
         <port polarity="Input" name="CD_n" />
-        <port polarity="Output" name="LEDS(7:0)" />
         <blockdef name="SDRAM_SPIMASTER">
             <timestamp>2017-12-1T15:21:37</timestamp>
             <line x2="0" y1="288" y2="288" x1="64" />
@@ -92,9 +90,7 @@
             <arc ex="208" ey="-96" sx="128" sy="-48" r="88" cx="132" cy="-136" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2017-12-1T22:36:2</timestamp>
-            <rect width="64" x="368" y="276" height="24" />
-            <line x2="432" y1="288" y2="288" x1="368" />
+            <timestamp>2017-12-10T13:28:59</timestamp>
             <line x2="0" y1="224" y2="224" x1="64" />
             <line x2="432" y1="224" y2="224" x1="368" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
@@ -178,7 +174,6 @@
             <blockpin signalname="ram_A(22:0)" name="ram_A(22:0)" />
             <blockpin signalname="XLXN_55(22:0)" name="spi_A(22:0)" />
             <blockpin signalname="XLXN_94(8:0)" name="spi_A_block(8:0)" />
-            <blockpin signalname="LEDS(7:0)" name="leds(7:0)" />
         </block>
         <block symbolname="xor2" name="XLXI_8">
             <blockpin signalname="SCLK" name="I0" />
@@ -389,10 +384,5 @@
             <wire x2="2656" y1="864" y2="1520" x1="2656" />
         </branch>
         <iomarker fontsize="28" x="1312" y="672" name="CD_n" orien="R270" />
-        <branch name="LEDS(7:0)">
-            <wire x2="2608" y1="1056" y2="1056" x1="2592" />
-            <wire x2="2848" y1="1056" y2="1056" x1="2608" />
-        </branch>
-        <iomarker fontsize="28" x="2848" y="1056" name="LEDS(7:0)" orien="R0" />
     </sheet>
 </drawing>

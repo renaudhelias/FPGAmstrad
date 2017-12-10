@@ -22,15 +22,12 @@
         <signal name="XLXN_646" />
         <signal name="XLXN_717" />
         <signal name="ram_W_n" />
-        <signal name="OE1_n">
-        </signal>
+        <signal name="OE1_n" />
         <signal name="ram_A(20:0)" />
         <signal name="PS2_DATA" />
         <signal name="PS2_CLK" />
-        <signal name="JOYSTICK1(7:0)">
-        </signal>
-        <signal name="JOYSTICK2(7:0)">
-        </signal>
+        <signal name="JOYSTICK1(7:0)" />
+        <signal name="JOYSTICK2(7:0)" />
         <signal name="XLXN_731" />
         <signal name="XLXN_732(7:0)" />
         <signal name="crtc_A(14:0)" />
@@ -47,7 +44,6 @@
         <signal name="uno" />
         <signal name="AUDIO_L" />
         <signal name="AUDIO_R" />
-        <signal name="XLXN_752(7:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="FILE_LOADED" />
         <port polarity="Input" name="CLK50MHz" />
@@ -88,9 +84,7 @@
             <line x2="384" y1="-32" y2="-32" x1="320" />
         </blockdef>
         <blockdef name="bootloader_sd">
-            <timestamp>2017-12-1T22:36:45</timestamp>
-            <rect width="64" x="432" y="20" height="24" />
-            <line x2="496" y1="32" y2="32" x1="432" />
+            <timestamp>2017-12-10T13:29:22</timestamp>
             <line x2="0" y1="-672" y2="-672" x1="64" />
             <line x2="0" y1="-464" y2="-464" x1="64" />
             <rect width="64" x="0" y="-268" height="24" />
@@ -108,9 +102,7 @@
             <rect width="368" x="64" y="-704" height="812" />
         </blockdef>
         <blockdef name="amstrad_video">
-            <timestamp>2017-12-1T22:28:22</timestamp>
-            <rect width="64" x="0" y="212" height="24" />
-            <line x2="0" y1="224" y2="224" x1="64" />
+            <timestamp>2017-12-10T13:27:48</timestamp>
             <rect width="64" x="0" y="20" height="24" />
             <line x2="0" y1="32" y2="32" x1="64" />
             <rect width="64" x="0" y="84" height="24" />
@@ -190,7 +182,6 @@
             <blockpin signalname="XLXN_736" name="ram_W_n" />
             <blockpin signalname="SS_n" name="SS_n" />
             <blockpin signalname="FILE_LOADED" name="FILE_LOADED" />
-            <blockpin signalname="XLXN_752(7:0)" name="LEDS(7:0)" />
         </block>
         <block symbolname="divideby2" name="XLXI_500">
             <blockpin signalname="CLK50MHz" name="CLKin" />
@@ -210,7 +201,6 @@
             <blockpin signalname="RED3(2:0)" name="RED3(2:0)" />
             <blockpin signalname="GREEN3(2:0)" name="GREEN3(2:0)" />
             <blockpin signalname="BLUE3(2:0)" name="BLUE3(2:0)" />
-            <blockpin signalname="XLXN_752(7:0)" name="debug_leds(7:0)" />
         </block>
         <block symbolname="amstrad_motherboard" name="XLXI_512">
             <blockpin signalname="XLXN_737(22:0)" name="init_A(22:0)" />
@@ -460,21 +450,5 @@
         </branch>
         <iomarker fontsize="28" x="1904" y="2096" name="AUDIO_R" orien="R0" />
         <iomarker fontsize="28" x="6928" y="400" name="FILE_LOADED" orien="R270" />
-        <branch name="XLXN_752(7:0)">
-            <wire x2="4320" y1="1712" y2="1712" x1="4192" />
-            <wire x2="4192" y1="1712" y2="1792" x1="4192" />
-            <wire x2="5824" y1="1792" y2="1792" x1="4192" />
-            <wire x2="5776" y1="880" y2="1024" x1="5776" />
-            <wire x2="5808" y1="1024" y2="1024" x1="5776" />
-            <wire x2="5808" y1="1024" y2="1216" x1="5808" />
-            <wire x2="5824" y1="1216" y2="1216" x1="5808" />
-            <wire x2="5824" y1="1216" y2="1792" x1="5824" />
-            <wire x2="6752" y1="880" y2="880" x1="5776" />
-            <wire x2="6752" y1="880" y2="896" x1="6752" />
-            <wire x2="6848" y1="896" y2="896" x1="6752" />
-            <wire x2="6848" y1="768" y2="768" x1="6640" />
-            <wire x2="6848" y1="768" y2="880" x1="6848" />
-            <wire x2="6848" y1="880" y2="896" x1="6848" />
-        </branch>
     </sheet>
 </drawing>
