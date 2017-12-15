@@ -37,7 +37,7 @@ entity SDRAM_FAT32_LOADER is
 	);
     Port ( CLK:in STD_LOGIC;
            file_select:in std_logic_vector(7 downto 0);
-           ram_A : out  STD_LOGIC_VECTOR (22 downto 0):=(others=>'0');
+           ram_A : out  STD_LOGIC_VECTOR (20 downto 0):=(others=>'0');
            ram_D : inout  STD_LOGIC_VECTOR (7 downto 0):=(others=>'Z'); -- for sim
            ram_W : out  STD_LOGIC:='0';
            spi_A : out  STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0);
@@ -1085,7 +1085,7 @@ end if;
 							input_A:=(others=>'0');
 						end if;
 					when 18=> -- data transmit
-						gripsou_ram_A_mem:="00" & "1" & conv_std_logic_vector(no_track,6) & conv_std_logic_vector(no_side,1) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
+						gripsou_ram_A_mem:= "1" & conv_std_logic_vector(no_track,6) & conv_std_logic_vector(no_side,1) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
 						gripsou_ram_A<=gripsou_ram_A_mem;
 						gripsou_ram_D<=data_mem;
 						

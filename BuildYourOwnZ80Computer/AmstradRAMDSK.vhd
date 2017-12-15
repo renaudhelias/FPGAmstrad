@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity AmstradRAMDSK is
     Port ( A : in  STD_LOGIC_VECTOR (17 downto 0);
            dsk_A : in  STD_LOGIC_VECTOR (19 downto 0);
-			  init_A : in  STD_LOGIC_VECTOR (22 downto 0);
+			  init_A : in  STD_LOGIC_VECTOR (20 downto 0);
 			  crtc_A : in  STD_LOGIC_VECTOR (15 downto 0);
 			  --VRAM01:in STD_LOGIC;
            transmit : in  STD_LOGIC;

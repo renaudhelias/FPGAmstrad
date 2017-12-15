@@ -9,8 +9,9 @@
         <signal name="CLKin" />
         <signal name="CLKout" />
         <signal name="XLXN_26" />
-        <signal name="XLXN_27" />
         <signal name="XLXN_32" />
+        <signal name="XLXN_34" />
+        <signal name="XLXN_27" />
         <port polarity="Input" name="CLKin" />
         <port polarity="Output" name="CLKout" />
         <blockdef name="bufg">
@@ -109,61 +110,33 @@
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
-        <iomarker fontsize="28" x="320" y="896" name="CLKin" orien="R180" />
-        <iomarker fontsize="28" x="2672" y="448" name="CLKout" orien="R0" />
         <text style="fontsize:48;fontname:Arial" x="1676" y="840">http://www.hitequest.com/Hardware/a120.htm</text>
         <branch name="CLKin">
-            <wire x2="496" y1="896" y2="896" x1="320" />
-            <wire x2="496" y1="896" y2="1056" x1="496" />
-            <wire x2="560" y1="1056" y2="1056" x1="496" />
-            <wire x2="480" y1="1040" y2="1552" x1="480" />
-            <wire x2="496" y1="1552" y2="1552" x1="480" />
-            <wire x2="560" y1="1040" y2="1040" x1="480" />
-            <wire x2="560" y1="1040" y2="1056" x1="560" />
+            <wire x2="496" y1="1552" y2="1552" x1="368" />
         </branch>
-        <instance x="880" y="752" name="XLXI_2" orien="R180" />
         <instance x="496" y="1808" name="XLXI_24" orien="R0">
-            <attrtext style="fontsize:28;fontname:Arial;displayformat:NAMEEQUALSVALUE" attrname="CLKOUT0_DIVIDE" x="192" y="-172" type="instance" />
-            <attrtext style="fontsize:28;fontname:Arial;displayformat:NAMEEQUALSVALUE" attrname="CLKIN_PERIOD" x="222" y="-172" type="instance" />
-            <attrtext style="fontsize:28;fontname:Arial;displayformat:NAMEEQUALSVALUE" attrname="CLKFBOUT_MULT" x="223" y="-172" type="instance" />
-            <attrtext style="fontsize:28;fontname:Arial;displayformat:NAMEEQUALSVALUE" attrname="BANDWIDTH" x="239" y="-172" type="instance" />
-            <attrtext style="fontsize:28;fontname:Arial;displayformat:NAMEEQUALSVALUE" attrname="REF_JITTER" x="269" y="-172" type="instance" />
-            <attrtext style="fontsize:28;fontname:Arial;displayformat:NAMEEQUALSVALUE" attrname="COMPENSATION" x="232" y="-172" type="instance" />
         </instance>
-        <branch name="XLXN_26">
-            <wire x2="432" y1="1456" y2="1664" x1="432" />
-            <wire x2="496" y1="1664" y2="1664" x1="432" />
-            <wire x2="560" y1="1456" y2="1456" x1="432" />
-            <wire x2="544" y1="784" y2="1120" x1="544" />
-            <wire x2="560" y1="1120" y2="1120" x1="544" />
-            <wire x2="560" y1="1120" y2="1456" x1="560" />
-            <wire x2="656" y1="784" y2="784" x1="544" />
-        </branch>
-        <branch name="XLXN_27">
-            <wire x2="976" y1="784" y2="784" x1="880" />
-            <wire x2="976" y1="784" y2="1056" x1="976" />
-            <wire x2="880" y1="1056" y2="1456" x1="880" />
-            <wire x2="960" y1="1456" y2="1456" x1="880" />
-            <wire x2="960" y1="1456" y2="1744" x1="960" />
-            <wire x2="976" y1="1056" y2="1056" x1="880" />
-            <wire x2="960" y1="1744" y2="1744" x1="880" />
-        </branch>
-        <instance x="144" y="1472" name="XLXI_425" orien="R90" />
         <branch name="XLXN_32">
-            <wire x2="384" y1="1536" y2="1536" x1="272" />
-            <wire x2="384" y1="1536" y2="1776" x1="384" />
-            <wire x2="496" y1="1776" y2="1776" x1="384" />
+            <wire x2="496" y1="1776" y2="1776" x1="272" />
         </branch>
         <branch name="CLKout">
-            <wire x2="944" y1="1552" y2="1552" x1="880" />
-            <wire x2="944" y1="1440" y2="1552" x1="944" />
-            <wire x2="1408" y1="1440" y2="1440" x1="944" />
-            <wire x2="1632" y1="1440" y2="1440" x1="1408" />
-            <wire x2="2176" y1="1440" y2="1440" x1="1632" />
-            <wire x2="2528" y1="496" y2="496" x1="2176" />
-            <wire x2="2176" y1="496" y2="1440" x1="2176" />
-            <wire x2="2672" y1="448" y2="448" x1="2528" />
-            <wire x2="2528" y1="448" y2="496" x1="2528" />
+            <wire x2="1584" y1="1552" y2="1552" x1="880" />
+        </branch>
+        <instance x="144" y="1712" name="XLXI_425" orien="R90" />
+        <iomarker fontsize="28" x="368" y="1552" name="CLKin" orien="R180" />
+        <iomarker fontsize="28" x="1584" y="1552" name="CLKout" orien="R0" />
+        <instance x="800" y="1216" name="XLXI_2" orien="R180" />
+        <branch name="XLXN_26">
+            <wire x2="192" y1="1248" y2="1664" x1="192" />
+            <wire x2="496" y1="1664" y2="1664" x1="192" />
+            <wire x2="576" y1="1248" y2="1248" x1="192" />
+        </branch>
+        <branch name="XLXN_27">
+            <wire x2="928" y1="1248" y2="1248" x1="800" />
+            <wire x2="1040" y1="1248" y2="1248" x1="928" />
+            <wire x2="1040" y1="1248" y2="1744" x1="1040" />
+            <wire x2="1008" y1="1744" y2="1744" x1="880" />
+            <wire x2="1040" y1="1744" y2="1744" x1="1008" />
         </branch>
     </sheet>
 </drawing>

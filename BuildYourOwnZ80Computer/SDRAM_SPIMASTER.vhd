@@ -34,10 +34,10 @@ entity SDRAM_SPIMASTER is
 			-- in case of SDHC or SDXC cards, fixed to 512
 			);
     Port (
-			  reset : in std_logic:='0';
+--			  reset : in std_logic:='0';
 			  address : STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0); -- 32bit FAT32 /+9bit (block 512)
 			  address_block : STD_LOGIC_VECTOR (8 downto 0); -- 32bit FAT32 /+9bit (block 512)
-			  data_in : in STD_LOGIC_VECTOR(7 downto 0):=(others=>'0');
+--			  data_in : in STD_LOGIC_VECTOR(7 downto 0):=(others=>'0');
 			  data_out : out STD_LOGIC_VECTOR(7 downto 0);
            SCLK : in  STD_LOGIC; -- 25MHz
            MOSI : out  STD_LOGIC:='1'; -- sleeping 1 (because other one does not have the same rising edge)
@@ -46,9 +46,9 @@ entity SDRAM_SPIMASTER is
 			  --CD_n : in  STD_LOGIC; -- useless here, just for plug
            spi_R:in STD_LOGIC;
 			  spi_Rdone:out STD_LOGIC:='1';
-			  spi_W:in STD_LOGIC:='0';
-			  spi_Wblock:in STD_LOGIC:='0';
-			  spi_Wdone:out STD_LOGIC:='1';
+--			  spi_W:in STD_LOGIC:='0';
+--			  spi_Wblock:in STD_LOGIC:='0';
+--			  spi_Wdone:out STD_LOGIC:='1';
 			  spi_init_done:out std_logic:='0'
 			  );
 end SDRAM_SPIMASTER;
@@ -109,7 +109,7 @@ architecture Behavioral of SDRAM_SPIMASTER is
 	
 	
 	
-	signal reset_released:std_logic:='0';
+--	signal reset_released:std_logic:='0';
 
 begin
 
@@ -210,7 +210,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 	begin
 		buffer_response<=buffer_response_mem;
 		
-		if rising_edge(SCLK) then
+		if falling_edge(SCLK) then
 		
 			MOSI<='1'; -- start bit is '0' and end bit is '1'... so '1' is sleeping on I think so :)
 			
@@ -348,31 +348,31 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 						when 8=>NULL; -- error : uncertain following message
 						when 9=>NULL; -- CRC16 failed
 						
-						when 10=> -- send written block
+						when 10=> NULL;-- send written block
 							-- start block token (one byte)
-							MOSI<=START_BLOCK_TOKEN(7-cursor);
-							cursor_data_block:=0;
-							data_block_address<=conv_std_logic_vector(cursor_data_block,data_block_address'length);
-							if cursor=7 then
-								cursor:=0;
-								step_cmd:=11;
-								crc16_init;
-								
-								-- "address before data access"
-								
-								current_byte:=data_block_out;
-								if cursor_data_block=conv_integer(address_block) then
-									-- oh yes, I'm here ? just do it !
-									data_block_w<='1';
-									current_byte:=data_in;
-									data_block_in<=current_byte;
-								end if;
-								
-								cursor_data_block:=1;					
-								
-							else
-								cursor:=cursor+1;
-							end if;
+--							MOSI<=START_BLOCK_TOKEN(7-cursor);
+--							cursor_data_block:=0;
+--							data_block_address<=conv_std_logic_vector(cursor_data_block,data_block_address'length);
+--							if cursor=7 then
+--								cursor:=0;
+--								step_cmd:=11;
+--								crc16_init;
+--								
+--								-- "address before data access"
+--								
+--								current_byte:=data_block_out;
+--								if cursor_data_block=conv_integer(address_block) then
+--									-- oh yes, I'm here ? just do it !
+--									data_block_w<='1';
+----									current_byte:=data_in;
+--									data_block_in<=current_byte;
+--								end if;
+--								
+--								cursor_data_block:=1;					
+--								
+--							else
+--								cursor:=cursor+1;
+--							end if;
 						when 11=>
 							-- blocks
 							MOSI<=current_byte(7-cursor); -- is it safe enought ? no _mem by here ?
@@ -388,7 +388,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 								if cursor_data_block=conv_integer(address_block) then
 									-- oh yes, I'm here ? just do it !
 									data_block_w<='1';
-									current_byte:=data_in;
+--									current_byte:=data_in;
 									data_block_in<=current_byte;
 								end if;
 								if cursor_data_block=BLOCK_SIZE-1 then
@@ -455,7 +455,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 						when 19=> NULL; -- just write into BLOCK internal RAM
 							cursor_data_block:=conv_integer(address_block);
 							data_block_address<=conv_std_logic_vector(cursor_data_block,data_block_address'length);
-							current_byte:=data_in;
+--							current_byte:=data_in;
 							data_block_in<=current_byte;
 							data_block_w<='1';
 							step_cmd:=20;
@@ -635,20 +635,20 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		
 		variable init_start_waiting:std_logic_vector(7 downto 0):=x"00"; -- unstable reset with bad responses (MiST-board SPI simulator)
 	begin
-		if rising_edge(SCLK) then
-		if reset='1' or not(IS_MIST_BOARD) then
-			reset_released<='1'; -- have passed by reset phase (reset perhaps is 0 before being 1 for first time)
-		end if;
+		if falling_edge(SCLK) then
+--		if reset='1' or not(IS_MIST_BOARD) then
+--			reset_released<='1'; -- have passed by reset phase (reset perhaps is 0 before being 1 for first time)
+--		end if;
 		
 		spi_Rdone<=spi_Rmem;
-		spi_Wdone<=spi_Wmem;
+--		spi_Wdone<=spi_Wmem;
 		
 		spi_init_done<=init_done;
 		
 			ram_T<=false;
 			ram_Tblock<=false;
 			
-if reset='0' and reset_released='1' then
+--if reset='0' and reset_released='1' then
 			
 			if not(init_done='1') then
 				do_data_block_read<=false;
@@ -776,7 +776,7 @@ if reset='0' and reset_released='1' then
 			
 --				length_crc16<=16;
 				
-				if spi_R='1' or spi_W='1' or spi_Wblock='1' then
+				if spi_R='1' then
 					if spi_Rmem='0' then
 						overrun:=true; -- over run
 						read_step:=6; -- over run
@@ -789,22 +789,22 @@ if reset='0' and reset_released='1' then
 						-- spi_Wblock+spi_W (begin of block): do full read into internal and just fill internal RAM
 						-- spi_W (end of block): do write internal block into SPI, writing also last byte given
 					
-						if spi_Wblock='1' then
-							spi_Wmem:='0';
-							if spi_W='1' then
-								write_step:=9; -- read full block and then just write into internal RAM
-							else
-								write_step:=7; -- just write into internal RAM
-							end if;
-							spi_wasRWmem:='0'; -- block is contaminated : it's my BLOCK :p
-						elsif spi_W='1' then
-							spi_Wmem:='0';
-							if spi_wasRWmem='0' and address_loaded_safe and address_loaded=address then
-								-- its perfect do it quickly
-								write_step:=2;
-							else
-								write_step:=0;
-							end if;
+--						if spi_Wblock='1' then
+--							spi_Wmem:='0';
+--							if spi_W='1' then
+--								write_step:=9; -- read full block and then just write into internal RAM
+--							else
+--								write_step:=7; -- just write into internal RAM
+--							end if;
+--							spi_wasRWmem:='0'; -- block is contaminated : it's my BLOCK :p
+--						elsif spi_W='1' then
+--							spi_Wmem:='0';
+--							if spi_wasRWmem='0' and address_loaded_safe and address_loaded=address then
+--								-- its perfect do it quickly
+--								write_step:=2;
+--							else
+--								write_step:=0;
+--							end if;
 		--==============================================
 		--==============================================
 		--==============================================
@@ -814,8 +814,8 @@ if reset='0' and reset_released='1' then
 		-- We could only write big BLOCK_SIZE block of bytes
 		-- Step 1 : read BLOCK except the currently written byte
 		-- Step 2 : write BLOCK
-							spi_wasRWmem:='0';
-						elsif spi_R='1' then
+--							spi_wasRWmem:='0';
+						if spi_R='1' then
 							if spi_wasRWmem='0' and address_loaded_safe and address_loaded=address then
 								-- its perfect do nothing
 							else
@@ -972,7 +972,7 @@ if reset='0' and reset_released='1' then
 					end if;
 				end if;
 			end if;
-end if;
+--end if;
 		end if;
 	end process sangoku;
 	
