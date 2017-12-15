@@ -24,7 +24,7 @@
         <signal name="ram_A(20:0)" />
         <signal name="PS2_DATA" />
         <signal name="PS2_CLK" />
-        <signal name="uno,uno,uno,uno,uno,uno,uno,uno" />
+        <signal name="JOYSTICK1(5:0)" />
         <signal name="XLXN_731" />
         <signal name="XLXN_732(7:0)" />
         <signal name="crtc_A(14:0)" />
@@ -57,6 +57,7 @@
         <port polarity="Output" name="ram_A(20:0)" />
         <port polarity="Input" name="PS2_DATA" />
         <port polarity="Input" name="PS2_CLK" />
+        <port polarity="BiDirectional" name="JOYSTICK1(5:0)" />
         <port polarity="Output" name="AUDIO_L" />
         <port polarity="Output" name="AUDIO_R" />
         <blockdef name="gnd">
@@ -122,7 +123,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-14T6:54:16</timestamp>
+            <timestamp>2017-12-15T20:24:18</timestamp>
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
             <line x2="448" y1="336" y2="336" x1="384" />
@@ -148,8 +149,6 @@
             <line x2="448" y1="-160" y2="-160" x1="384" />
             <rect width="64" x="384" y="-108" height="24" />
             <line x2="448" y1="-96" y2="-96" x1="384" />
-            <rect width="64" x="384" y="-44" height="24" />
-            <line x2="448" y1="-32" y2="-32" x1="384" />
             <rect width="320" x="64" y="-768" height="1200" />
             <line x2="448" y1="32" y2="32" x1="384" />
             <line x2="448" y1="96" y2="96" x1="384" />
@@ -205,8 +204,7 @@
             <blockpin signalname="FILE_LOADED" name="RESET_n" />
             <blockpin signalname="XLXN_717" name="PWM_CLK" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
-            <blockpin signalname="uno,uno,uno,uno,uno,uno,uno,uno" name="JOYSTICK2(7:0)" />
-            <blockpin signalname="uno,uno,uno,uno,uno,uno,uno,uno" name="JOYSTICK1(7:0)" />
+            <blockpin signalname="JOYSTICK1(5:0)" name="JOYSTICK1(5:0)" />
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="crtc_A(15:0)" name="crtc_A(15:0)" />
@@ -325,13 +323,8 @@
             <wire x2="1424" y1="1648" y2="1648" x1="1392" />
         </branch>
         <iomarker fontsize="28" x="1392" y="1648" name="PS2_CLK" orien="R180" />
-        <branch name="uno,uno,uno,uno,uno,uno,uno,uno">
-            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1904" y="1904" type="branch" />
+        <branch name="JOYSTICK1(5:0)">
             <wire x2="1904" y1="1904" y2="1904" x1="1872" />
-        </branch>
-        <branch name="uno,uno,uno,uno,uno,uno,uno,uno">
-            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1904" y="1968" type="branch" />
-            <wire x2="1904" y1="1968" y2="1968" x1="1872" />
         </branch>
         <branch name="XLXN_731">
             <wire x2="2160" y1="1648" y2="1648" x1="1872" />
@@ -417,5 +410,6 @@
         <iomarker fontsize="28" x="6928" y="400" name="FILE_LOADED" orien="R270" />
         <instance x="112" y="1120" name="XLXI_500" orien="R0">
         </instance>
+        <iomarker fontsize="28" x="1904" y="1904" name="JOYSTICK1(5:0)" orien="R0" />
     </sheet>
 </drawing>

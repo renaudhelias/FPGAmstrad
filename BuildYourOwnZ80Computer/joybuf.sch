@@ -1,47 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <drawing version="7">
-    <attr value="spartan3e" name="DeviceFamilyName">
+    <attr value="spartan6" name="DeviceFamilyName">
         <trait delete="all:0" />
         <trait editname="all:0" />
         <trait edittrait="all:0" />
     </attr>
     <netlist>
-        <signal name="JOY_IN(0)">
-        </signal>
-        <signal name="JOY_OUT(0)">
-        </signal>
-        <signal name="JOY_IN(1)">
-        </signal>
-        <signal name="JOY_OUT(1)">
-        </signal>
-        <signal name="JOY_IN(2)">
-        </signal>
-        <signal name="JOY_OUT(2)">
-        </signal>
-        <signal name="JOY_IN(3)">
-        </signal>
-        <signal name="JOY_OUT(3)">
-        </signal>
-        <signal name="JOY_IN(4)">
-        </signal>
-        <signal name="JOY_OUT(4)">
-        </signal>
-        <signal name="JOY_IN(5)">
-        </signal>
-        <signal name="JOY_OUT(5)">
-        </signal>
-        <signal name="JOY_IN(6)">
-        </signal>
-        <signal name="JOY_OUT(6)">
-        </signal>
-        <signal name="JOY_IN(7)">
-        </signal>
-        <signal name="JOY_OUT(7)">
-        </signal>
-        <signal name="JOY_IN(7:0)" />
-        <signal name="JOY_OUT(7:0)" />
-        <port polarity="BiDirectional" name="JOY_IN(7:0)" />
-        <port polarity="Output" name="JOY_OUT(7:0)" />
+        <signal name="JOY_IN(0)" />
+        <signal name="JOY_OUT(0)" />
+        <signal name="JOY_IN(1)" />
+        <signal name="JOY_OUT(1)" />
+        <signal name="JOY_IN(2)" />
+        <signal name="JOY_OUT(2)" />
+        <signal name="JOY_IN(3)" />
+        <signal name="JOY_OUT(3)" />
+        <signal name="JOY_IN(4)" />
+        <signal name="JOY_OUT(4)" />
+        <signal name="JOY_IN(5)" />
+        <signal name="JOY_OUT(5)" />
+        <signal name="JOY_IN(5:0)" />
+        <signal name="JOY_OUT(5:0)" />
+        <port polarity="BiDirectional" name="JOY_IN(5:0)" />
+        <port polarity="Output" name="JOY_OUT(5:0)" />
         <blockdef name="buf">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-32" x1="0" />
@@ -105,20 +85,6 @@
         </block>
         <block symbolname="pulldown" name="XLXI_14">
             <blockpin signalname="JOY_IN(5)" name="O" />
-        </block>
-        <block symbolname="buf" name="XLXI_15">
-            <blockpin signalname="JOY_IN(6)" name="I" />
-            <blockpin signalname="JOY_OUT(6)" name="O" />
-        </block>
-        <block symbolname="pulldown" name="XLXI_16">
-            <blockpin signalname="JOY_IN(6)" name="O" />
-        </block>
-        <block symbolname="buf" name="XLXI_17">
-            <blockpin signalname="JOY_IN(7)" name="I" />
-            <blockpin signalname="JOY_OUT(7)" name="O" />
-        </block>
-        <block symbolname="pulldown" name="XLXI_18">
-            <blockpin signalname="JOY_IN(7)" name="O" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
@@ -188,37 +154,15 @@
             <attrtext style="alignment:SOFT-LEFT" attrname="Name" x="2464" y="544" type="branch" />
             <wire x2="2464" y1="544" y2="544" x1="2336" />
         </branch>
-        <branch name="JOY_IN(6)">
-            <attrtext style="alignment:SOFT-RIGHT" attrname="Name" x="1888" y="928" type="branch" />
-            <wire x2="2000" y1="928" y2="928" x1="1888" />
-            <wire x2="2112" y1="928" y2="928" x1="2000" />
-        </branch>
-        <instance x="2112" y="960" name="XLXI_15" orien="R0" />
-        <instance x="1936" y="1088" name="XLXI_16" orien="R0" />
-        <branch name="JOY_OUT(6)">
-            <attrtext style="alignment:SOFT-LEFT" attrname="Name" x="2464" y="928" type="branch" />
-            <wire x2="2464" y1="928" y2="928" x1="2336" />
-        </branch>
-        <branch name="JOY_IN(7)">
-            <attrtext style="alignment:SOFT-RIGHT" attrname="Name" x="1872" y="1296" type="branch" />
-            <wire x2="1984" y1="1296" y2="1296" x1="1872" />
-            <wire x2="2096" y1="1296" y2="1296" x1="1984" />
-        </branch>
-        <instance x="2096" y="1328" name="XLXI_17" orien="R0" />
-        <instance x="1920" y="1456" name="XLXI_18" orien="R0" />
-        <branch name="JOY_OUT(7)">
-            <attrtext style="alignment:SOFT-LEFT" attrname="Name" x="2448" y="1296" type="branch" />
-            <wire x2="2448" y1="1296" y2="1296" x1="2320" />
-        </branch>
-        <branch name="JOY_IN(7:0)">
+        <branch name="JOY_IN(5:0)">
             <attrtext style="alignment:SOFT-LEFT" attrname="Name" x="1040" y="1808" type="branch" />
             <wire x2="1040" y1="1808" y2="1808" x1="496" />
         </branch>
-        <iomarker fontsize="28" x="496" y="1808" name="JOY_IN(7:0)" orien="R180" />
-        <branch name="JOY_OUT(7:0)">
+        <iomarker fontsize="28" x="496" y="1808" name="JOY_IN(5:0)" orien="R180" />
+        <branch name="JOY_OUT(5:0)">
             <attrtext style="alignment:SOFT-RIGHT" attrname="Name" x="1680" y="1808" type="branch" />
             <wire x2="2320" y1="1808" y2="1808" x1="1680" />
         </branch>
-        <iomarker fontsize="28" x="2320" y="1808" name="JOY_OUT(7:0)" orien="R0" />
+        <iomarker fontsize="28" x="2320" y="1808" name="JOY_OUT(5:0)" orien="R0" />
     </sheet>
 </drawing>

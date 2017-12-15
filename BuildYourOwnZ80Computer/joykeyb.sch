@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <drawing version="7">
-    <attr value="spartan3e" name="DeviceFamilyName">
+    <attr value="spartan6" name="DeviceFamilyName">
         <trait delete="all:0" />
         <trait editname="all:0" />
         <trait edittrait="all:0" />
@@ -18,16 +18,14 @@
         <signal name="XLXN_30" />
         <signal name="XLXN_31" />
         <signal name="PPI_portA(7:0)" />
-        <signal name="joystick1(7:0)" />
-        <signal name="joystick2(7:0)" />
+        <signal name="joystick1(5:0)" />
         <port polarity="Input" name="reset" />
         <port polarity="Input" name="PS2_CLK" />
         <port polarity="Input" name="PS2_DATA" />
         <port polarity="Input" name="CLK4MHz" />
         <port polarity="Input" name="PPI_portC(3:0)" />
         <port polarity="Output" name="PPI_portA(7:0)" />
-        <port polarity="Input" name="joystick1(7:0)" />
-        <port polarity="Input" name="joystick2(7:0)" />
+        <port polarity="Input" name="joystick1(5:0)" />
         <blockdef name="Keyboard">
             <timestamp>2011-4-21T11:50:12</timestamp>
             <line x2="384" y1="32" y2="32" x1="320" />
@@ -40,7 +38,7 @@
             <rect width="256" x="64" y="-256" height="320" />
         </blockdef>
         <blockdef name="KEYBOARD_driver">
-            <timestamp>2011-11-7T10:19:20</timestamp>
+            <timestamp>2017-12-15T20:23:0</timestamp>
             <line x2="0" y1="-224" y2="-224" x1="64" />
             <line x2="0" y1="-160" y2="-160" x1="64" />
             <rect width="64" x="0" y="-108" height="24" />
@@ -51,9 +49,7 @@
             <line x2="0" y1="96" y2="96" x1="64" />
             <line x2="384" y1="-224" y2="-224" x1="320" />
             <rect width="64" x="320" y="-236" height="24" />
-            <line x2="384" y1="64" y2="64" x1="320" />
             <line x2="384" y1="0" y2="0" x1="320" />
-            <rect width="64" x="320" y="52" height="24" />
             <rect width="64" x="320" y="-12" height="24" />
             <rect width="256" x="64" y="-256" height="448" />
         </blockdef>
@@ -97,8 +93,7 @@
             <blockpin signalname="XLXN_30" name="press" />
             <blockpin signalname="XLXN_31" name="unpress" />
             <blockpin signalname="PPI_portC(3:0)" name="portC(3:0)" />
-            <blockpin signalname="joystick1(7:0)" name="joystick1(7:0)" />
-            <blockpin signalname="joystick2(7:0)" name="joystick2(7:0)" />
+            <blockpin signalname="joystick1(5:0)" name="joystick1(5:0)" />
             <blockpin signalname="XLXN_27(9:0)" name="keycode(9:0)" />
             <blockpin signalname="PPI_portA(7:0)" name="portA(7:0)" />
         </block>
@@ -179,16 +174,11 @@
             <wire x2="2880" y1="528" y2="528" x1="2864" />
         </branch>
         <iomarker fontsize="28" x="2880" y="528" name="PPI_portA(7:0)" orien="R0" />
-        <branch name="joystick1(7:0)">
+        <branch name="joystick1(5:0)">
             <wire x2="2864" y1="752" y2="752" x1="2848" />
             <wire x2="2880" y1="752" y2="752" x1="2864" />
         </branch>
-        <iomarker fontsize="28" x="2880" y="752" name="joystick1(7:0)" orien="R0" />
-        <branch name="joystick2(7:0)">
-            <wire x2="2864" y1="816" y2="816" x1="2848" />
-            <wire x2="2880" y1="816" y2="816" x1="2864" />
-        </branch>
-        <iomarker fontsize="28" x="2880" y="816" name="joystick2(7:0)" orien="R0" />
+        <iomarker fontsize="28" x="2880" y="752" name="joystick1(5:0)" orien="R0" />
         <instance x="2288" y="640" name="XLXI_4" orien="R270" />
     </sheet>
 </drawing>

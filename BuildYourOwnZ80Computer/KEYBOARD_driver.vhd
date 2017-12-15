@@ -10,9 +10,9 @@ entity KEYBOARD_driver is
 			  press : in STD_LOGIC;
 			  unpress : in STD_LOGIC;
            portC : in  STD_LOGIC_VECTOR (3 downto 0);
-			  joystick1 : in STD_LOGIC_VECTOR(7 downto 0);
+			  joystick1 : in STD_LOGIC_VECTOR(5 downto 0);
 			  --joystick1_common : inout STD_LOGIC;
-           joystick2 : in STD_LOGIC_VECTOR(7 downto 0);
+           --joystick2 : in STD_LOGIC_VECTOR(7 downto 0);
 			  --TOUCHE_A :in std_logic;
            keycode : in  STD_LOGIC_VECTOR (9 downto 0); -- e0 & e1 & scancode
            portA : out  STD_LOGIC_VECTOR (7 downto 0)
@@ -219,13 +219,10 @@ begin
 --						else
 							--joystick
 							if conv_integer(portC)=9 then
-								if joystick1(i)='1' then
-									portA(i)<='0';
-								end if;
-							end if;
-							if conv_integer(portC)=6 then
-								if joystick2(i)='1' then
-									portA(i)<='0';
+								if i<=5 then
+									if joystick1(i)='1' then
+										portA(i)<='0';
+									end if;
 								end if;
 							end if;
 							for j in 6 downto 0 loop
