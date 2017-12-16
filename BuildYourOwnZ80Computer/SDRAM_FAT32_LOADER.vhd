@@ -31,7 +31,8 @@ entity SDRAM_FAT32_LOADER is
 		BLOCK_SIZE_MAXIMUM:integer:=65536; --4096; -- bytes
 		BLOCK_SQRT:integer:=9; -- 2^BLOCK_SQRT=BLOCK_SIZE_MAXIMUM (=512 :P)
 		MAX_DSK_NUMBER_SQRT:integer:=16; -- ZXUNO_DSK_SELECT
-		SDRAM_ASYNC_DELTA:integer:=0 -- 0 or more : go more and more slower with SDRAM_ASYNC access delays. More a problem of AUTO-REFRESH I think...
+		SDRAM_ASYNC_DELTA:integer:=0; -- 0 or more : go more and more slower with SDRAM_ASYNC access delays. More a problem of AUTO-REFRESH I think...
+		CARAC_END_OF_NAME:std_logic_vector(7 downto 0):=x"01"
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0):=x"00400C00" -- in byte
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0):=x"00400000" -- in byte
 		-- CLK : @4MHz
@@ -49,7 +50,11 @@ entity SDRAM_FAT32_LOADER is
 			  spi_init_done : in STD_LOGIC;
 			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
-			  key_reset:in std_logic
+			  key_reset:in std_logic;
+			  ZDSK_doSelect : in  STD_LOGIC; -- no Wait_n needed by here
+           ZDSK_CARAC : out  STD_LOGIC_VECTOR (7 downto 0);
+           ZDSK_doCarac : out  STD_LOGIC;
+           ZDSK_doneCarac : in  STD_LOGIC
 			  );
 			  	attribute keep : string;
 				attribute keep of file_select : signal is "TRUE";
@@ -593,6 +598,11 @@ end function;
 	--files_loaded(1:3) : rom 1 2 3 loaded
 	variable files_loaded:std_logic_vector((1+ROM_COUNT)-1 downto 0):="0000" & DSK_OFF; -- méchant doute(DSK_OFF,others=>'0');
 
+		variable ZDSK_doneCarac_old_mem:std_logic:='0';
+		variable file_search_do:boolean := false;
+		variable file_search_done:boolean := false;
+		variable file_search_offset:integer range 0 to 12 := 0;
+
 	begin
 		load_init_done<=load_done;
 		
@@ -798,7 +808,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						--== LOOKING ABOUT DSK ==
 						--=======================
 						switch_transmit_gripsou<=SWITCH_GRIPSOU;
-						if files_loaded(0)='1' then
+						if not(file_search_do) and files_loaded(0)='1' then
 							if files_loaded="11111" then
 								load_done:='1';
 								switch_transmit_gripsou<=SWITCH_NONE;
@@ -892,8 +902,16 @@ end if;
 							-- nom et extention de fichier identique
 							if dsk_number>=file_select then
 								files_loaded(0):='1';
-								get_var4b(file_size,folder_sector_pointer+(folder_DirStruct_number-1)*32+28);
-								step_var:=14;
+								if file_search_do then
+									file_search_do:=false;
+									file_search_done:=true;
+									file_search_offset:=0;
+									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
+									step_var:=26;
+								else
+									get_var4b(file_size,folder_sector_pointer+(folder_DirStruct_number-1)*32+28);
+									step_var:=14;
+								end if;
 							else
 								dsk_number:=dsk_number+1;
 								step_var:=8;
@@ -909,7 +927,40 @@ end if;
 							load_done:='0';
 							files_loaded:=(others=>'0');
 							dsk_number:=(others=>'0');
+						elsif ZDSK_doSelect='1' then
+							ZDSK_doCarac<='0';
+							-- place cursor front of file with nice number
+							file_search_do:=true;
+							file_search_done:=false;
+							file_search_offset:=0;
+							dsk_number:=(others=>'0');
+							step_var:=8; -- next DIRStruct
+						elsif ZDSK_doneCarac='1' and ZDSK_doneCarac_old_mem='0' then
+							-- a char has been readen, go to next char.
+							ZDSK_doCarac<='0';
+							-- next CARAC or else CARAC_END_OF_NAME
+							if file_search_done then
+								file_search_offset:=file_search_offset+1;
+								if file_search_offset=12 then
+									file_search_done:=false;
+								else
+									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
+								end if;
+							else
+								ZDSK_CARAC<=CARAC_END_OF_NAME;
+								ZDSK_doCarac<='1';
+							end if;
+						elsif file_search_done and ZDSK_doneCarac='0' then
+							if file_search_done then
+								-- I'm front of file with nice number, exhibit a char !
+								ZDSK_CARAC<=data_reader1;
+								ZDSK_doCarac<='1';
+							else
+								ZDSK_CARAC<=CARAC_END_OF_NAME;
+								ZDSK_doCarac<='1';
+							end if;
 						end if;
+						ZDSK_doneCarac_old_mem:=ZDSK_doneCarac;
 					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
 					--when 29=>NULL; -- bad file cluster
