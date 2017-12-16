@@ -908,6 +908,7 @@ end if;
 							step_var:=0;
 							load_done:='0';
 							files_loaded:=(others=>'0');
+							dsk_number:=(others=>'0');
 						end if;
 					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
