@@ -105,7 +105,6 @@
         <signal name="audio_bc" />
         <signal name="audio_ab" />
         <signal name="XLXN_861" />
-        <signal name="ZDSK_doCarac" />
         <signal name="ZDSK_CARAC(7:0)" />
         <signal name="key_reset" />
         <signal name="XLXN_865" />
@@ -115,6 +114,7 @@
         <signal name="ZDSK_NUMBER(15:0)" />
         <signal name="ZDSK_doneCarac" />
         <signal name="ZDSK_doInsert" />
+        <signal name="ZDSK_doCarac" />
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
@@ -135,7 +135,6 @@
         <port polarity="Input" name="PWM_CLK" />
         <port polarity="Output" name="audio_bc" />
         <port polarity="Output" name="audio_ab" />
-        <port polarity="Input" name="ZDSK_doCarac" />
         <port polarity="Input" name="ZDSK_CARAC(7:0)" />
         <port polarity="Output" name="key_reset" />
         <port polarity="Input" name="pause" />
@@ -143,6 +142,7 @@
         <port polarity="Output" name="ZDSK_NUMBER(15:0)" />
         <port polarity="Output" name="ZDSK_doneCarac" />
         <port polarity="Output" name="ZDSK_doInsert" />
+        <port polarity="Input" name="ZDSK_doCarac" />
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-64" x1="64" />
@@ -828,20 +828,6 @@
             <blockpin signalname="XLXN_848" name="I2" />
             <blockpin signalname="ram_W_n" name="O" />
         </block>
-        <block symbolname="ZXUNO_DSK_SELECT" name="XLXI_577">
-            <blockpin signalname="XLXN_861" name="CLK4MHz" />
-            <blockpin signalname="A(15:0)" name="rd" />
-            <blockpin signalname="D(7:0)" name="wr" />
-            <blockpin signalname="IO_RD" name="ZDSK_doCarac" />
-            <blockpin signalname="IO_WR" name="A(15:0)" />
-            <blockpin signalname="ZDSK_doCarac" name="Din(7:0)" />
-            <blockpin signalname="ZDSK_CARAC(7:0)" name="ZDSK_CARAC(7:0)" />
-            <blockpin signalname="ZDSK_doSelect" name="ZDSK_doSelect" />
-            <blockpin signalname="ZDSK_doInsert" name="ZDSK_doInsert" />
-            <blockpin signalname="ZDSK_doneCarac" name="ZDSK_doneCarac" />
-            <blockpin signalname="ZDSK_NUMBER(15:0)" name="ZDSK_NUMBER(15:0)" />
-            <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
-        </block>
         <block symbolname="AmstradRAMDSK" name="XLXI_348">
             <blockpin signalname="XLXN_621" name="transmit" />
             <blockpin signalname="XLXN_852" name="crtc_transmit" />
@@ -861,14 +847,28 @@
             <blockpin signalname="pause" name="I" />
             <blockpin signalname="XLXN_866" name="O" />
         </block>
+        <block symbolname="ZXUNO_DSK_SELECT" name="XLXI_577">
+            <blockpin signalname="XLXN_861" name="CLK4MHz" />
+            <blockpin signalname="IO_RD" name="rd" />
+            <blockpin signalname="IO_WR" name="wr" />
+            <blockpin signalname="ZDSK_doCarac" name="ZDSK_doCarac" />
+            <blockpin signalname="A(15:0)" name="A(15:0)" />
+            <blockpin signalname="D(7:0)" name="Din(7:0)" />
+            <blockpin signalname="ZDSK_CARAC(7:0)" name="ZDSK_CARAC(7:0)" />
+            <blockpin signalname="ZDSK_doSelect" name="ZDSK_doSelect" />
+            <blockpin signalname="ZDSK_doInsert" name="ZDSK_doInsert" />
+            <blockpin signalname="ZDSK_doneCarac" name="ZDSK_doneCarac" />
+            <blockpin signalname="ZDSK_NUMBER(15:0)" name="ZDSK_NUMBER(15:0)" />
+            <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
+        </block>
     </netlist>
     <sheet sheetnum="1" width="7040" height="5440">
         <branch name="A(15:0)">
-            <wire x2="1728" y1="480" y2="480" x1="352" />
+            <wire x2="208" y1="480" y2="1152" x1="208" />
+            <wire x2="544" y1="1152" y2="1152" x1="208" />
+            <wire x2="1728" y1="480" y2="480" x1="208" />
             <wire x2="2480" y1="480" y2="480" x1="1728" />
             <wire x2="1728" y1="480" y2="3168" x1="1728" />
-            <wire x2="352" y1="480" y2="960" x1="352" />
-            <wire x2="544" y1="960" y2="960" x1="352" />
             <wire x2="1728" y1="3168" y2="3168" x1="1664" />
             <wire x2="3264" y1="304" y2="304" x1="2480" />
             <wire x2="3264" y1="304" y2="544" x1="3264" />
@@ -1057,12 +1057,12 @@
             <wire x2="2736" y1="4656" y2="4656" x1="2560" />
         </branch>
         <branch name="IO_RD">
-            <wire x2="544" y1="1088" y2="1088" x1="112" />
-            <wire x2="112" y1="1088" y2="3584" x1="112" />
+            <wire x2="112" y1="960" y2="3584" x1="112" />
             <wire x2="768" y1="3584" y2="3584" x1="112" />
             <wire x2="768" y1="3584" y2="4256" x1="768" />
             <wire x2="848" y1="4256" y2="4256" x1="768" />
             <wire x2="2416" y1="3584" y2="3584" x1="768" />
+            <wire x2="544" y1="960" y2="960" x1="112" />
             <wire x2="2416" y1="3024" y2="3024" x1="2352" />
             <wire x2="2416" y1="3024" y2="3104" x1="2416" />
             <wire x2="2416" y1="3104" y2="3584" x1="2416" />
@@ -1310,8 +1310,8 @@
             <wire x2="5040" y1="2704" y2="2704" x1="3216" />
             <wire x2="5040" y1="2704" y2="2928" x1="5040" />
             <wire x2="5824" y1="2928" y2="2928" x1="5040" />
-            <wire x2="272" y1="608" y2="1152" x1="272" />
-            <wire x2="544" y1="1152" y2="1152" x1="272" />
+            <wire x2="272" y1="608" y2="1024" x1="272" />
+            <wire x2="544" y1="1024" y2="1024" x1="272" />
             <wire x2="784" y1="4112" y2="4192" x1="784" />
             <wire x2="848" y1="4192" y2="4192" x1="784" />
             <wire x2="1760" y1="4112" y2="4112" x1="784" />
@@ -1348,7 +1348,7 @@
         </branch>
         <branch name="D(7:0)">
             <attrtext style="alignment:SOFT-VLEFT" attrname="Name" x="1856" y="3184" type="branch" />
-            <wire x2="208" y1="1024" y2="2096" x1="208" />
+            <wire x2="208" y1="1216" y2="2096" x1="208" />
             <wire x2="2384" y1="2096" y2="2096" x1="208" />
             <wire x2="2384" y1="2096" y2="2640" x1="2384" />
             <wire x2="2384" y1="2640" y2="3232" x1="2384" />
@@ -1356,7 +1356,7 @@
             <wire x2="4976" y1="2640" y2="2640" x1="2688" />
             <wire x2="4976" y1="2640" y2="3120" x1="4976" />
             <wire x2="5824" y1="3120" y2="3120" x1="4976" />
-            <wire x2="544" y1="1024" y2="1024" x1="208" />
+            <wire x2="544" y1="1216" y2="1216" x1="208" />
             <wire x2="1536" y1="320" y2="320" x1="1456" />
             <wire x2="1456" y1="320" y2="544" x1="1456" />
             <wire x2="2688" y1="544" y2="544" x1="1456" />
@@ -1551,8 +1551,6 @@
         <instance x="4096" y="1328" name="XLXI_575" orien="R0" />
         <instance x="4464" y="4080" name="XLXI_566" orien="R180">
         </instance>
-        <instance x="544" y="1312" name="XLXI_577" orien="R0">
-        </instance>
         <branch name="XLXN_861">
             <wire x2="1472" y1="736" y2="736" x1="416" />
             <wire x2="2720" y1="736" y2="736" x1="1472" />
@@ -1566,10 +1564,6 @@
             <wire x2="1472" y1="384" y2="736" x1="1472" />
             <wire x2="2800" y1="1088" y2="1088" x1="2752" />
         </branch>
-        <branch name="ZDSK_doCarac">
-            <wire x2="544" y1="1216" y2="1216" x1="512" />
-        </branch>
-        <iomarker fontsize="28" x="512" y="1216" name="ZDSK_doCarac" orien="R180" />
         <branch name="ZDSK_CARAC(7:0)">
             <wire x2="544" y1="1280" y2="1280" x1="512" />
         </branch>
@@ -1644,5 +1638,11 @@
             <wire x2="1152" y1="992" y2="992" x1="1120" />
         </branch>
         <iomarker fontsize="28" x="1152" y="992" name="ZDSK_doInsert" orien="R0" />
+        <instance x="544" y="1312" name="XLXI_577" orien="R0">
+        </instance>
+        <branch name="ZDSK_doCarac">
+            <wire x2="544" y1="1088" y2="1088" x1="512" />
+        </branch>
+        <iomarker fontsize="28" x="512" y="1088" name="ZDSK_doCarac" orien="R180" />
     </sheet>
 </drawing>
