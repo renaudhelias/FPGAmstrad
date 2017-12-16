@@ -30,6 +30,8 @@
         <signal name="ZDSK_doneCarac" />
         <signal name="ZDSK_doCarac" />
         <signal name="ZDSK_CARAC(7:0)" />
+        <signal name="ZDSK_doInsert" />
+        <signal name="pause" />
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
@@ -45,6 +47,8 @@
         <port polarity="Input" name="ZDSK_doneCarac" />
         <port polarity="Output" name="ZDSK_doCarac" />
         <port polarity="Output" name="ZDSK_CARAC(7:0)" />
+        <port polarity="Input" name="ZDSK_doInsert" />
+        <port polarity="Output" name="pause" />
         <blockdef name="SDRAM_SPIMASTER">
             <timestamp>2017-12-14T6:47:3</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
@@ -84,7 +88,9 @@
             <arc ex="208" ey="-96" sx="128" sy="-48" r="88" cx="132" cy="-136" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2017-12-16T15:15:28</timestamp>
+            <timestamp>2017-12-16T18:23:59</timestamp>
+            <line x2="0" y1="416" y2="416" x1="64" />
+            <line x2="560" y1="416" y2="416" x1="496" />
             <line x2="0" y1="288" y2="288" x1="64" />
             <line x2="0" y1="352" y2="352" x1="64" />
             <line x2="0" y1="224" y2="224" x1="64" />
@@ -95,7 +101,6 @@
             <rect width="64" x="0" y="-44" height="24" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
             <line x2="0" y1="-272" y2="-272" x1="64" />
-            <rect width="432" x="64" y="-384" height="768" />
             <line x2="560" y1="288" y2="288" x1="496" />
             <rect width="64" x="496" y="340" height="24" />
             <line x2="560" y1="352" y2="352" x1="496" />
@@ -110,6 +115,7 @@
             <rect width="64" x="496" y="20" height="24" />
             <line x2="560" y1="32" y2="32" x1="496" />
             <line x2="560" y1="96" y2="96" x1="496" />
+            <rect width="432" x="64" y="-384" height="832" />
         </blockdef>
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -158,19 +164,21 @@
             <blockpin signalname="XLXN_57" name="spi_Rdone" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
             <blockpin signalname="key_reset" name="key_reset" />
-            <blockpin signalname="FILE_SELECT(15:0)" name="file_select(15:0)" />
-            <blockpin signalname="XLXN_52(7:0)" name="spi_Din(7:0)" />
             <blockpin signalname="ZDSK_doSelect" name="ZDSK_doSelect" />
             <blockpin signalname="ZDSK_doneCarac" name="ZDSK_doneCarac" />
+            <blockpin signalname="FILE_SELECT(15:0)" name="file_select(15:0)" />
+            <blockpin signalname="XLXN_52(7:0)" name="spi_Din(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="ram_W" name="ram_W" />
             <blockpin signalname="XLXN_95" name="spi_Rdo" />
             <blockpin signalname="FILE_LOADED" name="load_init_done" />
+            <blockpin signalname="ZDSK_doCarac" name="ZDSK_doCarac" />
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="XLXN_55(22:0)" name="spi_A(22:0)" />
             <blockpin signalname="XLXN_94(8:0)" name="spi_A_block(8:0)" />
-            <blockpin signalname="ZDSK_doCarac" name="ZDSK_doCarac" />
             <blockpin signalname="ZDSK_CARAC(7:0)" name="ZDSK_CARAC(7:0)" />
+            <blockpin signalname="ZDSK_doInsert" name="ZDSK_doInsert" />
+            <blockpin signalname="pause" name="pause" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
@@ -310,5 +318,15 @@
         <iomarker fontsize="28" x="2656" y="1120" name="ZDSK_CARAC(7:0)" orien="R0" />
         <iomarker fontsize="28" x="1952" y="1120" name="ZDSK_doneCarac" orien="R180" />
         <iomarker fontsize="28" x="1920" y="1056" name="ZDSK_doSelect" orien="R180" />
+        <branch name="ZDSK_doInsert">
+            <wire x2="2016" y1="1184" y2="1184" x1="1920" />
+            <wire x2="2032" y1="1184" y2="1184" x1="2016" />
+        </branch>
+        <branch name="pause">
+            <wire x2="2608" y1="1184" y2="1184" x1="2592" />
+            <wire x2="2656" y1="1184" y2="1184" x1="2608" />
+        </branch>
+        <iomarker fontsize="28" x="2656" y="1184" name="pause" orien="R0" />
+        <iomarker fontsize="28" x="1920" y="1184" name="ZDSK_doInsert" orien="R180" />
     </sheet>
 </drawing>

@@ -54,7 +54,9 @@ entity SDRAM_FAT32_LOADER is
 			  ZDSK_doSelect : in  STD_LOGIC; -- no Wait_n needed by here
            ZDSK_CARAC : out  STD_LOGIC_VECTOR (7 downto 0);
            ZDSK_doCarac : out  STD_LOGIC;
-           ZDSK_doneCarac : in  STD_LOGIC
+           ZDSK_doneCarac : in  STD_LOGIC;
+			  ZDSK_doInsert : in  STD_LOGIC;
+			  pause : out STD_LOGIC
 			  );
 			  	attribute keep : string;
 				attribute keep of file_select : signal is "TRUE";
@@ -578,6 +580,7 @@ end function;
 
 		variable step_var:integer range 0 to 31:=0;
 		variable load_done:std_logic:='0';
+		variable pause_mem:std_logic:='0';
 		
 		variable folder_cluster_pointer:std_logic_vector(31 downto 0); -- number
 		variable file_cluster_pointer:std_logic_vector(31 downto 0); -- number
@@ -605,6 +608,7 @@ end function;
 
 	begin
 		load_init_done<=load_done;
+		pause<=pause_mem;
 		
 		if rising_edge(CLK) then
 		
@@ -878,6 +882,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						-- that's all folk
 if files_loaded="11111" then
 	load_done:='1';
+	pause_mem:='0';
 	switch_transmit_gripsou<=SWITCH_NONE;
 	step_var:=26; -- load done
 else
@@ -923,10 +928,15 @@ end if;
 						
 					when 26=> -- load done
 						if key_reset='1' then
-							step_var:=0;
-							load_done:='0';
 							files_loaded:=(others=>'0');
 							dsk_number:=(others=>'0');
+							load_done:='0';
+							step_var:=0;
+						elsif ZDSK_doInsert='1' then
+							files_loaded(0):='0';
+							dsk_number:=(others=>'0');
+							pause_mem:='1';
+							step_var:=8; -- next DIRStruct
 						elsif ZDSK_doSelect='1' then
 							ZDSK_doCarac<='0';
 							-- place cursor front of file with nice number
