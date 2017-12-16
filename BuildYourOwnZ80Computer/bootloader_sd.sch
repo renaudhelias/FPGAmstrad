@@ -9,7 +9,7 @@
         <signal name="MISO" />
         <signal name="MOSI" />
         <signal name="INV_PHA" />
-        <signal name="FILE_SELECT(7:0)" />
+        <signal name="FILE_SELECT(15:0)" />
         <signal name="XLXN_55(22:0)" />
         <signal name="ram_D(7:0)" />
         <signal name="ram_A(20:0)" />
@@ -25,10 +25,10 @@
         <signal name="XLXN_52(7:0)" />
         <signal name="XLXN_94(8:0)" />
         <signal name="XLXN_95" />
-        <signal name="XLXN_101" />
+        <signal name="key_reset" />
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
-        <port polarity="Input" name="FILE_SELECT(7:0)" />
+        <port polarity="Input" name="FILE_SELECT(15:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
         <port polarity="Output" name="SCLK" />
@@ -36,6 +36,7 @@
         <port polarity="Output" name="SS_n" />
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Output" name="FILE_LOADED" />
+        <port polarity="Input" name="key_reset" />
         <blockdef name="SDRAM_SPIMASTER">
             <timestamp>2017-12-14T6:47:3</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
@@ -75,7 +76,7 @@
             <arc ex="208" ey="-96" sx="128" sy="-48" r="88" cx="132" cy="-136" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2017-12-13T21:4:20</timestamp>
+            <timestamp>2017-12-16T13:22:59</timestamp>
             <line x2="0" y1="224" y2="224" x1="64" />
             <line x2="432" y1="224" y2="224" x1="368" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
@@ -94,7 +95,8 @@
             <line x2="0" y1="96" y2="96" x1="64" />
             <rect width="64" x="0" y="-44" height="24" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
-            <rect width="304" x="64" y="-384" height="708" />
+            <rect width="304" x="64" y="-384" height="640" />
+            <line x2="0" y1="-272" y2="-272" x1="64" />
         </blockdef>
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -126,7 +128,7 @@
             <blockpin signalname="SCLK_pha" name="CLK" />
             <blockpin signalname="XLXN_57" name="spi_Rdone" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
-            <blockpin signalname="FILE_SELECT(7:0)" name="file_select(7:0)" />
+            <blockpin signalname="FILE_SELECT(15:0)" name="file_select(15:0)" />
             <blockpin signalname="XLXN_52(7:0)" name="spi_Din(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="ram_W" name="ram_W" />
@@ -135,6 +137,7 @@
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="XLXN_55(22:0)" name="spi_A(22:0)" />
             <blockpin signalname="XLXN_94(8:0)" name="spi_A_block(8:0)" />
+            <blockpin signalname="key_reset" name="key_reset" />
         </block>
         <block symbolname="xor2" name="XLXI_8">
             <blockpin signalname="SCLK" name="I0" />
@@ -164,7 +167,7 @@
         </branch>
         <instance x="2160" y="768" name="XLXI_7" orien="R0">
         </instance>
-        <branch name="FILE_SELECT(7:0)">
+        <branch name="FILE_SELECT(15:0)">
             <wire x2="2160" y1="608" y2="608" x1="2096" />
         </branch>
         <branch name="XLXN_55(22:0)">
@@ -220,7 +223,7 @@
             <wire x2="2880" y1="496" y2="496" x1="2864" />
             <wire x2="2880" y1="448" y2="496" x1="2880" />
         </branch>
-        <iomarker fontsize="28" x="2096" y="608" name="FILE_SELECT(7:0)" orien="R180" />
+        <iomarker fontsize="28" x="2096" y="608" name="FILE_SELECT(15:0)" orien="R180" />
         <iomarker fontsize="28" x="2704" y="672" name="ram_D(7:0)" orien="R0" />
         <iomarker fontsize="28" x="2704" y="608" name="ram_A(20:0)" orien="R0" />
         <iomarker fontsize="28" x="2880" y="448" name="ram_W_n" orien="R270" />
@@ -267,5 +270,9 @@
             <wire x2="1152" y1="1216" y2="1216" x1="1072" />
         </branch>
         <iomarker fontsize="28" x="1152" y="1216" name="SS_n" orien="R0" />
+        <branch name="key_reset">
+            <wire x2="2160" y1="496" y2="496" x1="2128" />
+        </branch>
+        <iomarker fontsize="28" x="2128" y="496" name="key_reset" orien="R180" />
     </sheet>
 </drawing>

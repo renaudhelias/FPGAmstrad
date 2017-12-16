@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="joykeyb">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-15T20:23:18</timestamp>
+    <timestamp>2017-12-16T13:15:54</timestamp>
     <pin polarity="Input" x="0" y="-352" name="reset" />
     <pin polarity="Input" x="0" y="-288" name="PS2_CLK" />
     <pin polarity="Input" x="0" y="-224" name="PS2_DATA" />
@@ -9,6 +9,7 @@
     <pin polarity="Input" x="0" y="-96" name="PPI_portC(3:0)" />
     <pin polarity="Input" x="496" y="-112" name="joystick1(5:0)" />
     <pin polarity="Output" x="496" y="-352" name="PPI_portA(7:0)" />
+    <pin polarity="Output" x="496" y="-240" name="key_reset" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="248" y="-392" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-352" type="pin reset" />
@@ -28,6 +29,8 @@
         <line x2="496" y1="-352" y2="-352" x1="432" />
         <rect width="64" x="432" y="-124" height="24" />
         <line x2="496" y1="-112" y2="-112" x1="432" />
-        <rect width="368" x="64" y="-384" height="448" />
+        <rect width="368" x="64" y="-384" height="320" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-240" type="pin key_reset" />
+        <line x2="496" y1="-240" y2="-240" x1="432" />
     </graph>
 </symbol>

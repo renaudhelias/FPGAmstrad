@@ -5,6 +5,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity KEYBOARD_driver is
     Port ( CLK : in  STD_LOGIC;
+           --reset : in STD_LOGIC;
            enable : in  STD_LOGIC;
 			  press : in STD_LOGIC;
 			  unpress : in STD_LOGIC;

@@ -30,13 +30,14 @@ entity SDRAM_FAT32_LOADER is
 		SPI_ADDRESS_FAT32:integer:=23; -- 32 if FAT32 normaly
 		BLOCK_SIZE_MAXIMUM:integer:=65536; --4096; -- bytes
 		BLOCK_SQRT:integer:=9; -- 2^BLOCK_SQRT=BLOCK_SIZE_MAXIMUM (=512 :P)
+		MAX_DSK_NUMBER_SQRT:integer:=16; -- ZXUNO_DSK_SELECT
 		SDRAM_ASYNC_DELTA:integer:=0 -- 0 or more : go more and more slower with SDRAM_ASYNC access delays. More a problem of AUTO-REFRESH I think...
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0):=x"00400C00" -- in byte
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0):=x"00400000" -- in byte
 		-- CLK : @4MHz
 	);
     Port ( CLK:in STD_LOGIC;
-           file_select:in std_logic_vector(7 downto 0);
+           file_select:in std_logic_vector(MAX_DSK_NUMBER_SQRT-1 downto 0);
            ram_A : out  STD_LOGIC_VECTOR (20 downto 0):=(others=>'0');
            ram_D : inout  STD_LOGIC_VECTOR (7 downto 0):=(others=>'Z'); -- for sim
            ram_W : out  STD_LOGIC:='0';
@@ -47,7 +48,8 @@ entity SDRAM_FAT32_LOADER is
            spi_Rdone : in  STD_LOGIC;
 			  spi_init_done : in STD_LOGIC;
 			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
-			  load_init_done:out std_logic
+			  load_init_done:out std_logic;
+			  key_reset:in std_logic
 			  );
 			  	attribute keep : string;
 				attribute keep of file_select : signal is "TRUE";
@@ -580,7 +582,7 @@ end function;
 		variable file_sector_pointer:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0);
 		
 		variable rom_number:integer range 0 to ROM_COUNT:=0;
-		variable dsk_number:std_logic_vector(7 downto 0):=(others=>'0');
+		variable dsk_number:std_logic_vector(MAX_DSK_NUMBER_SQRT-1 downto 0):=(others=>'0');
 		
 		variable file_address:std_logic_vector(31 downto 0);
 		variable folder_DirStruct_number:integer;
@@ -901,7 +903,12 @@ end if;
 						end if;
 						
 						
-					when 26=>NULL; -- load done
+					when 26=> -- load done
+						if key_reset='1' then
+							step_var:=0;
+							load_done:='0';
+							files_loaded:=(others=>'0');
+						end if;
 					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
 					--when 29=>NULL; -- bad file cluster

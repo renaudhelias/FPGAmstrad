@@ -32,7 +32,6 @@
         <signal name="CLK8(1)" />
         <signal name="MEM_WR" />
         <signal name="XLXN_621" />
-        <signal name="XLXN_435" />
         <signal name="CLK16MHz" />
         <signal name="D(7:0)" />
         <signal name="XLXN_58" />
@@ -105,6 +104,14 @@
         <signal name="XLXN_860" />
         <signal name="audio_bc" />
         <signal name="audio_ab" />
+        <signal name="XLXN_861" />
+        <signal name="ZDSK_NUMBER(15:0)" />
+        <signal name="ZDSK_doSelect" />
+        <signal name="ZDSK_doInsert" />
+        <signal name="ZDSK_doneCarac" />
+        <signal name="ZDSK_doCarac" />
+        <signal name="ZDSK_CARAC(7:0)" />
+        <signal name="key_reset" />
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
@@ -125,6 +132,13 @@
         <port polarity="Input" name="PWM_CLK" />
         <port polarity="Output" name="audio_bc" />
         <port polarity="Output" name="audio_ab" />
+        <port polarity="Output" name="ZDSK_NUMBER(15:0)" />
+        <port polarity="Output" name="ZDSK_doSelect" />
+        <port polarity="Output" name="ZDSK_doInsert" />
+        <port polarity="Output" name="ZDSK_doneCarac" />
+        <port polarity="Input" name="ZDSK_doCarac" />
+        <port polarity="Input" name="ZDSK_CARAC(7:0)" />
+        <port polarity="Output" name="key_reset" />
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-64" x1="64" />
@@ -423,7 +437,7 @@
             <line x2="320" y1="-192" y2="-192" x1="384" />
         </blockdef>
         <blockdef name="joykeyb">
-            <timestamp>2017-12-15T20:23:18</timestamp>
+            <timestamp>2017-12-16T13:15:54</timestamp>
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -434,7 +448,8 @@
             <line x2="496" y1="-352" y2="-352" x1="432" />
             <rect width="64" x="432" y="-124" height="24" />
             <line x2="496" y1="-112" y2="-112" x1="432" />
-            <rect width="368" x="64" y="-384" height="448" />
+            <rect width="368" x="64" y="-384" height="320" />
+            <line x2="496" y1="-240" y2="-240" x1="432" />
         </blockdef>
         <blockdef name="buf">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -470,8 +485,29 @@
             <arc ex="144" ey="-176" sx="144" sy="-80" r="48" cx="144" cy="-128" />
             <line x2="64" y1="-64" y2="-192" x1="64" />
         </blockdef>
+        <blockdef name="ZXUNO_DSK_SELECT">
+            <timestamp>2017-12-16T12:39:6</timestamp>
+            <line x2="0" y1="-416" y2="-416" x1="64" />
+            <rect width="448" x="64" y="-448" height="448" />
+            <rect width="64" x="0" y="-364" height="24" />
+            <line x2="0" y1="-352" y2="-352" x1="64" />
+            <rect width="64" x="0" y="-300" height="24" />
+            <line x2="0" y1="-288" y2="-288" x1="64" />
+            <line x2="0" y1="-224" y2="-224" x1="64" />
+            <line x2="0" y1="-160" y2="-160" x1="64" />
+            <line x2="0" y1="-96" y2="-96" x1="64" />
+            <rect width="64" x="0" y="-44" height="24" />
+            <line x2="0" y1="-32" y2="-32" x1="64" />
+            <rect width="64" x="512" y="-300" height="24" />
+            <line x2="576" y1="-288" y2="-288" x1="512" />
+            <rect width="64" x="512" y="-236" height="24" />
+            <line x2="576" y1="-224" y2="-224" x1="512" />
+            <line x2="576" y1="-160" y2="-160" x1="512" />
+            <line x2="576" y1="-96" y2="-96" x1="512" />
+            <line x2="576" y1="-32" y2="-32" x1="512" />
+        </blockdef>
         <block symbolname="simple_GateArray" name="GA">
-            <blockpin signalname="XLXN_435" name="CLK" />
+            <blockpin signalname="XLXN_861" name="CLK" />
             <blockpin signalname="IO_WR" name="IO_REQ_W" />
             <blockpin signalname="A(15:14)" name="A15_A14(1:0)" />
             <blockpin signalname="D(7:0)" name="D(7:0)" />
@@ -492,7 +528,7 @@
         </block>
         <block symbolname="inv" name="XLXI_243">
             <blockpin signalname="CLK8(2)" name="I" />
-            <blockpin signalname="XLXN_435" name="O" />
+            <blockpin signalname="XLXN_861" name="O" />
         </block>
         <block symbolname="vcc" name="XLXI_414">
             <blockpin signalname="XLXN_542" name="P" />
@@ -528,7 +564,7 @@
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
         </block>
         <block symbolname="ROMselect" name="XLXI_345">
-            <blockpin signalname="XLXN_435" name="CLK" />
+            <blockpin signalname="XLXN_861" name="CLK" />
             <blockpin signalname="A(13)" name="A13" />
             <blockpin signalname="IO_WR" name="IO_WR" />
             <blockpin signalname="D(7:0)" name="D(7:0)" />
@@ -724,6 +760,7 @@
             <blockpin signalname="portC(3:0)" name="PPI_portC(3:0)" />
             <blockpin signalname="XLXN_798(5:0)" name="joystick1(5:0)" />
             <blockpin signalname="XLXN_518(7:0)" name="PPI_portA(7:0)" />
+            <blockpin signalname="key_reset" name="key_reset" />
         </block>
         <block symbolname="buf" name="XLXI_495">
             <blockpin signalname="XLXN_832" name="I" />
@@ -798,12 +835,29 @@
             <blockpin signalname="XLXN_848" name="I2" />
             <blockpin signalname="ram_W_n" name="O" />
         </block>
+        <block symbolname="ZXUNO_DSK_SELECT" name="XLXI_577">
+            <blockpin signalname="XLXN_861" name="CLK4MHz" />
+            <blockpin signalname="A(15:0)" name="A(15:0)" />
+            <blockpin signalname="D(7:0)" name="Din(7:0)" />
+            <blockpin signalname="IO_RD" name="rd" />
+            <blockpin signalname="IO_WR" name="wr" />
+            <blockpin signalname="ZDSK_doCarac" name="ZDSK_doCarac" />
+            <blockpin signalname="ZDSK_CARAC(7:0)" name="ZDSK_CARAC(7:0)" />
+            <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
+            <blockpin signalname="ZDSK_NUMBER(15:0)" name="ZDSK_NUMBER(15:0)" />
+            <blockpin signalname="ZDSK_doSelect" name="ZDSK_doSelect" />
+            <blockpin signalname="ZDSK_doInsert" name="ZDSK_doInsert" />
+            <blockpin signalname="ZDSK_doneCarac" name="ZDSK_doneCarac" />
+        </block>
     </netlist>
     <sheet sheetnum="1" width="7040" height="5440">
         <branch name="A(15:0)">
-            <wire x2="1728" y1="3168" y2="3168" x1="1664" />
+            <wire x2="1728" y1="480" y2="480" x1="352" />
             <wire x2="2480" y1="480" y2="480" x1="1728" />
             <wire x2="1728" y1="480" y2="3168" x1="1728" />
+            <wire x2="352" y1="480" y2="960" x1="352" />
+            <wire x2="544" y1="960" y2="960" x1="352" />
+            <wire x2="1728" y1="3168" y2="3168" x1="1664" />
             <wire x2="3264" y1="304" y2="304" x1="2480" />
             <wire x2="3264" y1="304" y2="544" x1="3264" />
             <wire x2="3472" y1="544" y2="544" x1="3264" />
@@ -838,14 +892,17 @@
             <wire x2="3472" y1="832" y2="832" x1="2384" />
         </branch>
         <branch name="XLXN_283(7:0)">
+            <wire x2="1536" y1="1024" y2="1024" x1="1120" />
+            <wire x2="1536" y1="1024" y2="2352" x1="1536" />
+            <wire x2="2592" y1="2352" y2="2352" x1="1536" />
+            <wire x2="2592" y1="2352" y2="3344" x1="2592" />
+            <wire x2="2592" y1="3344" y2="4880" x1="2592" />
+            <wire x2="6384" y1="3344" y2="3344" x1="2592" />
+            <wire x2="4096" y1="2352" y2="2352" x1="2592" />
             <wire x2="1280" y1="3216" y2="3216" x1="1200" />
             <wire x2="1200" y1="3216" y2="3344" x1="1200" />
             <wire x2="2592" y1="3344" y2="3344" x1="1200" />
-            <wire x2="2592" y1="3344" y2="4880" x1="2592" />
-            <wire x2="6384" y1="3344" y2="3344" x1="2592" />
             <wire x2="2592" y1="4880" y2="4880" x1="2560" />
-            <wire x2="2592" y1="2352" y2="3344" x1="2592" />
-            <wire x2="4096" y1="2352" y2="2352" x1="2592" />
             <wire x2="4096" y1="1376" y2="1376" x1="3440" />
             <wire x2="4096" y1="1376" y2="1632" x1="4096" />
             <wire x2="4096" y1="1632" y2="2352" x1="4096" />
@@ -926,18 +983,8 @@
             <wire x2="3488" y1="1536" y2="1648" x1="3488" />
             <wire x2="6400" y1="2800" y2="2800" x1="6304" />
         </branch>
-        <branch name="XLXN_435">
-            <wire x2="1536" y1="384" y2="384" x1="1472" />
-            <wire x2="1472" y1="384" y2="736" x1="1472" />
-            <wire x2="2720" y1="736" y2="736" x1="1472" />
-            <wire x2="2768" y1="736" y2="736" x1="2720" />
-            <wire x2="2720" y1="736" y2="816" x1="2720" />
-            <wire x2="2800" y1="816" y2="816" x1="2720" />
-            <wire x2="2800" y1="816" y2="1088" x1="2800" />
-            <wire x2="2800" y1="1088" y2="1088" x1="2752" />
-        </branch>
         <branch name="CLK16MHz">
-            <wire x2="1808" y1="1600" y2="1600" x1="1536" />
+            <wire x2="1808" y1="1600" y2="1600" x1="1008" />
             <wire x2="2000" y1="1600" y2="1600" x1="1808" />
             <wire x2="1808" y1="1504" y2="1600" x1="1808" />
         </branch>
@@ -964,7 +1011,6 @@
         <bustap x2="2480" y1="1472" y2="1472" x1="2576" />
         <iomarker fontsize="28" x="3984" y="1664" name="ram_A(20:0)" orien="R270" />
         <iomarker fontsize="28" x="3296" y="1632" name="ram_D(7:0)" orien="R180" />
-        <iomarker fontsize="28" x="1536" y="1600" name="CLK16MHz" orien="R180" />
         <branch name="XLXN_58">
             <wire x2="1744" y1="2720" y2="2720" x1="1664" />
         </branch>
@@ -1001,6 +1047,9 @@
             <wire x2="2736" y1="4656" y2="4656" x1="2560" />
         </branch>
         <branch name="IO_RD">
+            <wire x2="544" y1="1088" y2="1088" x1="112" />
+            <wire x2="112" y1="1088" y2="3584" x1="112" />
+            <wire x2="768" y1="3584" y2="3584" x1="112" />
             <wire x2="768" y1="3584" y2="4256" x1="768" />
             <wire x2="848" y1="4256" y2="4256" x1="768" />
             <wire x2="2416" y1="3584" y2="3584" x1="768" />
@@ -1245,19 +1294,15 @@
             <wire x2="4864" y1="576" y2="2592" x1="4864" />
         </branch>
         <branch name="XLXN_830">
-            <wire x2="6016" y1="64" y2="64" x1="208" />
+            <wire x2="160" y1="64" y2="2832" x1="160" />
+            <wire x2="448" y1="2832" y2="2832" x1="160" />
+            <wire x2="6016" y1="64" y2="64" x1="160" />
             <wire x2="6016" y1="64" y2="672" x1="6016" />
-            <wire x2="208" y1="64" y2="2832" x1="208" />
-            <wire x2="448" y1="2832" y2="2832" x1="208" />
             <wire x2="6016" y1="672" y2="672" x1="5776" />
         </branch>
         <branch name="IO_WR">
             <attrtext style="alignment:SOFT-LEFT" attrname="Name" x="2496" y="2752" type="branch" />
-            <wire x2="784" y1="4112" y2="4192" x1="784" />
-            <wire x2="848" y1="4192" y2="4192" x1="784" />
-            <wire x2="1760" y1="4112" y2="4112" x1="784" />
-            <wire x2="1536" y1="256" y2="256" x1="1504" />
-            <wire x2="1504" y1="256" y2="608" x1="1504" />
+            <wire x2="1504" y1="608" y2="608" x1="272" />
             <wire x2="2704" y1="608" y2="608" x1="1504" />
             <wire x2="2768" y1="608" y2="608" x1="2704" />
             <wire x2="2704" y1="608" y2="800" x1="2704" />
@@ -1269,6 +1314,13 @@
             <wire x2="5040" y1="2704" y2="2704" x1="3216" />
             <wire x2="5040" y1="2704" y2="2928" x1="5040" />
             <wire x2="5824" y1="2928" y2="2928" x1="5040" />
+            <wire x2="272" y1="608" y2="1152" x1="272" />
+            <wire x2="544" y1="1152" y2="1152" x1="272" />
+            <wire x2="784" y1="4112" y2="4192" x1="784" />
+            <wire x2="848" y1="4192" y2="4192" x1="784" />
+            <wire x2="1760" y1="4112" y2="4112" x1="784" />
+            <wire x2="1536" y1="256" y2="256" x1="1504" />
+            <wire x2="1504" y1="256" y2="608" x1="1504" />
             <wire x2="1760" y1="2960" y2="4112" x1="1760" />
             <wire x2="2464" y1="2960" y2="2960" x1="1760" />
             <wire x2="2464" y1="2752" y2="2752" x1="2352" />
@@ -1307,6 +1359,15 @@
         </branch>
         <branch name="D(7:0)">
             <attrtext style="alignment:SOFT-VLEFT" attrname="Name" x="1856" y="3184" type="branch" />
+            <wire x2="208" y1="1024" y2="2096" x1="208" />
+            <wire x2="2384" y1="2096" y2="2096" x1="208" />
+            <wire x2="2384" y1="2096" y2="2640" x1="2384" />
+            <wire x2="2384" y1="2640" y2="3232" x1="2384" />
+            <wire x2="2688" y1="2640" y2="2640" x1="2384" />
+            <wire x2="4976" y1="2640" y2="2640" x1="2688" />
+            <wire x2="4976" y1="2640" y2="3120" x1="4976" />
+            <wire x2="5824" y1="3120" y2="3120" x1="4976" />
+            <wire x2="544" y1="1024" y2="1024" x1="208" />
             <wire x2="1536" y1="320" y2="320" x1="1456" />
             <wire x2="1456" y1="320" y2="544" x1="1456" />
             <wire x2="2688" y1="544" y2="544" x1="1456" />
@@ -1314,16 +1375,11 @@
             <wire x2="2688" y1="544" y2="1504" x1="2688" />
             <wire x2="3056" y1="1504" y2="1504" x1="2688" />
             <wire x2="2688" y1="1504" y2="2640" x1="2688" />
-            <wire x2="4976" y1="2640" y2="2640" x1="2688" />
-            <wire x2="4976" y1="2640" y2="3120" x1="4976" />
-            <wire x2="5824" y1="3120" y2="3120" x1="4976" />
             <wire x2="1856" y1="3232" y2="3232" x1="1664" />
             <wire x2="1856" y1="3232" y2="4624" x1="1856" />
             <wire x2="2096" y1="4624" y2="4624" x1="1856" />
             <wire x2="2384" y1="3232" y2="3232" x1="1856" />
             <wire x2="1856" y1="3184" y2="3232" x1="1856" />
-            <wire x2="2384" y1="2640" y2="3232" x1="2384" />
-            <wire x2="2688" y1="2640" y2="2640" x1="2384" />
             <wire x2="5072" y1="768" y2="768" x1="4976" />
             <wire x2="4976" y1="768" y2="2640" x1="4976" />
         </branch>
@@ -1525,5 +1581,49 @@
         <instance x="4096" y="1328" name="XLXI_575" orien="R0" />
         <instance x="4464" y="4080" name="XLXI_566" orien="R180">
         </instance>
+        <instance x="544" y="1312" name="XLXI_577" orien="R0">
+        </instance>
+        <branch name="XLXN_861">
+            <wire x2="1472" y1="736" y2="736" x1="416" />
+            <wire x2="2720" y1="736" y2="736" x1="1472" />
+            <wire x2="2768" y1="736" y2="736" x1="2720" />
+            <wire x2="2720" y1="736" y2="816" x1="2720" />
+            <wire x2="2800" y1="816" y2="816" x1="2720" />
+            <wire x2="2800" y1="816" y2="1088" x1="2800" />
+            <wire x2="416" y1="736" y2="896" x1="416" />
+            <wire x2="544" y1="896" y2="896" x1="416" />
+            <wire x2="1536" y1="384" y2="384" x1="1472" />
+            <wire x2="1472" y1="384" y2="736" x1="1472" />
+            <wire x2="2800" y1="1088" y2="1088" x1="2752" />
+        </branch>
+        <branch name="ZDSK_NUMBER(15:0)">
+            <wire x2="1152" y1="1088" y2="1088" x1="1120" />
+        </branch>
+        <iomarker fontsize="28" x="1152" y="1088" name="ZDSK_NUMBER(15:0)" orien="R0" />
+        <branch name="ZDSK_doSelect">
+            <wire x2="1152" y1="1152" y2="1152" x1="1120" />
+        </branch>
+        <iomarker fontsize="28" x="1152" y="1152" name="ZDSK_doSelect" orien="R0" />
+        <branch name="ZDSK_doInsert">
+            <wire x2="1152" y1="1216" y2="1216" x1="1120" />
+        </branch>
+        <iomarker fontsize="28" x="1152" y="1216" name="ZDSK_doInsert" orien="R0" />
+        <branch name="ZDSK_doneCarac">
+            <wire x2="1152" y1="1280" y2="1280" x1="1120" />
+        </branch>
+        <iomarker fontsize="28" x="1152" y="1280" name="ZDSK_doneCarac" orien="R0" />
+        <branch name="ZDSK_doCarac">
+            <wire x2="544" y1="1216" y2="1216" x1="512" />
+        </branch>
+        <iomarker fontsize="28" x="512" y="1216" name="ZDSK_doCarac" orien="R180" />
+        <branch name="ZDSK_CARAC(7:0)">
+            <wire x2="544" y1="1280" y2="1280" x1="512" />
+        </branch>
+        <iomarker fontsize="28" x="512" y="1280" name="ZDSK_CARAC(7:0)" orien="R180" />
+        <iomarker fontsize="28" x="1008" y="1600" name="CLK16MHz" orien="R180" />
+        <branch name="key_reset">
+            <wire x2="3968" y1="4944" y2="4944" x1="3936" />
+        </branch>
+        <iomarker fontsize="28" x="3968" y="4944" name="key_reset" orien="R0" />
     </sheet>
 </drawing>

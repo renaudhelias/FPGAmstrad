@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="SDRAM_FAT32_LOADER">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-13T21:4:20</timestamp>
+    <timestamp>2017-12-16T13:22:59</timestamp>
     <pin polarity="Input" x="0" y="-352" name="CLK" />
     <pin polarity="Input" x="0" y="96" name="spi_Rdone" />
     <pin polarity="Input" x="0" y="224" name="spi_init_done" />
-    <pin polarity="Input" x="0" y="-160" name="file_select(7:0)" />
+    <pin polarity="Input" x="0" y="-160" name="file_select(15:0)" />
     <pin polarity="Input" x="0" y="-32" name="spi_Din(7:0)" />
     <pin polarity="BiDirectional" x="432" y="-96" name="ram_D(7:0)" />
     <pin polarity="Output" x="432" y="-352" name="ram_W" />
@@ -14,12 +14,13 @@
     <pin polarity="Output" x="432" y="-160" name="ram_A(20:0)" />
     <pin polarity="Output" x="432" y="-32" name="spi_A(22:0)" />
     <pin polarity="Output" x="432" y="32" name="spi_A_block(8:0)" />
+    <pin polarity="Input" x="0" y="-272" name="key_reset" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="216" y="-392" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-352" type="pin CLK" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="96" type="pin spi_Rdone" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="224" type="pin spi_init_done" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-160" type="pin file_select(7:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-160" type="pin file_select(15:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-32" type="pin spi_Din(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="-96" type="pin ram_D(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="-352" type="pin ram_W" />
@@ -46,6 +47,8 @@
         <line x2="0" y1="96" y2="96" x1="64" />
         <rect width="64" x="0" y="-44" height="24" />
         <line x2="0" y1="-32" y2="-32" x1="64" />
-        <rect width="304" x="64" y="-384" height="708" />
+        <rect width="304" x="64" y="-384" height="640" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-272" type="pin key_reset" />
+        <line x2="0" y1="-272" y2="-272" x1="64" />
     </graph>
 </symbol>
