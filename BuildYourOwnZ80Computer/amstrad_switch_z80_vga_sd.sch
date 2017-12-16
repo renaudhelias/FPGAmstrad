@@ -44,11 +44,8 @@
         <signal name="XLXN_756" />
         <signal name="XLXN_757(7:0)" />
         <signal name="XLXN_760" />
-        <signal name="XLXN_761" />
         <signal name="XLXN_762" />
         <signal name="XLXN_763" />
-        <signal name="XLXN_764" />
-        <signal name="XLXN_765" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="FILE_LOADED" />
         <port polarity="Input" name="CLK50MHz" />
@@ -130,7 +127,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-16T18:17:22</timestamp>
+            <timestamp>2017-12-16T21:0:46</timestamp>
             <rect width="64" x="384" y="452" height="24" />
             <line x2="448" y1="464" y2="464" x1="384" />
             <line x2="448" y1="528" y2="528" x1="384" />
@@ -204,6 +201,7 @@
             <blockpin signalname="XLXN_717" name="PWM_CLK" />
             <blockpin signalname="XLXN_760" name="ZDSK_doCarac" />
             <blockpin signalname="XLXN_757(7:0)" name="ZDSK_CARAC(7:0)" />
+            <blockpin signalname="XLXN_762" name="pause" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="JOYSTICK1(5:0)" name="JOYSTICK1(5:0)" />
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
@@ -217,12 +215,11 @@
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
             <blockpin signalname="AUDIO_R" name="audio_bc" />
             <blockpin signalname="AUDIO_L" name="audio_ab" />
-            <blockpin signalname="XLXN_749(15:0)" name="ZDSK_NUMBER(15:0)" />
-            <blockpin signalname="XLXN_755" name="ZDSK_doSelect" />
-            <blockpin signalname="XLXN_763" name="ZDSK_doInsert" />
-            <blockpin signalname="XLXN_756" name="ZDSK_doneCarac" />
             <blockpin signalname="XLXN_753" name="key_reset" />
-            <blockpin signalname="XLXN_762" name="pause" />
+            <blockpin signalname="XLXN_755" name="ZDSK_doSelect" />
+            <blockpin signalname="XLXN_749(15:0)" name="ZDSK_NUMBER(15:0)" />
+            <blockpin signalname="XLXN_756" name="ZDSK_doneCarac" />
+            <blockpin signalname="XLXN_763" name="ZDSK_doInsert" />
         </block>
         <block symbolname="bootloader_sd" name="XLXI_462">
             <blockpin signalname="MISO" name="MISO" />
