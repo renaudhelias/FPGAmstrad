@@ -615,7 +615,7 @@ end function;
 			--leds<=files_loaded & "111";
 			--leds<=conv_std_logic_vector(step_var,8);
 			
-			if load_done='0' and spi_init_done='1' then
+			if spi_init_done='1' then
 			
 				data_Rdo<=false;
 				compare_do<=false;
