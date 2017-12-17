@@ -936,7 +936,7 @@ end if;
 							files_loaded(0):='0';
 							dsk_number:=(others=>'0');
 							pause_mem:='1';
-							step_var:=8; -- next DIRStruct
+							step_var:=0;
 						elsif ZDSK_doSelect='1' then
 							ZDSK_doCarac<='0';
 							-- place cursor front of file with nice number
@@ -944,7 +944,7 @@ end if;
 							file_search_done:=false;
 							file_search_offset:=0;
 							dsk_number:=(others=>'0');
-							step_var:=8; -- next DIRStruct
+							step_var:=0;
 						elsif ZDSK_doneCarac='1' and ZDSK_doneCarac_old_mem='0' then
 							-- a char has been readen, go to next char.
 							ZDSK_doCarac<='0';
@@ -1011,11 +1011,16 @@ end if;
 		if rising_edge(CLK) then
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
-			if gripsou_write='1' and switch_transmit_gripsou=SWITCH_GRIPSOU then
+			
+			if switch_transmit_gripsou/=SWITCH_GRIPSOU then
+				-- ready for another disk insertion...
+				gripsou_step:=0;
+				input_A:="000" & x"00000";
+			elsif gripsou_write='1' then -- and switch_transmit_gripsou=SWITCH_GRIPSOU then
 				data_mem:=gripsou_data;
 				case gripsou_step is
 					when 0=> -- disk ID
-						if input_A=x"00000000" then
+						if input_A="000" & x"00000" then
 							if data_mem=x"45" then
 								extended:=true;
 							elsif data_mem=x"4D" then
@@ -1023,11 +1028,11 @@ end if;
 							end if;
 						end if;
 						input_A:=input_A+1;
-						if input_A>x"00000021" then
+						if input_A>"000" & x"00021" then
 							gripsou_step:=1;
 						end if;
 					when 1=> -- disk creator
-						if input_A=x"00000022" then
+						if input_A="000" & x"00022" then
 							if data_mem=x"57" then
 								winape:=true;
 							else
@@ -1035,7 +1040,7 @@ end if;
 							end if;
 						end if;
 						input_A:=input_A+1;
-						if input_A>x"0000002f" then
+						if input_A>"000" & x"0002f" then
 							gripsou_step:=2;
 						end if;
 					when 2=>
@@ -1043,19 +1048,19 @@ end if;
 						input_A:=input_A+1;
 						gripsou_step:=3;
 					when 3=>
-						if input_A=x"00000031" then
+						if input_A="000" & x"00031" then
 							nb_sides:=conv_integer(data_mem);
 						end if;
 						input_A:=input_A+1;
 						gripsou_step:=4;
         			when 4=>
-						if input_A=x"00000032" then
+						if input_A="000" & x"00032" then
 							track_size(7 downto 0):=data_mem;
-						elsif input_A=x"00000033" then
+						elsif input_A="000" & x"00033" then
 							track_size(15 downto 8):=data_mem;
 						end if;
 						input_A:=input_A+1;
-						if input_A>x"00000033" then
+						if input_A>"000" & x"00033" then
 							if extended then
 								gripsou_step:=5;
 								no_track:=0;
@@ -1072,7 +1077,7 @@ end if;
 						end if;
 					when 6=> -- avancer jusqu'au début track-info
 						input_A:=input_A+1;
-						if input_A>x"000000FF" then --==============================================
+						if input_A>"000" & x"000FF" then --==============================================
 							gripsou_step:=7;
 							no_track:=0;
 							input_A:=(others=>'0'); -- rembobine
@@ -1080,14 +1085,14 @@ end if;
 						end if;
 					when 7=> -- pour chaque track
 						input_A:=input_A+1;
-						if input_A>x"0000000F" then
+						if input_A>"000" & x"0000F" then
 							gripsou_step:=10;
 						end if;
 					when 8=>NULL;
 					when 9=>NULL;
 					when 10=>
 						input_A:=input_A+1;
-						if input_A>x"0000000014" then
+						if input_A>"000" & x"00014" then
 							gripsou_step:=11;
 						end if;
 					when 11=>
@@ -1096,7 +1101,7 @@ end if;
 						gripsou_step:=12;
 					when 12=>
 						input_A:=input_A+1;
-						if input_A>x"0000000017" then --===============================================
+						if input_A>"000" & x"00017" then --===============================================
 							gripsou_step:=13;
 							no_sect:=0;
 						end if;
@@ -1145,7 +1150,7 @@ end if;
 						
 					when 17=>
 						input_A:=input_A+1;
-						if input_A>x"000000FF" then --=============================================
+						if input_A>"000" & x"000FF" then --=============================================
 							gripsou_step:=18;
 							no_sect:=0;
 							no_side:=0;
