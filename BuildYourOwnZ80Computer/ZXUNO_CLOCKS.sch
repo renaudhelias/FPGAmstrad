@@ -94,6 +94,13 @@
                 <trait vhdl="all:0 gm:1nosynth wa:1 wd:1" />
                 <trait valuetype="Integer 1 74" />
             </attr>
+            <attr value="64" name="CLKOUT0_PHASE">
+                <trait editname="all:1 sch:0" />
+                <trait edittrait="all:1 sch:0" />
+                <trait verilog="all:0 dp:1nosynth wsynop:1 wsynth:1" />
+                <trait vhdl="all:0 gm:1nosynth wa:1 wd:1" />
+                <trait valuetype="Float 0 360" />
+            </attr>
             <blockpin signalname="CLK50MHz" name="CLKIN" />
             <blockpin signalname="XLXN_3" name="CLKFBIN" />
             <blockpin signalname="XLXN_1" name="RST" />
@@ -116,6 +123,7 @@
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
         <instance x="1232" y="768" name="XLXI_1" orien="R0">
+            <attrtext style="fontsize:28;fontname:Arial;displayformat:NAMEEQUALSVALUE" attrname="CLKOUT0_PHASE" x="192" y="-172" type="instance" />
         </instance>
         <instance x="960" y="672" name="XLXI_425" orien="R90" />
         <branch name="XLXN_1">
