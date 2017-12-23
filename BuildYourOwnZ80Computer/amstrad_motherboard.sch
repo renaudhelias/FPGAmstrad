@@ -8,7 +8,6 @@
     <netlist>
         <signal name="IO_WR" />
         <signal name="A(15:0)" />
-        <signal name="XLXN_118" />
         <signal name="MEM_RD" />
         <signal name="LED1" />
         <signal name="LED2" />
@@ -20,19 +19,16 @@
         <signal name="vram_A(17:0)" />
         <signal name="XLXN_427(19:0)" />
         <signal name="ram_D(7:0)" />
-        <signal name="XLXN_542" />
         <signal name="ram_A(20:0)" />
         <signal name="init_A(20:0)" />
         <signal name="XLXN_555" />
         <signal name="XLXN_556" />
         <signal name="init_W_n" />
         <signal name="A(15:14)" />
-        <signal name="CLK8(0)" />
-        <signal name="CLK8(2)" />
-        <signal name="CLK8(1)" />
+        <signal name="CLK8(2)">
+        </signal>
         <signal name="MEM_WR" />
         <signal name="XLXN_621" />
-        <signal name="CLK16MHz" />
         <signal name="D(7:0)" />
         <signal name="XLXN_58" />
         <signal name="XLXN_75" />
@@ -115,12 +111,11 @@
         <signal name="ZDSK_doneCarac" />
         <signal name="ZDSK_doInsert" />
         <signal name="ZDSK_doCarac" />
-        <port polarity="Output" name="CLK8(2:0)" />
+        <port polarity="Input" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
         <port polarity="Input" name="init_A(20:0)" />
         <port polarity="Input" name="init_W_n" />
-        <port polarity="Input" name="CLK16MHz" />
         <port polarity="Input" name="PS2_CLK" />
         <port polarity="Input" name="PS2_DATA" />
         <port polarity="Output" name="crtc_A(15:0)" />
@@ -219,21 +214,6 @@
             <rect width="64" x="320" y="-172" height="24" />
             <line x2="384" y1="-160" y2="-160" x1="320" />
             <rect width="256" x="64" y="-192" height="256" />
-        </blockdef>
-        <blockdef name="cb2ce">
-            <timestamp>2000-1-1T10:10:10</timestamp>
-            <rect width="256" x="64" y="-384" height="320" />
-            <line x2="320" y1="-128" y2="-128" x1="384" />
-            <line x2="64" y1="-32" y2="-32" x1="0" />
-            <line x2="64" y1="-128" y2="-128" x1="0" />
-            <line x2="64" y1="-128" y2="-144" x1="80" />
-            <line x2="80" y1="-112" y2="-128" x1="64" />
-            <line x2="64" y1="-32" y2="-32" x1="192" />
-            <line x2="192" y1="-64" y2="-32" x1="192" />
-            <line x2="64" y1="-192" y2="-192" x1="0" />
-            <line x2="320" y1="-192" y2="-192" x1="384" />
-            <line x2="320" y1="-256" y2="-256" x1="384" />
-            <line x2="320" y1="-320" y2="-320" x1="384" />
         </blockdef>
         <blockdef name="AmstradRAMDSK">
             <timestamp>2017-12-13T21:1:36</timestamp>
@@ -532,25 +512,6 @@
         <block symbolname="inv" name="XLXI_243">
             <blockpin signalname="CLK8(2)" name="I" />
             <blockpin signalname="XLXN_861" name="O" />
-        </block>
-        <block symbolname="vcc" name="XLXI_414">
-            <blockpin signalname="XLXN_542" name="P" />
-        </block>
-        <block symbolname="gnd" name="XLXI_223">
-            <blockpin signalname="XLXN_118" name="G" />
-        </block>
-        <block symbolname="cb2ce" name="XLXI_221">
-            <blockpin signalname="CLK16MHz" name="C" />
-            <blockpin signalname="XLXN_542" name="CE" />
-            <blockpin signalname="XLXN_118" name="CLR" />
-            <blockpin name="CEO" />
-            <blockpin signalname="CLK8(1)" name="Q0" />
-            <blockpin signalname="CLK8(2)" name="Q1" />
-            <blockpin name="TC" />
-        </block>
-        <block symbolname="inv" name="XLXI_417">
-            <blockpin signalname="CLK16MHz" name="I" />
-            <blockpin signalname="CLK8(0)" name="O" />
         </block>
         <block symbolname="inv" name="XLXI_226">
             <blockpin signalname="XLXN_555" name="I" />
@@ -875,9 +836,6 @@
             <wire x2="3472" y1="544" y2="544" x1="3264" />
             <wire x2="2480" y1="304" y2="480" x1="2480" />
         </branch>
-        <branch name="XLXN_118">
-            <wire x2="2000" y1="1696" y2="1696" x1="1952" />
-        </branch>
         <branch name="MEM_RD">
             <wire x2="2976" y1="2608" y2="2608" x1="2352" />
             <wire x2="3056" y1="1248" y2="1248" x1="2976" />
@@ -951,9 +909,6 @@
             <wire x2="6368" y1="1168" y2="1920" x1="6368" />
             <wire x2="6368" y1="3056" y2="3056" x1="6304" />
         </branch>
-        <branch name="XLXN_542">
-            <wire x2="2000" y1="1536" y2="1536" x1="1968" />
-        </branch>
         <branch name="ram_A(20:0)">
             <wire x2="3936" y1="1664" y2="1664" x1="3920" />
             <wire x2="3936" y1="1664" y2="1680" x1="3936" />
@@ -977,15 +932,6 @@
         <branch name="A(15:14)">
             <wire x2="2768" y1="480" y2="480" x1="2576" />
         </branch>
-        <branch name="CLK8(0)">
-            <wire x2="1808" y1="1200" y2="1280" x1="1808" />
-            <wire x2="2448" y1="1200" y2="1200" x1="1808" />
-            <wire x2="2448" y1="1200" y2="1344" x1="2448" />
-            <wire x2="2480" y1="1344" y2="1344" x1="2448" />
-        </branch>
-        <branch name="CLK8(1)">
-            <wire x2="2480" y1="1408" y2="1408" x1="2384" />
-        </branch>
         <branch name="XLXN_621">
             <wire x2="3488" y1="1648" y2="1648" x1="3392" />
             <wire x2="3392" y1="1648" y2="2000" x1="3392" />
@@ -995,11 +941,6 @@
             <wire x2="3488" y1="1536" y2="1648" x1="3488" />
             <wire x2="6400" y1="2800" y2="2800" x1="6304" />
         </branch>
-        <branch name="CLK16MHz">
-            <wire x2="1808" y1="1600" y2="1600" x1="1008" />
-            <wire x2="2000" y1="1600" y2="1600" x1="1808" />
-            <wire x2="1808" y1="1504" y2="1600" x1="1808" />
-        </branch>
         <instance x="2768" y="576" name="GA" orien="R0">
         </instance>
         <bustap x2="2576" y1="480" y2="480" x1="2480" />
@@ -1007,17 +948,11 @@
         </instance>
         <instance x="2528" y="1120" name="XLXI_243" orien="R0" />
         <text style="fontsize:40;fontname:Arial" x="2192" y="948">12.5MHz (presque 16MHz)</text>
-        <instance x="1968" y="1600" name="XLXI_414" orien="R270" />
-        <instance x="1824" y="1632" name="XLXI_223" orien="R90" />
-        <instance x="2000" y="1728" name="XLXI_221" orien="R0" />
-        <instance x="1840" y="1504" name="XLXI_417" orien="R270" />
         <instance x="3552" y="1280" name="XLXI_226" orien="R0" />
         <instance x="1536" y="352" name="XLXI_345" orien="R0">
         </instance>
         <instance x="3056" y="1536" name="XLXI_224" orien="R0">
         </instance>
-        <bustap x2="2480" y1="1344" y2="1344" x1="2576" />
-        <bustap x2="2480" y1="1408" y2="1408" x1="2576" />
         <bustap x2="2480" y1="1472" y2="1472" x1="2576" />
         <iomarker fontsize="28" x="3984" y="1664" name="ram_A(20:0)" orien="R270" />
         <iomarker fontsize="28" x="3296" y="1632" name="ram_D(7:0)" orien="R180" />
@@ -1214,7 +1149,6 @@
         <iomarker fontsize="28" x="3280" y="1792" name="init_A(20:0)" orien="R180" />
         <iomarker fontsize="28" x="1056" y="3504" name="RESET_n" orien="R0" />
         <iomarker fontsize="28" x="3872" y="1200" name="init_W_n" orien="R180" />
-        <iomarker fontsize="28" x="2576" y="1296" name="CLK8(2:0)" orien="R270" />
         <iomarker fontsize="28" x="4448" y="2400" name="crtc_A(15:0)" orien="R270" />
         <text style="fontsize:24;fontname:Arial" x="1624" y="4708">000 1 50Hz 101 Schneider X vsync</text>
         <branch name="JOYSTICK1(5:0)">
@@ -1237,7 +1171,6 @@
             <wire x2="2464" y1="1920" y2="1920" x1="1664" />
             <wire x2="2464" y1="1920" y2="2000" x1="2464" />
             <wire x2="1664" y1="1920" y2="2320" x1="1664" />
-            <wire x2="2464" y1="1472" y2="1472" x1="2384" />
             <wire x2="2480" y1="1472" y2="1472" x1="2464" />
             <wire x2="2464" y1="1472" y2="1920" x1="2464" />
         </branch>
@@ -1568,7 +1501,6 @@
             <wire x2="544" y1="1280" y2="1280" x1="512" />
         </branch>
         <iomarker fontsize="28" x="512" y="1280" name="ZDSK_CARAC(7:0)" orien="R180" />
-        <iomarker fontsize="28" x="1008" y="1600" name="CLK16MHz" orien="R180" />
         <branch name="key_reset">
             <wire x2="3968" y1="4944" y2="4944" x1="3936" />
         </branch>
@@ -1644,5 +1576,6 @@
             <wire x2="544" y1="1088" y2="1088" x1="512" />
         </branch>
         <iomarker fontsize="28" x="512" y="1088" name="ZDSK_doCarac" orien="R180" />
+        <iomarker fontsize="28" x="2576" y="1296" name="CLK8(2:0)" orien="R270" />
     </sheet>
 </drawing>

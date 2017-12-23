@@ -6,16 +6,14 @@
         <trait edittrait="all:0" />
     </attr>
     <netlist>
-        <signal name="XLXN_337" />
         <signal name="XLXN_452(7:0)" />
         <signal name="XLXN_549" />
         <signal name="crtc_W" />
         <signal name="crtc_D(7:0)" />
         <signal name="crtc_A(14:0)" />
-        <signal name="XLXN_627" />
+        <signal name="CLK25MHz" />
         <signal name="XLXN_340(7:0)" />
         <signal name="CLK4MHz" />
-        <signal name="CLK25MHz" />
         <signal name="XLXN_338" />
         <signal name="XLXN_342" />
         <signal name="XLXN_343" />
@@ -39,8 +37,8 @@
         <port polarity="Input" name="crtc_W" />
         <port polarity="Input" name="crtc_D(7:0)" />
         <port polarity="Input" name="crtc_A(14:0)" />
-        <port polarity="Input" name="CLK4MHz" />
         <port polarity="Input" name="CLK25MHz" />
+        <port polarity="Input" name="CLK4MHz" />
         <port polarity="Input" name="palette_D(7:0)" />
         <port polarity="Input" name="palette_A(12:0)" />
         <port polarity="Input" name="palette_W" />
@@ -155,21 +153,13 @@
             <line x2="512" y1="-32" y2="-32" x1="448" />
             <rect width="384" x="64" y="-448" height="448" />
         </blockdef>
-        <block symbolname="inv" name="XLXI_320">
-            <blockpin signalname="XLXN_627" name="I" />
-            <blockpin signalname="XLXN_337" name="O" />
-        </block>
         <block symbolname="inv" name="XLXI_421">
-            <blockpin signalname="XLXN_627" name="I" />
-            <blockpin signalname="XLXN_549" name="O" />
-        </block>
-        <block symbolname="inv" name="XLXI_470">
             <blockpin signalname="CLK25MHz" name="I" />
-            <blockpin signalname="XLXN_627" name="O" />
+            <blockpin signalname="XLXN_549" name="O" />
         </block>
         <block symbolname="VRAM32Ko_Amstrad" name="XLXI_474">
             <blockpin signalname="CLK4MHz" name="vram_CLK" />
-            <blockpin signalname="XLXN_627" name="vga_CLK" />
+            <blockpin signalname="CLK25MHz" name="vga_CLK" />
             <blockpin signalname="crtc_A(14:0)" name="vram_A(14:0)" />
             <blockpin signalname="XLXN_693(14:0)" name="vga_A(14:0)" />
             <blockpin signalname="crtc_W" name="vram_W" />
@@ -179,7 +169,7 @@
         <block symbolname="PALETTE_RAM" name="XLXI_475">
             <blockpin signalname="palette_D(7:0)" name="DI(7:0)" />
             <blockpin signalname="CLK4MHz" name="CLKI" />
-            <blockpin signalname="XLXN_627" name="CLKO" />
+            <blockpin signalname="CLK25MHz" name="CLKO" />
             <blockpin signalname="palette_W" name="WR" />
             <blockpin signalname="palette_A(12:0)" name="AI(12:0)" />
             <blockpin signalname="XLXN_694(12:0)" name="AO(12:0)" />
@@ -216,7 +206,7 @@
             <blockpin signalname="XLXN_339" name="G" />
         </block>
         <block symbolname="aZRaEL_vram2vgaAmstradMiaow" name="joe_dalton">
-            <blockpin signalname="XLXN_337" name="CLK_25MHz" />
+            <blockpin signalname="CLK25MHz" name="CLK_25MHz" />
             <blockpin signalname="XLXN_452(7:0)" name="DATA(7:0)" />
             <blockpin signalname="XLXN_684(7:0)" name="PALETTE_D(7:0)" />
             <blockpin signalname="VSYNC" name="VSYNC" />
@@ -237,14 +227,12 @@
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
-        <branch name="XLXN_337">
-            <wire x2="1472" y1="624" y2="624" x1="912" />
-        </branch>
         <branch name="XLXN_452(7:0)">
-            <wire x2="1472" y1="816" y2="816" x1="1184" />
             <wire x2="1184" y1="816" y2="1184" x1="1184" />
             <wire x2="3024" y1="1184" y2="1184" x1="1184" />
             <wire x2="3024" y1="1184" y2="1824" x1="3024" />
+            <wire x2="1456" y1="816" y2="816" x1="1184" />
+            <wire x2="1472" y1="816" y2="816" x1="1456" />
             <wire x2="3024" y1="1824" y2="1824" x1="2960" />
         </branch>
         <branch name="crtc_W">
@@ -253,7 +241,8 @@
         <branch name="crtc_A(14:0)">
             <wire x2="544" y1="1008" y2="1008" x1="368" />
         </branch>
-        <branch name="XLXN_627">
+        <branch name="CLK25MHz">
+            <wire x2="32" y1="224" y2="512" x1="32" />
             <wire x2="32" y1="512" y2="624" x1="32" />
             <wire x2="32" y1="624" y2="944" x1="32" />
             <wire x2="32" y1="944" y2="1408" x1="32" />
@@ -261,9 +250,8 @@
             <wire x2="608" y1="2544" y2="2544" x1="32" />
             <wire x2="400" y1="1408" y2="1408" x1="32" />
             <wire x2="544" y1="944" y2="944" x1="32" />
-            <wire x2="688" y1="624" y2="624" x1="32" />
+            <wire x2="1472" y1="624" y2="624" x1="32" />
         </branch>
-        <instance x="688" y="656" name="XLXI_320" orien="R0" />
         <branch name="crtc_D(7:0)">
             <wire x2="544" y1="1200" y2="1200" x1="352" />
         </branch>
@@ -276,10 +264,6 @@
         </branch>
         <iomarker fontsize="28" x="352" y="1200" name="crtc_D(7:0)" orien="R180" />
         <iomarker fontsize="28" x="224" y="672" name="CLK4MHz" orien="R180" />
-        <instance x="0" y="288" name="XLXI_470" orien="R90" />
-        <branch name="CLK25MHz">
-            <wire x2="32" y1="224" y2="288" x1="32" />
-        </branch>
         <iomarker fontsize="28" x="32" y="224" name="CLK25MHz" orien="R270" />
         <instance x="544" y="1232" name="XLXI_474" orien="R0">
         </instance>
@@ -289,18 +273,22 @@
             <wire x2="1952" y1="1872" y2="1872" x1="1888" />
         </branch>
         <branch name="XLXN_342">
-            <wire x2="2576" y1="2048" y2="2048" x1="2512" />
+            <wire x2="2528" y1="2048" y2="2048" x1="2512" />
+            <wire x2="2576" y1="2048" y2="2048" x1="2528" />
         </branch>
         <branch name="XLXN_343">
-            <wire x2="2576" y1="1888" y2="1888" x1="2512" />
+            <wire x2="2528" y1="1888" y2="1888" x1="2512" />
+            <wire x2="2576" y1="1888" y2="1888" x1="2528" />
         </branch>
         <branch name="XLXN_344(7:0)">
-            <wire x2="2448" y1="1808" y2="1808" x1="2336" />
+            <wire x2="2352" y1="1808" y2="1808" x1="2336" />
+            <wire x2="2448" y1="1808" y2="1808" x1="2352" />
             <wire x2="2448" y1="1808" y2="1824" x1="2448" />
             <wire x2="2576" y1="1824" y2="1824" x1="2448" />
         </branch>
         <branch name="XLXN_550">
-            <wire x2="2400" y1="1664" y2="1664" x1="2288" />
+            <wire x2="2304" y1="1664" y2="1664" x1="2288" />
+            <wire x2="2400" y1="1664" y2="1664" x1="2304" />
             <wire x2="2400" y1="1664" y2="1952" x1="2400" />
             <wire x2="2576" y1="1952" y2="1952" x1="2400" />
         </branch>
