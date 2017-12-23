@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --use UNISIM.VComponents.all;
 
 entity simple_GateArray is
-    Port ( CLK4MHz:in STD_LOGIC;
+    Port ( CLK:in STD_LOGIC;
 			  IO_REQ_W : in STD_LOGIC;
 			  A15_A14 : in  STD_LOGIC_VECTOR (1 downto 0);
            D : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -46,7 +46,7 @@ end simple_GateArray;
 architecture Behavioral of simple_GateArray is
 begin
 	--http://quasar.cpcscene.com/doku.php?id=iassem:interruptions
-	simple_GateArray_process : process(CLK4MHz) is
+	simple_GateArray_process : process(CLK) is
 		variable MODE_mem:STD_LOGIC_VECTOR (1 downto 0):=('0','0');
 		variable lowerROMen_mem:STD_LOGIC:='1'; -- init ne marche pas :='1';
 		variable upperROMen_mem:STD_LOGIC:='1'; --init ne marche pas :='1'; -- je suppose ^^
@@ -55,7 +55,7 @@ begin
 		RAMbank<=RAMbank_mem;-- slices init_RAMbank;
 		lowerROMen<=lowerROMen_mem;
 		upperROMen<=upperROMen_mem;
-		if falling_edge(CLK4MHz) then
+		if rising_edge(CLK) then
 		
 			if IO_REQ_W='1' and A15_A14(1) = '0' and A15_A14(0) = '1' then --7Fxx gate array --
 				if D(7) ='0' then

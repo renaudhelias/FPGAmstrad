@@ -73,7 +73,7 @@ entity I82C55 is
 
     RESET             : in    std_logic;
     ENA               : in    std_logic; -- (CPU) clk enable
-    CLK4MHz               : in    std_logic
+    CLK               : in    std_logic
     );
 end;
 
@@ -143,9 +143,9 @@ signal O_DATA            : std_logic_vector(7 downto 0);
 begin
 
 --IO_DATA <= O_DATA when O_DATA_OE_L='0' else (others=>'Z');
-sortie:process (CLK4MHz)
+sortie:process (CLK)
 begin
-	if falling_edge(CLK4MHz) then
+	if rising_edge(CLK) then
 		if O_DATA_OE_L='0' then
 			IO_DATA <= O_DATA;
 		else
@@ -203,7 +203,7 @@ end process;
     end case;
   end process;
 
-  p_write_reg_reset : process(RESET, CLK4MHz)
+  p_write_reg_reset : process(RESET, CLK)
     variable r_portc_masked : std_logic_vector(7 downto 0);
     variable r_portc_setclr : std_logic_vector(7 downto 0);
   begin
@@ -213,7 +213,7 @@ end process;
       r_portc <= x"00";
       r_control <= x"9B"; -- 10011011
       mode_clear <= '1';
-    elsif falling_edge(CLK4MHz) then
+    elsif rising_edge(CLK) then
 
       r_portc_masked := (not bit_mask) and r_portc;
       for i in 0 to 7 loop
@@ -294,7 +294,7 @@ end process;
 
   p_rw_control_reg : process
   begin
-    wait until falling_edge(CLK4MHz);
+    wait until rising_edge(CLK);
     if (ENA = '1') then
       porta_we_t1 <= porta_we;
       portb_we_t1 <= portb_we;
@@ -375,7 +375,7 @@ end process;
   --  PC5 output a_ibf
   --  PC4 input  a_stb_l
   --  PC3 is still interrupt out
-  p_control_flags : process(RESET, CLK4MHz)
+  p_control_flags : process(RESET, CLK)
     variable we   : boolean;
     variable set1 : boolean;
     variable set2 : boolean;
@@ -391,7 +391,7 @@ end process;
       b_obf_l <= '1';
       b_ibf   <= '0';
       b_intr  <= '0';
-    elsif falling_edge(CLK4MHz) then
+    elsif rising_edge(CLK) then
       we := (I_CS_L = '0') and (I_WR_L = '0') and (I_ADDR = "11") and (I_DATA(7) = '0');
 
       if (ENA = '1') then
@@ -682,7 +682,7 @@ end process;
 
   p_ipreg : process
   begin
-    wait until falling_edge(CLK4MHz);
+    wait until rising_edge(CLK);
     --   pc4 input  a_stb_l
     --   pc2 input  b_stb_l
 

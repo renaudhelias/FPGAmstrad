@@ -227,7 +227,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable no_char:integer range 0 to CHAR_WIDTH/8-1;
 	
 begin
-	if falling_edge(CLK_25MHz) then
+	if rising_edge(CLK_25MHz) then
 		if MODE_select="00" then
 			NB_PIXEL_PER_OCTET:=2;
 		elsif MODE_select="01" then

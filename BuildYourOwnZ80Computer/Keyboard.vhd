@@ -36,7 +36,7 @@ begin
 			code <= (others => '0') ;
 			fok <= '0' ;
 			fok_internal <= '0' ;
-		elsif falling_edge(fclk) then
+		elsif rising_edge(fclk) then
 			fok <= '0' ;
 			fok_internal <= '0' ;
 			case state is 
