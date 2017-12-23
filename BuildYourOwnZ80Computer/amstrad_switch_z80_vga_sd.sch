@@ -43,12 +43,10 @@
         <signal name="XLXN_760" />
         <signal name="XLXN_762" />
         <signal name="XLXN_763" />
-        <signal name="CLK8(2:0)" />
-        <signal name="CLK8(0)" />
-        <signal name="CLK8(1)" />
-        <signal name="CLK8(2)" />
-        <signal name="XLXN_771" />
-        <signal name="XLXN_772" />
+        <signal name="CLK16MHz" />
+        <signal name="CLK8MHz" />
+        <signal name="CLK4MHz" />
+        <signal name="XLXN_764" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="FILE_LOADED" />
         <port polarity="Input" name="CLK50MHz" />
@@ -118,7 +116,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-23T12:28:43</timestamp>
+            <timestamp>2017-12-23T14:40:33</timestamp>
             <rect width="64" x="384" y="452" height="24" />
             <line x2="448" y1="464" y2="464" x1="384" />
             <line x2="448" y1="528" y2="528" x1="384" />
@@ -155,9 +153,10 @@
             <line x2="0" y1="768" y2="768" x1="64" />
             <line x2="448" y1="720" y2="720" x1="384" />
             <line x2="0" y1="-96" y2="-96" x1="64" />
-            <rect width="320" x="64" y="-768" height="1572" />
-            <rect width="64" x="0" y="-444" height="24" />
-            <line x2="0" y1="-432" y2="-432" x1="64" />
+            <rect width="320" x="64" y="-768" height="1560" />
+            <line x2="0" y1="-512" y2="-512" x1="64" />
+            <line x2="0" y1="-560" y2="-560" x1="64" />
+            <line x2="0" y1="-464" y2="-464" x1="64" />
         </blockdef>
         <blockdef name="ZXUNO_CLOCKS">
             <timestamp>2017-12-23T13:42:24</timestamp>
@@ -172,7 +171,7 @@
             <blockpin signalname="XLXN_731" name="crtc_W" />
             <blockpin signalname="XLXN_732(7:0)" name="crtc_D(7:0)" />
             <blockpin signalname="crtc_A(14:0)" name="crtc_A(14:0)" />
-            <blockpin signalname="CLK8(2)" name="CLK4MHz" />
+            <blockpin signalname="CLK4MHz" name="CLK4MHz" />
             <blockpin signalname="XLXN_646" name="CLK25MHz" />
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
             <blockpin signalname="XLXN_745(12:0)" name="palette_A(12:0)" />
@@ -210,7 +209,9 @@
             <blockpin signalname="XLXN_749(15:0)" name="ZDSK_NUMBER(15:0)" />
             <blockpin signalname="XLXN_756" name="ZDSK_doneCarac" />
             <blockpin signalname="XLXN_763" name="ZDSK_doInsert" />
-            <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
+            <blockpin signalname="CLK8MHz" name="CLK8MHz" />
+            <blockpin signalname="CLK16MHz" name="CLK16MHz" />
+            <blockpin signalname="CLK4MHz" name="CLK4MHz" />
         </block>
         <block symbolname="bootloader_sd" name="XLXI_462">
             <blockpin signalname="MISO" name="MISO" />
@@ -229,14 +230,14 @@
             <blockpin signalname="XLXN_760" name="ZDSK_doCarac" />
             <blockpin signalname="XLXN_757(7:0)" name="ZDSK_CARAC(7:0)" />
             <blockpin signalname="XLXN_762" name="pause" />
-            <blockpin signalname="CLK8(2)" name="CLK4MHz" />
+            <blockpin signalname="CLK4MHz" name="CLK4MHz" />
         </block>
         <block symbolname="ZXUNO_CLOCKS" name="XLXI_513">
             <blockpin signalname="CLK50MHz" name="CLK50MHz" />
             <blockpin signalname="XLXN_646" name="CLK25MHz" />
-            <blockpin signalname="CLK8(0)" name="CLK16MHz" />
-            <blockpin signalname="CLK8(1)" name="CLK8MHz" />
-            <blockpin signalname="CLK8(2)" name="CLK4MHz" />
+            <blockpin signalname="CLK16MHz" name="CLK16MHz" />
+            <blockpin signalname="CLK8MHz" name="CLK8MHz" />
+            <blockpin signalname="CLK4MHz" name="CLK4MHz" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="7040" height="5440">
@@ -425,8 +426,7 @@
         <branch name="XLXN_762">
             <wire x2="1424" y1="1904" y2="1904" x1="1376" />
             <wire x2="1376" y1="1904" y2="2832" x1="1376" />
-            <wire x2="1424" y1="2832" y2="2832" x1="1376" />
-            <wire x2="6688" y1="2832" y2="2832" x1="1424" />
+            <wire x2="6688" y1="2832" y2="2832" x1="1376" />
             <wire x2="6688" y1="896" y2="896" x1="6640" />
             <wire x2="6688" y1="896" y2="2832" x1="6688" />
         </branch>
@@ -437,32 +437,28 @@
         </branch>
         <instance x="304" y="1360" name="XLXI_513" orien="R0">
         </instance>
-        <branch name="CLK8(2:0)">
-            <wire x2="976" y1="1248" y2="1296" x1="976" />
-            <wire x2="976" y1="1296" y2="1344" x1="976" />
-            <wire x2="976" y1="1344" y2="1568" x1="976" />
-            <wire x2="1424" y1="1568" y2="1568" x1="976" />
+        <branch name="CLK16MHz">
+            <wire x2="1040" y1="1248" y2="1248" x1="688" />
+            <wire x2="1040" y1="1248" y2="1440" x1="1040" />
+            <wire x2="1424" y1="1440" y2="1440" x1="1040" />
         </branch>
-        <bustap x2="880" y1="1248" y2="1248" x1="976" />
-        <bustap x2="880" y1="1296" y2="1296" x1="976" />
-        <bustap x2="880" y1="1344" y2="1344" x1="976" />
-        <branch name="CLK8(0)">
-            <wire x2="880" y1="1248" y2="1248" x1="688" />
+        <branch name="CLK8MHz">
+            <wire x2="1008" y1="1296" y2="1296" x1="688" />
+            <wire x2="1008" y1="1296" y2="1488" x1="1008" />
+            <wire x2="1424" y1="1488" y2="1488" x1="1008" />
         </branch>
-        <branch name="CLK8(1)">
-            <wire x2="880" y1="1296" y2="1296" x1="688" />
-        </branch>
-        <branch name="CLK8(2)">
+        <branch name="CLK4MHz">
             <wire x2="800" y1="1344" y2="1344" x1="688" />
-            <wire x2="880" y1="1344" y2="1344" x1="800" />
-            <wire x2="1840" y1="480" y2="480" x1="800" />
-            <wire x2="3568" y1="480" y2="480" x1="1840" />
+            <wire x2="976" y1="1344" y2="1344" x1="800" />
+            <wire x2="976" y1="1344" y2="1536" x1="976" />
+            <wire x2="1424" y1="1536" y2="1536" x1="976" />
+            <wire x2="800" y1="480" y2="1344" x1="800" />
+            <wire x2="3568" y1="480" y2="480" x1="800" />
             <wire x2="3568" y1="480" y2="1392" x1="3568" />
             <wire x2="4320" y1="1392" y2="1392" x1="3568" />
             <wire x2="4816" y1="480" y2="480" x1="3568" />
             <wire x2="4816" y1="480" y2="704" x1="4816" />
             <wire x2="6080" y1="704" y2="704" x1="4816" />
-            <wire x2="800" y1="480" y2="1344" x1="800" />
         </branch>
     </sheet>
 </drawing>

@@ -26,7 +26,10 @@ entity simple_GateArrayInterrupt is
   VRAM_Voffset:integer:=38*8-30*8-4*8+4  +0; -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
   BUG_Voffset:integer:=0 -- a CRTC original bug ?
 	);
-    Port ( CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
+    Port ( --CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
+			  CLK16MHz : in STD_LOGIC;
+			  CLK8MHz : in STD_LOGIC;
+			  CLK4MHz : in STD_LOGIC;
            IO_REQ_W : in  STD_LOGIC;
 			  IO_REQ_R : in  STD_LOGIC;
            A15_A14_A9_A8 : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -91,7 +94,7 @@ architecture Behavioral of simple_GateArrayInterrupt is
 	signal vsync:std_logic;
 	signal hsync:std_logic;
 	
-	signal CLK4MHz : STD_LOGIC;
+--	signal CLK4MHz : STD_LOGIC;
 	
 	signal crtc_R:STD_LOGIC:='0'; -- variable commune local
 
@@ -100,26 +103,26 @@ architecture Behavioral of simple_GateArrayInterrupt is
 begin
 
 -- scan de la RAM (de manière intrusive) par le CRTC, puis envoi à la VRAM
-	process(CLK8(0),reset) is -- transmit
+	process(CLK16MHz,reset) is -- transmit
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
 	begin
 		crtc_D<=D2;
 		if reset='1' then
 		else
 			-- address is solving
-			if falling_edge(CLK8(0)) then
+			if falling_edge(CLK16MHz) then
 				crtc_transmit<='0';
 				ram_R<='0';
 				ram_D<=(others=>'Z');
-				if CLK8(2)='1' then
+				if CLK4MHz='1' then
 					-- CRTC working
-					if CLK8(1)='0' then
+					if CLK8MHz='0' then
 						-- address is solved
 						if crtc_R='1' then
 							ram_R<='1';
 							crtc_transmit<='1';
 						end if;
-					elsif CLK8(1)='1' then
+					elsif CLK8MHz='1' then
 						if crtc_R='1' then
 							D2:=ram_D;
 						end if;
@@ -131,7 +134,7 @@ begin
 		end if;
 	end process;
 
-	CLK4MHz<=not(CLK8(2)); -- cad l'inverse de l'horloge du z80
+--	CLK4MHz<=not(CLK8(2)); -- cad l'inverse de l'horloge du z80
 
 ctrcConfig_process:process(CLK4MHz) is
 	variable reg_select : integer range 0 to 17;
@@ -144,7 +147,7 @@ ctrcConfig_process:process(CLK4MHz) is
 	variable border_ink:STD_LOGIC;
 	variable ink_color:STD_LOGIC_VECTOR(4 downto 0);
 begin
-	if rising_edge(CLK4MHz) then
+	if falling_edge(CLK4MHz) then
 		
 		if IO_REQ_W='1' and A15_A14_A9_A8(3) = '0' and A15_A14_A9_A8(2) = '1' then
 			if D(7) ='0' then
@@ -277,7 +280,7 @@ simple_GateArray_process : process(CLK4MHz) is
 		variable in_800x600:boolean:=false;
 		
 	begin
-		if rising_edge(CLK4MHz) then
+		if falling_edge(CLK4MHz) then
 		
 		compteur1MHz:=(compteur1MHz+1) mod 4;
 		
@@ -580,7 +583,7 @@ begin
 --INTERRUPT
 	
 --selon ma rétro-ingéniérie de Space Invaders sur MameVHDL, en fait le IO_ACK se déclanche lorsque l'interruption décide de finalement commencer, et lors du IO_ACK, le DATA_BUS est lu (selon l'interruption ça joue)
-	if rising_edge(CLK4MHz) then
+	if falling_edge(CLK4MHz) then
 		if IO_ACK='1' then
 			--the Gate Array will reset bit5 of the counter
 			int<='0'; -- supposé.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-23T12:28:43</timestamp>
+    <timestamp>2017-12-23T14:40:33</timestamp>
     <pin polarity="Input" x="0" y="-736" name="init_A(20:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-352" name="PS2_CLK" />
@@ -28,7 +28,9 @@
     <pin polarity="Output" x="448" y="464" name="ZDSK_NUMBER(15:0)" />
     <pin polarity="Output" x="448" y="656" name="ZDSK_doneCarac" />
     <pin polarity="Output" x="448" y="592" name="ZDSK_doInsert" />
-    <pin polarity="Input" x="0" y="-432" name="CLK8(2:0)" />
+    <pin polarity="Input" x="0" y="-512" name="CLK8MHz" />
+    <pin polarity="Input" x="0" y="-560" name="CLK16MHz" />
+    <pin polarity="Input" x="0" y="-464" name="CLK4MHz" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="224" y="-776" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-736" type="pin init_A(20:0)" />
@@ -93,9 +95,12 @@
         <line x2="0" y1="768" y2="768" x1="64" />
         <line x2="448" y1="720" y2="720" x1="384" />
         <line x2="0" y1="-96" y2="-96" x1="64" />
-        <rect width="320" x="64" y="-768" height="1572" />
-        <rect width="64" x="0" y="-444" height="24" />
-        <line x2="0" y1="-432" y2="-432" x1="64" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-432" type="pin CLK8(2:0)" />
+        <rect width="320" x="64" y="-768" height="1560" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-512" type="pin CLK8MHz" />
+        <line x2="0" y1="-512" y2="-512" x1="64" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-560" type="pin CLK16MHz" />
+        <line x2="0" y1="-560" y2="-560" x1="64" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-464" type="pin CLK4MHz" />
+        <line x2="0" y1="-464" y2="-464" x1="64" />
     </graph>
 </symbol>
