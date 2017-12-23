@@ -66,7 +66,7 @@ begin
 		else
 			
 			-- address is solving
-			if rising_edge(CLK8(0)) then
+			if falling_edge(CLK8(0)) then
 			
 				ram_R<='0';
 				ram_W<='0';

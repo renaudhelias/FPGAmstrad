@@ -8,8 +8,7 @@ entity simple_DSK is
 		MAX_SECTORS:integer:=9;
 		MAX_TRACKS:integer:=40 -- 40 par face 79+1
 	);
-    Port ( CLK_bourin : in STD_LOGIC; -- horloge d'indexation
-           CLK8 : in STD_LOGIC_VECTOR (2 downto 0);
+    Port ( CLK8 : in STD_LOGIC_VECTOR (2 downto 0);
            reset : in STD_LOGIC;
            A10_A8_A7 : in  STD_LOGIC_VECTOR (2 downto 0);
            A0 : in  STD_LOGIC;
@@ -132,7 +131,7 @@ begin
 		was_concerned:=false;
 		do_update:=false;
 	else
-		if rising_edge(CLK8(0)) then
+		if falling_edge(CLK8(0)) then
 
 if CLK8(2)='1' then
 	-- CRTC working

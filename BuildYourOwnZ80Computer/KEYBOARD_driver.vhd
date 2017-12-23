@@ -4,7 +4,7 @@ use IEEE.std_logic_arith.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity KEYBOARD_driver is
-    Port ( CLK : in  STD_LOGIC;
+    Port ( CLK4MHz : in  STD_LOGIC;
            enable : in  STD_LOGIC;
 			  press : in STD_LOGIC;
 			  unpress : in STD_LOGIC;
@@ -46,11 +46,11 @@ architecture Behavioral of KEYBOARD_driver is
 	signal keyb:keyb_type;
 begin
 
-	keybscan : process(CLK)
+	keybscan : process(CLK4MHz)
 		variable keyb_mem:keyb_type:=(others=>(others=>'0'));
 	begin
 		keyb<=keyb_mem;
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			if RESET_KEY=keycode(7 downto 0) then
 				if unpress='1' then
 					key_reset<='0';
@@ -93,11 +93,11 @@ begin
 	end process;
 	
 	
-	process(CLK)
+	process(CLK4MHz)
 		-- bad CLK to refresh keyboard102_pressing, it could be nicer having a sort of PS2_CLK
 		--http://www.beyondlogic.org/keyboard/keybrd.htm
 	begin
-			if rising_edge(CLK) then
+			if falling_edge(CLK4MHz) then
 				portA<=(others=>'1');
 				if enable='1' then
 					for i in 7 downto 0 loop

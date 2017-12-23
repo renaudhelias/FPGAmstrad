@@ -79,7 +79,7 @@ zxuno:process(CLK4MHz)
 	variable Din_mem:std_logic_vector(7 downto 0);
 	variable doneCarac_mem:std_logic:='0';
 begin
-	if rising_edge(CLK4MHz) then
+	if falling_edge(CLK4MHz) then
 		Dout<=(others=>'Z');
 		doInsert_mem:='0';
 		doSelect_mem:='0';

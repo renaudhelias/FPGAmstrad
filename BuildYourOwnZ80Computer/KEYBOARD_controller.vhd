@@ -30,7 +30,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity KEYBOARD_controller is
-    Port ( CLK : in  STD_LOGIC;
+    Port ( CLK4MHz : in  STD_LOGIC;
 				scancode_in : in  STD_LOGIC_VECTOR (7 downto 0);
            fok : in  STD_LOGIC; -- tic
            press : out  STD_LOGIC:='0'; -- tic
@@ -42,7 +42,7 @@ architecture Behavioral of KEYBOARD_controller is
 
 begin
 
-process(CLK)
+process(CLK4MHz)
 	variable keycode_mem:std_logic_vector(keycode'range);
 	variable press_mem : std_logic:='0';
 	variable unpress_mem : std_logic:='0';
@@ -50,7 +50,7 @@ process(CLK)
 	variable is_e1:std_logic:='0';
 	variable releasing:boolean:=false;
 begin
-	if rising_edge(CLK) then
+	if falling_edge(CLK4MHz) then
 		press<='0';
 		unpress<='0';
 		if fok='1' then

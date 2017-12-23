@@ -107,7 +107,7 @@ begin
 		if reset='1' then
 		else
 			-- address is solving
-			if rising_edge(CLK8(0)) then
+			if falling_edge(CLK8(0)) then
 				crtc_transmit<='0';
 				ram_R<='0';
 				ram_D<=(others=>'Z');

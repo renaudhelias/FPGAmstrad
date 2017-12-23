@@ -30,7 +30,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity ROMselect is
-    Port ( CLK:in STD_LOGIC;
+    Port ( CLK4MHz:in STD_LOGIC;
 			  A13 : in  STD_LOGIC;
            D : in  STD_LOGIC_VECTOR (7 downto 0);
            IO_WR : in  STD_LOGIC;
@@ -41,10 +41,10 @@ architecture Behavioral of ROMselect is
 	signal init_ROMbank: STD_LOGIC_VECTOR (3 downto 0):=(others=>'0'); -- it's upper ROM number in fact
 begin
 	ROMbank<=init_ROMbank;
-	process(CLK) is
+	process(CLK4MHz) is
 		variable ROMbank_mem: STD_LOGIC_VECTOR (3 downto 0);
 	begin
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			if IO_WR='1' and A13='0' then
 				ROMbank_mem(3 downto 0):=D(3 downto 0);
 				init_ROMbank<=ROMbank_mem;
