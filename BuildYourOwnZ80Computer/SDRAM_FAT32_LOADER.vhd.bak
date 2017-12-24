@@ -30,14 +30,16 @@ entity SDRAM_FAT32_LOADER is
 		SPI_ADDRESS_FAT32:integer:=23; -- 32 if FAT32 normaly
 		BLOCK_SIZE_MAXIMUM:integer:=65536; --4096; -- bytes
 		BLOCK_SQRT:integer:=9; -- 2^BLOCK_SQRT=BLOCK_SIZE_MAXIMUM (=512 :P)
-		SDRAM_ASYNC_DELTA:integer:=0 -- 0 or more : go more and more slower with SDRAM_ASYNC access delays. More a problem of AUTO-REFRESH I think...
+		MAX_DSK_NUMBER_SQRT:integer:=16; -- ZXUNO_DSK_SELECT
+		SDRAM_ASYNC_DELTA:integer:=0; -- 0 or more : go more and more slower with SDRAM_ASYNC access delays. More a problem of AUTO-REFRESH I think...
+		CARAC_END_OF_NAME:std_logic_vector(7 downto 0):=x"01"
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0):=x"00400C00" -- in byte
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0):=x"00400000" -- in byte
 		-- CLK : @4MHz
 	);
-    Port ( CLK:in STD_LOGIC;
-           file_select:in std_logic_vector(7 downto 0);
-           ram_A : out  STD_LOGIC_VECTOR (22 downto 0):=(others=>'0');
+    Port ( CLK4MHz:in STD_LOGIC;
+           file_select:in std_logic_vector(MAX_DSK_NUMBER_SQRT-1 downto 0);
+           ram_A : out  STD_LOGIC_VECTOR (20 downto 0):=(others=>'0');
            ram_D : inout  STD_LOGIC_VECTOR (7 downto 0):=(others=>'Z'); -- for sim
            ram_W : out  STD_LOGIC:='0';
            spi_A : out  STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0);
@@ -47,7 +49,14 @@ entity SDRAM_FAT32_LOADER is
            spi_Rdone : in  STD_LOGIC;
 			  spi_init_done : in STD_LOGIC;
 			  leds:out STD_LOGIC_VECTOR(7 downto 0);
-			  load_init_done:out std_logic
+			  load_init_done:out std_logic;
+			  key_reset:in std_logic;
+			  ZDSK_doSelect : in  STD_LOGIC; -- no Wait_n needed by here
+           ZDSK_CARAC : out  STD_LOGIC_VECTOR (7 downto 0);
+           ZDSK_doCarac : out  STD_LOGIC;
+           ZDSK_doneCarac : in  STD_LOGIC;
+			  ZDSK_doInsert : in  STD_LOGIC;
+			  pause : out STD_LOGIC
 			  );
 			  	attribute keep : string;
 				attribute keep of file_select : signal is "TRUE";
@@ -162,15 +171,15 @@ begin
 		else '0';
 
 	-- Permit to load BR values, and also some others variables
-	spi_to_loader: process(CLK) is
-		variable data_step:integer range 0 to 7:=0;
+	spi_to_loader: process(CLK4MHz) is
+		variable data_step:integer range 0 to 6:=0;
 		variable data_cursor:integer range 0 to 3:=0;
 		variable data_reader1_mem:std_logic_vector(7 downto 0):=(others=>'0');
 		variable data_reader2_mem:std_logic_vector(15 downto 0):=(others=>'0');
 		variable data_reader4_mem:std_logic_vector(31 downto 0):=(others=>'0');
 
 	begin
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			data_reader1<=data_reader1_mem;
 			data_reader2<=data_reader2_mem;
 			data_reader4<=data_reader4_mem;
@@ -250,9 +259,8 @@ begin
 							end case;
 						when 5 => -- variable transfert completed
 							data_RWdone<=true;
-							data_step:=7;
+							-- STOP HERE that's all folks !
 						when 6=>NULL; -- over run
-						when 7=>NULL; -- that's all folks !
 					end case;
 				end if;
 			end if;
@@ -260,12 +268,12 @@ begin
 	end process;
 
 	-- compare 8bytes ou 3 bytes
-	comparator:process(CLK) is
+	comparator:process(CLK4MHz) is
 		variable compare_step:integer range 0 to 3:=0;
 		variable cursor:integer range 0 to 12:=0;
 
 	begin
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			compare_spi_Rdo<='0';
 			if compare_do then
 				compare_done<=false;
@@ -285,23 +293,16 @@ begin
 							compare_spi_A<=compare_address+cursor;
 							compare_step:=1;
 						when 1=>
-							if cursor=compare_length-1 then
-								if compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_Din then
-									compare_result<=false;
-								else
-									compare_result<=true;
-								end if;
-								compare_done<=true;
-								compare_step:=3;
-							elsif compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_Din then
+							if compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_Din then
 								compare_result<=false;
 								compare_done<=true;
 								compare_step:=3;
 							else
 								cursor:=cursor+1;
-								if cursor>=compare_length then
+								if cursor=compare_length then
 									compare_result<=true;
 									compare_done<=true;
+									compare_step:=3;
 								else
 									compare_spi_Rdo<='1';
 									compare_spi_A<=compare_address+cursor;
@@ -316,14 +317,14 @@ begin
 	end process;
 	
 	-- Filling RAM
-	transmiter:process(CLK) is
+	transmiter:process(CLK4MHz) is
 		variable cursor:integer range 0 to BLOCK_SIZE_MAXIMUM;
 		variable transmit_step:integer range 0 to 5;
 		variable data_mem:std_logic_vector(7 downto 0);
 		variable address_mem:std_logic_vector(ram_A'range);
 		variable transmit_sdram_wait: integer range 0 to SDRAM_ASYNC_DELTA;
 	begin
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			if transmit_do then
 				transmit_done<=false;
 				cursor:=0;
@@ -377,7 +378,7 @@ begin
 							transmit_done<=true;
 							transmit_step:=3;
 						end if;
-					when 3=>NULL; -- transmit SPI to RAM done
+					when 3=>NULL; -- that's all folks
 					when 4=>NULL; -- over run
 				end case;
 			end if;
@@ -386,7 +387,7 @@ begin
 	
 
 	--tortue_geniale : the main process, using FAT32 protocol
-	tortue_geniale:process (CLK) is
+	tortue_geniale:process (CLK4MHz) is
 	   variable FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32+9-1 downto 0):=x"00400000"; -- in byte
 		variable BPB_FATSz32:STD_LOGIC_VECTOR(31 downto 0);
 		variable BPB_TotSec32:STD_LOGIC_VECTOR(31 downto 0);
@@ -579,6 +580,7 @@ end function;
 
 		variable step_var:integer range 0 to 31:=0;
 		variable load_done:std_logic:='0';
+		variable pause_mem:std_logic:='0';
 		
 		variable folder_cluster_pointer:std_logic_vector(31 downto 0); -- number
 		variable file_cluster_pointer:std_logic_vector(31 downto 0); -- number
@@ -588,7 +590,7 @@ end function;
 		variable file_sector_pointer:std_logic_vector(SPI_ADDRESS_FAT32+9-1 downto 0);
 		
 		variable rom_number:integer range 0 to ROM_COUNT:=0;
-		variable dsk_number:std_logic_vector(7 downto 0):=(others=>'0');
+		variable dsk_number:std_logic_vector(MAX_DSK_NUMBER_SQRT-1 downto 0):=(others=>'0');
 		
 		variable file_address:std_logic_vector(31 downto 0);
 		variable folder_DirStruct_number:integer;
@@ -599,15 +601,21 @@ end function;
 	--files_loaded(1:3) : rom 1 2 3 loaded
 	variable files_loaded:std_logic_vector((1+ROM_COUNT)-1 downto 0):="0000" & DSK_OFF; -- méchant doute(DSK_OFF,others=>'0');
 
+		variable ZDSK_doneCarac_old_mem:std_logic:='0';
+		variable file_search_do:boolean := false;
+		variable file_search_done:boolean := false;
+		variable file_search_offset:integer range 0 to 12 := 0;
+
 	begin
 		load_init_done<=load_done;
+		pause<=pause_mem;
 		
-		if rising_edge(CLK) then
+		if rising_edge(CLK4MHz) then
 		
 			--leds<=files_loaded & "111";
-			leds<=conv_std_logic_vector(step_var,8);
+			--leds<=conv_std_logic_vector(step_var,8);
 			
-			if load_done='0' and spi_init_done='1' then
+			if spi_init_done='1' then
 			
 				data_Rdo<=false;
 				compare_do<=false;
@@ -804,7 +812,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						--== LOOKING ABOUT DSK ==
 						--=======================
 						switch_transmit_gripsou<=SWITCH_GRIPSOU;
-						if files_loaded(0)='1' then
+						if not(file_search_do) and files_loaded(0)='1' then
 							if files_loaded="11111" then
 								load_done:='1';
 								switch_transmit_gripsou<=SWITCH_NONE;
@@ -874,6 +882,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						-- that's all folk
 if files_loaded="11111" then
 	load_done:='1';
+	pause_mem:='0';
 	switch_transmit_gripsou<=SWITCH_NONE;
 	step_var:=26; -- load done
 else
@@ -898,8 +907,16 @@ end if;
 							-- nom et extention de fichier identique
 							if dsk_number>=file_select then
 								files_loaded(0):='1';
-								get_var4b(file_size,folder_sector_pointer+(folder_DirStruct_number-1)*32+28);
-								step_var:=14;
+								if file_search_do then
+									file_search_do:=false;
+									file_search_done:=true;
+									file_search_offset:=0;
+									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
+									step_var:=26;
+								else
+									get_var4b(file_size,folder_sector_pointer+(folder_DirStruct_number-1)*32+28);
+									step_var:=14;
+								end if;
 							else
 								dsk_number:=dsk_number+1;
 								step_var:=8;
@@ -909,7 +926,51 @@ end if;
 						end if;
 						
 						
-					when 26=>NULL; -- load done
+					when 26=> -- load done
+						if key_reset='1' then
+							files_loaded:=(others=>'0');
+							dsk_number:=(others=>'0');
+							load_done:='0';
+							step_var:=0;
+						elsif ZDSK_doInsert='1' then
+							files_loaded(0):='0';
+							dsk_number:=(others=>'0');
+							pause_mem:='1';
+							step_var:=0;
+						elsif ZDSK_doSelect='1' then
+							ZDSK_doCarac<='0';
+							-- place cursor front of file with nice number
+							file_search_do:=true;
+							file_search_done:=false;
+							file_search_offset:=0;
+							dsk_number:=(others=>'0');
+							step_var:=0;
+						elsif ZDSK_doneCarac='1' and ZDSK_doneCarac_old_mem='0' then
+							-- a char has been readen, go to next char.
+							ZDSK_doCarac<='0';
+							-- next CARAC or else CARAC_END_OF_NAME
+							if file_search_done then
+								file_search_offset:=file_search_offset+1;
+								if file_search_offset=12 then
+									file_search_done:=false;
+								else
+									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
+								end if;
+							else
+								ZDSK_CARAC<=CARAC_END_OF_NAME;
+								ZDSK_doCarac<='1';
+							end if;
+						elsif file_search_done and ZDSK_doneCarac='0' then
+							if file_search_done then
+								-- I'm front of file with nice number, exhibit a char !
+								ZDSK_CARAC<=data_reader1;
+								ZDSK_doCarac<='1';
+							else
+								ZDSK_CARAC<=CARAC_END_OF_NAME;
+								ZDSK_doCarac<='1';
+							end if;
+						end if;
+						ZDSK_doneCarac_old_mem:=ZDSK_doneCarac;
 					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
 					--when 29=>NULL; -- bad file cluster
@@ -920,7 +981,7 @@ end if;
 		end if;
 	end process tortue_geniale;
 	
-	gripsou:process(CLK) is
+	gripsou:process(CLK4MHz) is
 		variable gripsou_step:integer range 0 to 25:=0;
 		variable input_A:std_logic_vector(SPI_ADDRESS_FAT32-1 downto 0):=(others=>'0');
 		variable data_mem:std_logic_vector(7 downto 0);
@@ -947,14 +1008,19 @@ end if;
 		type sector_order_type is array(0 to 8) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
 	begin
-		if rising_edge(CLK) then
+		if rising_edge(CLK4MHz) then
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
-			if gripsou_write='1' and switch_transmit_gripsou=SWITCH_GRIPSOU then
+			
+			if switch_transmit_gripsou/=SWITCH_GRIPSOU then
+				-- ready for another disk insertion...
+				gripsou_step:=0;
+				input_A:="000" & x"00000";
+			elsif gripsou_write='1' then -- and switch_transmit_gripsou=SWITCH_GRIPSOU then
 				data_mem:=gripsou_data;
 				case gripsou_step is
 					when 0=> -- disk ID
-						if input_A=x"00000000" then
+						if input_A="000" & x"00000" then
 							if data_mem=x"45" then
 								extended:=true;
 							elsif data_mem=x"4D" then
@@ -962,11 +1028,11 @@ end if;
 							end if;
 						end if;
 						input_A:=input_A+1;
-						if input_A>x"00000021" then
+						if input_A>"000" & x"00021" then
 							gripsou_step:=1;
 						end if;
 					when 1=> -- disk creator
-						if input_A=x"00000022" then
+						if input_A="000" & x"00022" then
 							if data_mem=x"57" then
 								winape:=true;
 							else
@@ -974,7 +1040,7 @@ end if;
 							end if;
 						end if;
 						input_A:=input_A+1;
-						if input_A>x"0000002f" then
+						if input_A>"000" & x"0002f" then
 							gripsou_step:=2;
 						end if;
 					when 2=>
@@ -982,19 +1048,19 @@ end if;
 						input_A:=input_A+1;
 						gripsou_step:=3;
 					when 3=>
-						if input_A=x"00000031" then
+						if input_A="000" & x"00031" then
 							nb_sides:=conv_integer(data_mem);
 						end if;
 						input_A:=input_A+1;
 						gripsou_step:=4;
         			when 4=>
-						if input_A=x"00000032" then
+						if input_A="000" & x"00032" then
 							track_size(7 downto 0):=data_mem;
-						elsif input_A=x"00000033" then
+						elsif input_A="000" & x"00033" then
 							track_size(15 downto 8):=data_mem;
 						end if;
 						input_A:=input_A+1;
-						if input_A>x"00000033" then
+						if input_A>"000" & x"00033" then
 							if extended then
 								gripsou_step:=5;
 								no_track:=0;
@@ -1011,7 +1077,7 @@ end if;
 						end if;
 					when 6=> -- avancer jusqu'au début track-info
 						input_A:=input_A+1;
-						if input_A>x"000000FF" then --==============================================
+						if input_A>"000" & x"000FF" then --==============================================
 							gripsou_step:=7;
 							no_track:=0;
 							input_A:=(others=>'0'); -- rembobine
@@ -1019,14 +1085,14 @@ end if;
 						end if;
 					when 7=> -- pour chaque track
 						input_A:=input_A+1;
-						if input_A>x"0000000F" then
+						if input_A>"000" & x"0000F" then
 							gripsou_step:=10;
 						end if;
 					when 8=>NULL;
 					when 9=>NULL;
 					when 10=>
 						input_A:=input_A+1;
-						if input_A>x"0000000014" then
+						if input_A>"000" & x"00014" then
 							gripsou_step:=11;
 						end if;
 					when 11=>
@@ -1035,7 +1101,7 @@ end if;
 						gripsou_step:=12;
 					when 12=>
 						input_A:=input_A+1;
-						if input_A>x"0000000017" then --===============================================
+						if input_A>"000" & x"00017" then --===============================================
 							gripsou_step:=13;
 							no_sect:=0;
 						end if;
@@ -1084,7 +1150,7 @@ end if;
 						
 					when 17=>
 						input_A:=input_A+1;
-						if input_A>x"000000FF" then --=============================================
+						if input_A>"000" & x"000FF" then --=============================================
 							gripsou_step:=18;
 							no_sect:=0;
 							no_side:=0;
@@ -1093,7 +1159,7 @@ end if;
 							input_A:=(others=>'0');
 						end if;
 					when 18=> -- data transmit
-						gripsou_ram_A_mem:="00" & "1" & conv_std_logic_vector(no_track,6) & conv_std_logic_vector(no_side,1) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
+						gripsou_ram_A_mem:= "1" & conv_std_logic_vector(no_track,6) & conv_std_logic_vector(no_side,1) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
 						gripsou_ram_A<=gripsou_ram_A_mem;
 						gripsou_ram_D<=data_mem;
 						

@@ -6,13 +6,11 @@
         <trait edittrait="all:0" />
     </attr>
     <netlist>
-        <signal name="XLXN_337" />
         <signal name="XLXN_452(7:0)" />
         <signal name="XLXN_549" />
         <signal name="crtc_W" />
         <signal name="crtc_D(7:0)" />
         <signal name="crtc_A(14:0)" />
-        <signal name="XLXN_627" />
         <signal name="XLXN_340(7:0)" />
         <signal name="CLK4MHz" />
         <signal name="CLK25MHz" />
@@ -36,6 +34,7 @@
         <signal name="XLXN_701(1:0)" />
         <signal name="XLXN_702(2:0)" />
         <signal name="XLXN_703(1:0)" />
+        <signal name="debug_leds(7:0)" />
         <port polarity="Input" name="crtc_W" />
         <port polarity="Input" name="crtc_D(7:0)" />
         <port polarity="Input" name="crtc_A(14:0)" />
@@ -49,6 +48,7 @@
         <port polarity="Output" name="RED3(2:0)" />
         <port polarity="Output" name="GREEN3(2:0)" />
         <port polarity="Output" name="BLUE3(2:0)" />
+        <port polarity="Input" name="debug_leds(7:0)" />
         <blockdef name="inv">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-32" x1="0" />
@@ -135,7 +135,9 @@
             <line x2="384" y1="-352" y2="-352" x1="320" />
         </blockdef>
         <blockdef name="aZRaEL_vram2vgaAmstradMiaow">
-            <timestamp>2017-12-10T13:27:7</timestamp>
+            <timestamp>2017-12-24T12:1:51</timestamp>
+            <rect width="64" x="0" y="20" height="24" />
+            <line x2="0" y1="32" y2="32" x1="64" />
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <rect width="64" x="0" y="-236" height="24" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -153,23 +155,15 @@
             <line x2="512" y1="-96" y2="-96" x1="448" />
             <rect width="64" x="448" y="-44" height="24" />
             <line x2="512" y1="-32" y2="-32" x1="448" />
-            <rect width="384" x="64" y="-448" height="448" />
+            <rect width="384" x="64" y="-448" height="512" />
         </blockdef>
-        <block symbolname="inv" name="XLXI_320">
-            <blockpin signalname="XLXN_627" name="I" />
-            <blockpin signalname="XLXN_337" name="O" />
-        </block>
         <block symbolname="inv" name="XLXI_421">
-            <blockpin signalname="XLXN_627" name="I" />
-            <blockpin signalname="XLXN_549" name="O" />
-        </block>
-        <block symbolname="inv" name="XLXI_470">
             <blockpin signalname="CLK25MHz" name="I" />
-            <blockpin signalname="XLXN_627" name="O" />
+            <blockpin signalname="XLXN_549" name="O" />
         </block>
         <block symbolname="VRAM32Ko_Amstrad" name="XLXI_474">
             <blockpin signalname="CLK4MHz" name="vram_CLK" />
-            <blockpin signalname="XLXN_627" name="vga_CLK" />
+            <blockpin signalname="CLK25MHz" name="vga_CLK" />
             <blockpin signalname="crtc_A(14:0)" name="vram_A(14:0)" />
             <blockpin signalname="XLXN_693(14:0)" name="vga_A(14:0)" />
             <blockpin signalname="crtc_W" name="vram_W" />
@@ -179,7 +173,7 @@
         <block symbolname="PALETTE_RAM" name="XLXI_475">
             <blockpin signalname="palette_D(7:0)" name="DI(7:0)" />
             <blockpin signalname="CLK4MHz" name="CLKI" />
-            <blockpin signalname="XLXN_627" name="CLKO" />
+            <blockpin signalname="CLK25MHz" name="CLKO" />
             <blockpin signalname="palette_W" name="WR" />
             <blockpin signalname="palette_A(12:0)" name="AI(12:0)" />
             <blockpin signalname="XLXN_694(12:0)" name="AO(12:0)" />
@@ -216,7 +210,7 @@
             <blockpin signalname="XLXN_339" name="G" />
         </block>
         <block symbolname="aZRaEL_vram2vgaAmstradMiaow" name="joe_dalton">
-            <blockpin signalname="XLXN_337" name="CLK_25MHz" />
+            <blockpin signalname="CLK25MHz" name="CLK_25MHz" />
             <blockpin signalname="XLXN_452(7:0)" name="DATA(7:0)" />
             <blockpin signalname="XLXN_684(7:0)" name="PALETTE_D(7:0)" />
             <blockpin signalname="VSYNC" name="VSYNC" />
@@ -226,6 +220,7 @@
             <blockpin signalname="XLXN_701(1:0)" name="RED(1:0)" />
             <blockpin signalname="XLXN_702(2:0)" name="GREEN(2:0)" />
             <blockpin signalname="XLXN_703(1:0)" name="BLUE(1:0)" />
+            <blockpin signalname="debug_leds(7:0)" name="debug_leds(7:0)" />
         </block>
         <block symbolname="NEXUS_RGB" name="XLXI_418">
             <blockpin signalname="XLXN_701(1:0)" name="RED_FF(1:0)" />
@@ -237,9 +232,6 @@
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
-        <branch name="XLXN_337">
-            <wire x2="1472" y1="624" y2="624" x1="912" />
-        </branch>
         <branch name="XLXN_452(7:0)">
             <wire x2="1472" y1="816" y2="816" x1="1184" />
             <wire x2="1184" y1="816" y2="1184" x1="1184" />
@@ -253,17 +245,6 @@
         <branch name="crtc_A(14:0)">
             <wire x2="544" y1="1008" y2="1008" x1="368" />
         </branch>
-        <branch name="XLXN_627">
-            <wire x2="32" y1="512" y2="624" x1="32" />
-            <wire x2="32" y1="624" y2="944" x1="32" />
-            <wire x2="32" y1="944" y2="1408" x1="32" />
-            <wire x2="32" y1="1408" y2="2544" x1="32" />
-            <wire x2="608" y1="2544" y2="2544" x1="32" />
-            <wire x2="400" y1="1408" y2="1408" x1="32" />
-            <wire x2="544" y1="944" y2="944" x1="32" />
-            <wire x2="688" y1="624" y2="624" x1="32" />
-        </branch>
-        <instance x="688" y="656" name="XLXI_320" orien="R0" />
         <branch name="crtc_D(7:0)">
             <wire x2="544" y1="1200" y2="1200" x1="352" />
         </branch>
@@ -276,9 +257,15 @@
         </branch>
         <iomarker fontsize="28" x="352" y="1200" name="crtc_D(7:0)" orien="R180" />
         <iomarker fontsize="28" x="224" y="672" name="CLK4MHz" orien="R180" />
-        <instance x="0" y="288" name="XLXI_470" orien="R90" />
         <branch name="CLK25MHz">
-            <wire x2="32" y1="224" y2="288" x1="32" />
+            <wire x2="32" y1="224" y2="624" x1="32" />
+            <wire x2="32" y1="624" y2="944" x1="32" />
+            <wire x2="32" y1="944" y2="1408" x1="32" />
+            <wire x2="32" y1="1408" y2="2544" x1="32" />
+            <wire x2="608" y1="2544" y2="2544" x1="32" />
+            <wire x2="400" y1="1408" y2="1408" x1="32" />
+            <wire x2="544" y1="944" y2="944" x1="32" />
+            <wire x2="1472" y1="624" y2="624" x1="32" />
         </branch>
         <iomarker fontsize="28" x="32" y="224" name="CLK25MHz" orien="R270" />
         <instance x="544" y="1232" name="XLXI_474" orien="R0">
@@ -339,11 +326,9 @@
         </branch>
         <iomarker fontsize="28" x="576" y="2480" name="palette_W" orien="R180" />
         <branch name="XLXN_684(7:0)">
-            <wire x2="1008" y1="2288" y2="2288" x1="992" />
-            <wire x2="1248" y1="2192" y2="2192" x1="1008" />
-            <wire x2="1008" y1="2192" y2="2288" x1="1008" />
-            <wire x2="1248" y1="1008" y2="2192" x1="1248" />
-            <wire x2="1472" y1="1008" y2="1008" x1="1248" />
+            <wire x2="1072" y1="2288" y2="2288" x1="992" />
+            <wire x2="1472" y1="1008" y2="1008" x1="1072" />
+            <wire x2="1072" y1="1008" y2="2288" x1="1072" />
         </branch>
         <branch name="HSYNC">
             <wire x2="2096" y1="688" y2="688" x1="1984" />
@@ -408,5 +393,9 @@
             <wire x2="320" y1="672" y2="672" x1="224" />
             <wire x2="320" y1="672" y2="880" x1="320" />
         </branch>
+        <branch name="debug_leds(7:0)">
+            <wire x2="1472" y1="1072" y2="1072" x1="1440" />
+        </branch>
+        <iomarker fontsize="28" x="1440" y="1072" name="debug_leds(7:0)" orien="R180" />
     </sheet>
 </drawing>

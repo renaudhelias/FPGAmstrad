@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="bootloader_sd">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-16T18:24:58</timestamp>
+    <timestamp>2017-12-24T12:3:20</timestamp>
     <pin polarity="Input" x="0" y="-464" name="MISO" />
-    <pin polarity="Input" x="0" y="-48" name="CLK50MHz" />
+    <pin polarity="Input" x="0" y="-32" name="CLK4MHz" />
     <pin polarity="Input" x="0" y="-320" name="key_reset" />
     <pin polarity="Input" x="0" y="-256" name="FILE_SELECT(15:0)" />
     <pin polarity="Input" x="0" y="32" name="ZDSK_doSelect" />
     <pin polarity="Input" x="0" y="96" name="ZDSK_doneCarac" />
+    <pin polarity="Input" x="0" y="160" name="ZDSK_doInsert" />
     <pin polarity="BiDirectional" x="560" y="-544" name="ram_D(7:0)" />
     <pin polarity="Output" x="560" y="-608" name="MOSI" />
     <pin polarity="Output" x="560" y="-480" name="ram_A(20:0)" />
@@ -17,16 +18,17 @@
     <pin polarity="Output" x="560" y="-288" name="FILE_LOADED" />
     <pin polarity="Output" x="560" y="32" name="ZDSK_doCarac" />
     <pin polarity="Output" x="560" y="96" name="ZDSK_CARAC(7:0)" />
-    <pin polarity="Input" x="0" y="160" name="ZDSK_doInsert" />
     <pin polarity="Output" x="560" y="160" name="pause" />
+    <pin polarity="Output" x="560" y="224" name="debug_leds(7:0)" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="248" y="-712" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-464" type="pin MISO" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-48" type="pin CLK50MHz" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-32" type="pin CLK4MHz" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-320" type="pin key_reset" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-256" type="pin FILE_SELECT(15:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="32" type="pin ZDSK_doSelect" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="96" type="pin ZDSK_doneCarac" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="160" type="pin ZDSK_doInsert" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="-544" type="pin ram_D(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="-608" type="pin MOSI" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="-480" type="pin ram_A(20:0)" />
@@ -36,16 +38,17 @@
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="-288" type="pin FILE_LOADED" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="32" type="pin ZDSK_doCarac" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="96" type="pin ZDSK_CARAC(7:0)" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="160" type="pin ZDSK_doInsert" />
-        <line x2="0" y1="160" y2="160" x1="64" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="160" type="pin pause" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="488" y="224" type="pin debug_leds(7:0)" />
+        <rect width="64" x="496" y="212" height="24" />
+        <line x2="560" y1="224" y2="224" x1="496" />
+        <line x2="0" y1="160" y2="160" x1="64" />
         <line x2="560" y1="160" y2="160" x1="496" />
         <line x2="0" y1="32" y2="32" x1="64" />
         <line x2="0" y1="96" y2="96" x1="64" />
         <line x2="0" y1="-464" y2="-464" x1="64" />
         <rect width="64" x="0" y="-268" height="24" />
         <line x2="0" y1="-256" y2="-256" x1="64" />
-        <line x2="0" y1="-48" y2="-48" x1="64" />
         <line x2="0" y1="-320" y2="-320" x1="64" />
         <line x2="560" y1="32" y2="32" x1="496" />
         <rect width="64" x="496" y="84" height="24" />
@@ -59,6 +62,7 @@
         <line x2="560" y1="-224" y2="-224" x1="496" />
         <line x2="560" y1="-160" y2="-160" x1="496" />
         <line x2="560" y1="-32" y2="-32" x1="496" />
-        <rect width="432" x="64" y="-704" height="896" />
+        <line x2="0" y1="-32" y2="-32" x1="64" />
+        <rect width="432" x="64" y="-704" height="952" />
     </graph>
 </symbol>

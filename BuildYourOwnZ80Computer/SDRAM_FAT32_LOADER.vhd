@@ -37,7 +37,7 @@ entity SDRAM_FAT32_LOADER is
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32-1 downto 0):=x"00400000" -- in byte
 		-- CLK : @4MHz
 	);
-    Port ( CLK:in STD_LOGIC;
+    Port ( CLK4MHz:in STD_LOGIC;
            file_select:in std_logic_vector(MAX_DSK_NUMBER_SQRT-1 downto 0);
            ram_A : out  STD_LOGIC_VECTOR (20 downto 0):=(others=>'0');
            ram_D : inout  STD_LOGIC_VECTOR (7 downto 0):=(others=>'Z'); -- for sim
@@ -48,7 +48,7 @@ entity SDRAM_FAT32_LOADER is
            spi_Rdo : out  STD_LOGIC;
            spi_Rdone : in  STD_LOGIC;
 			  spi_init_done : in STD_LOGIC;
-			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
+			  leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
 			  key_reset:in std_logic;
 			  ZDSK_doSelect : in  STD_LOGIC; -- no Wait_n needed by here
@@ -171,7 +171,7 @@ begin
 		else '0';
 
 	-- Permit to load BR values, and also some others variables
-	spi_to_loader: process(CLK) is
+	spi_to_loader: process(CLK4MHz) is
 		variable data_step:integer range 0 to 6:=0;
 		variable data_cursor:integer range 0 to 3:=0;
 		variable data_reader1_mem:std_logic_vector(7 downto 0):=(others=>'0');
@@ -179,7 +179,7 @@ begin
 		variable data_reader4_mem:std_logic_vector(31 downto 0):=(others=>'0');
 
 	begin
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			data_reader1<=data_reader1_mem;
 			data_reader2<=data_reader2_mem;
 			data_reader4<=data_reader4_mem;
@@ -268,12 +268,12 @@ begin
 	end process;
 
 	-- compare 8bytes ou 3 bytes
-	comparator:process(CLK) is
+	comparator:process(CLK4MHz) is
 		variable compare_step:integer range 0 to 3:=0;
 		variable cursor:integer range 0 to 12:=0;
 
 	begin
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			compare_spi_Rdo<='0';
 			if compare_do then
 				compare_done<=false;
@@ -317,14 +317,14 @@ begin
 	end process;
 	
 	-- Filling RAM
-	transmiter:process(CLK) is
+	transmiter:process(CLK4MHz) is
 		variable cursor:integer range 0 to BLOCK_SIZE_MAXIMUM;
 		variable transmit_step:integer range 0 to 5;
 		variable data_mem:std_logic_vector(7 downto 0);
 		variable address_mem:std_logic_vector(ram_A'range);
 		variable transmit_sdram_wait: integer range 0 to SDRAM_ASYNC_DELTA;
 	begin
-		if rising_edge(CLK) then
+		if falling_edge(CLK4MHz) then
 			if transmit_do then
 				transmit_done<=false;
 				cursor:=0;
@@ -387,7 +387,7 @@ begin
 	
 
 	--tortue_geniale : the main process, using FAT32 protocol
-	tortue_geniale:process (CLK) is
+	tortue_geniale:process (CLK4MHz) is
 	   variable FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (SPI_ADDRESS_FAT32+9-1 downto 0):=x"00400000"; -- in byte
 		variable BPB_FATSz32:STD_LOGIC_VECTOR(31 downto 0);
 		variable BPB_TotSec32:STD_LOGIC_VECTOR(31 downto 0);
@@ -610,10 +610,10 @@ end function;
 		load_init_done<=load_done;
 		pause<=pause_mem;
 		
-		if rising_edge(CLK) then
+		if rising_edge(CLK4MHz) then
 		
 			--leds<=files_loaded & "111";
-			--leds<=conv_std_logic_vector(step_var,8);
+			leds<=conv_std_logic_vector(step_var,8);
 			
 			if spi_init_done='1' then
 			
@@ -981,7 +981,7 @@ end if;
 		end if;
 	end process tortue_geniale;
 	
-	gripsou:process(CLK) is
+	gripsou:process(CLK4MHz) is
 		variable gripsou_step:integer range 0 to 25:=0;
 		variable input_A:std_logic_vector(SPI_ADDRESS_FAT32-1 downto 0):=(others=>'0');
 		variable data_mem:std_logic_vector(7 downto 0);
@@ -1008,7 +1008,7 @@ end if;
 		type sector_order_type is array(0 to 8) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
 	begin
-		if rising_edge(CLK) then
+		if rising_edge(CLK4MHz) then
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
 			

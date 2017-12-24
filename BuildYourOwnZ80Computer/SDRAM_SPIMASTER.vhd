@@ -635,7 +635,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		
 		variable init_start_waiting:std_logic_vector(7 downto 0):=x"00"; -- unstable reset with bad responses (MiST-board SPI simulator)
 	begin
-		if falling_edge(SCLK) then
+		if rising_edge(SCLK) then
 --		if reset='1' or not(IS_MIST_BOARD) then
 --			reset_released<='1'; -- have passed by reset phase (reset perhaps is 0 before being 1 for first time)
 --		end if;
