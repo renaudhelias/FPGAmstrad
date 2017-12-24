@@ -179,7 +179,7 @@ begin
 		variable data_reader4_mem:std_logic_vector(31 downto 0):=(others=>'0');
 
 	begin
-		if falling_edge(CLK4MHz) then
+		if rising_edge(CLK4MHz) then
 			data_reader1<=data_reader1_mem;
 			data_reader2<=data_reader2_mem;
 			data_reader4<=data_reader4_mem;
@@ -193,7 +193,7 @@ begin
 			end if;
 			
 			data_spi_Rdo<='0';
-			
+			--leds<='1' & conv_std_logic_vector(data_step,7);
 			if not data_RWdone then
 				if not(data_spi_Rdo='1') and spi_Rdone='1' then
 					case data_step is
@@ -273,7 +273,7 @@ begin
 		variable cursor:integer range 0 to 12:=0;
 
 	begin
-		if falling_edge(CLK4MHz) then
+		if rising_edge(CLK4MHz) then
 			compare_spi_Rdo<='0';
 			if compare_do then
 				compare_done<=false;
@@ -324,7 +324,7 @@ begin
 		variable address_mem:std_logic_vector(ram_A'range);
 		variable transmit_sdram_wait: integer range 0 to SDRAM_ASYNC_DELTA;
 	begin
-		if falling_edge(CLK4MHz) then
+		if rising_edge(CLK4MHz) then
 			if transmit_do then
 				transmit_done<=false;
 				cursor:=0;
@@ -610,7 +610,7 @@ end function;
 		load_init_done<=load_done;
 		pause<=pause_mem;
 		
-		if rising_edge(CLK4MHz) then
+		if falling_edge(CLK4MHz) then
 		
 			--leds<=files_loaded & "111";
 			leds<=conv_std_logic_vector(step_var,8);
@@ -630,42 +630,20 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						--============================================
 						--==  MBR : isFAT32 + FAT32_SECTOR0_OFFSET  ==
 						--============================================
---						-- MiST
---						--get_var1(data_reader1,x"000001FE");
---						-- ZX-Uno
---						get_var1b(data_reader1,x"000001FE");
---						--get_var1(data_reader1,x"00000000"); -- same result for SD and SDHC, x"BA"
---						step_var:=32;
---					when 32 =>
---						-- check data(1FE)=55 (fixed value)
---						if data_reader1 = x"55" then
---							step_var:=33;
---							-- MiST
---							--get_var1(data_reader1,x"000001FF");
---							-- ZX-Uno
---							get_var1b(data_reader1,x"000001FF");
---							--get_var1(data_reader1,x"00400003"); -- 4D
---						end if;
---					when 33 =>
---						-- check data(1FF)=AA (fixed value)
---						if data_reader1 = x"AA" then
---							step_var:=34;
---							--1BE+4=1C2
---							-- MiST
---							--get_var1(data_reader1,x"000001C2");
---							-- ZX-Uno
---							get_var1b(data_reader1,x"000001C2");
---						end if;
---					when 34 =>
---						-- check data(1BE+4)=0B ou 0C (is_FAT32)
---						if data_reader1 = x"0B" or data_reader1 = x"0C" then
+						-- MiST
+						--get_var1(data_reader1,x"000001FE");
+						-- ZX-Uno
+						get_var1b(data_reader1,x"000001FE");
+						step_var:=9;
+					when 9=>
+						-- check data(1FE)=55 (fixed value)
+						if data_reader1 = x"55" then
 							step_var:=28;
-							-- 1BE+8=1C6
 							-- MiST
 							--get_var4(data_reader4,x"000001C6");
 							-- ZX-Uno
 							get_var4b(data_reader4,x"000001C6");
---						end if;
+						end if;
 					when 28 =>
 						-- load data4Bytes(1BE+8) little endian, x512(=200h) = FAT32_SECTOR0_OFFSET
 						-- * 512 (=200h)
@@ -736,24 +714,24 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 						--========================================================
 						if folder_DirStruct_number=conv_integer(BPB_SecPerClus)*(conv_integer(BPB_BytsPerSec)/32) then
 							-- last DataStruct of all sectors of current cluster done
-							step_var:=9;
+							--=========================
+							--== NEXT FOLDER CLUSTER ==
+							--=========================
+							if bc(folder_cluster_pointer) then
+								-- that's all sucks
+								load_done:='0';
+								switch_transmit_gripsou<=SWITCH_NONE;
+							else
+								get_var4b(folder_cluster_pointer,getFAT(folder_cluster_pointer));
+								step_var:=12;
+							end if;
 						else
 							folder_DirStruct_number:=folder_DirStruct_number+1;
 							rom_number:=0;
 							step_var:=30;
 						end if;
-					when 9=>
-						--=========================
-						--== NEXT FOLDER CLUSTER ==
-						--=========================
-						if bc(folder_cluster_pointer) then
-							-- that's all sucks
-							load_done:='0';
-							switch_transmit_gripsou<=SWITCH_NONE;
-						else
-							get_var4b(folder_cluster_pointer,getFAT(folder_cluster_pointer));
-							step_var:=12;
-						end if;
+					
+						
 					when 30=>
 						--================================
 						--== END OF DIRSTRUCT DETECTION ==
@@ -1008,7 +986,7 @@ end if;
 		type sector_order_type is array(0 to 8) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
 	begin
-		if rising_edge(CLK4MHz) then
+		if falling_edge(CLK4MHz) then
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
 			

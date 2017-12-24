@@ -50,7 +50,7 @@
         <port polarity="Output" name="pause" />
         <port polarity="Output" name="debug_leds(7:0)" />
         <blockdef name="SDRAM_SPIMASTER">
-            <timestamp>2017-12-14T6:47:3</timestamp>
+            <timestamp>2017-12-24T13:48:29</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
             <line x2="0" y1="-160" y2="-160" x1="64" />
@@ -61,10 +61,10 @@
             <rect width="64" x="320" y="-44" height="24" />
             <line x2="384" y1="-32" y2="-32" x1="320" />
             <line x2="384" y1="-96" y2="-96" x1="320" />
-            <rect width="256" x="64" y="-256" height="564" />
             <rect width="64" x="0" y="84" height="24" />
             <line x2="0" y1="96" y2="96" x1="64" />
             <line x2="384" y1="32" y2="32" x1="320" />
+            <rect width="256" x="64" y="-256" height="512" />
         </blockdef>
         <blockdef name="inv">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -76,7 +76,7 @@
             <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2017-12-24T12:1:28</timestamp>
+            <timestamp>2017-12-24T14:2:30</timestamp>
             <rect width="64" x="496" y="468" height="24" />
             <line x2="560" y1="480" y2="480" x1="496" />
             <line x2="0" y1="416" y2="416" x1="64" />
@@ -112,12 +112,12 @@
             <blockpin signalname="MISO" name="MISO" />
             <blockpin signalname="XLXN_95" name="spi_R" />
             <blockpin signalname="XLXN_55(22:0)" name="address(22:0)" />
+            <blockpin signalname="XLXN_94(8:0)" name="address_block(8:0)" />
             <blockpin signalname="MOSI" name="MOSI" />
+            <blockpin signalname="SS_n" name="SS_n" />
             <blockpin signalname="XLXN_57" name="spi_Rdone" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
             <blockpin signalname="XLXN_52(7:0)" name="data_out(7:0)" />
-            <blockpin signalname="XLXN_94(8:0)" name="address_block(8:0)" />
-            <blockpin signalname="SS_n" name="SS_n" />
         </block>
         <block symbolname="inv" name="XLXI_26">
             <blockpin signalname="ram_W" name="I" />
@@ -142,8 +142,8 @@
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="XLXN_55(22:0)" name="spi_A(22:0)" />
             <blockpin signalname="XLXN_94(8:0)" name="spi_A_block(8:0)" />
-            <blockpin signalname="ZDSK_CARAC(7:0)" name="ZDSK_CARAC(7:0)" />
             <blockpin signalname="debug_leds(7:0)" name="leds(7:0)" />
+            <blockpin signalname="ZDSK_CARAC(7:0)" name="ZDSK_CARAC(7:0)" />
         </block>
         <block symbolname="inv" name="XLXI_47">
             <blockpin signalname="CLK4MHz" name="I" />

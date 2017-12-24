@@ -46,6 +46,7 @@ entity SDRAM_SPIMASTER is
 			  --CD_n : in  STD_LOGIC; -- useless here, just for plug
            spi_R:in STD_LOGIC;
 			  spi_Rdone:out STD_LOGIC:='1';
+			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
 --			  spi_W:in STD_LOGIC:='0';
 --			  spi_Wblock:in STD_LOGIC:='0';
 --			  spi_Wdone:out STD_LOGIC:='1';
@@ -210,7 +211,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 	begin
 		buffer_response<=buffer_response_mem;
 		
-		if falling_edge(SCLK) then
+		if rising_edge(SCLK) then
 		
 			MOSI<='1'; -- start bit is '0' and end bit is '1'... so '1' is sleeping on I think so :)
 			
@@ -635,7 +636,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		
 		variable init_start_waiting:std_logic_vector(7 downto 0):=x"00"; -- unstable reset with bad responses (MiST-board SPI simulator)
 	begin
-		if rising_edge(SCLK) then
+		if falling_edge(SCLK) then
 --		if reset='1' or not(IS_MIST_BOARD) then
 --			reset_released<='1'; -- have passed by reset phase (reset perhaps is 0 before being 1 for first time)
 --		end if;
@@ -649,6 +650,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 			ram_Tblock<=false;
 			
 --if reset='0' and reset_released='1' then
+			--leds<=conv_std_logic_vector(init_step,8);
 			
 			if not(init_done='1') then
 				do_data_block_read<=false;
