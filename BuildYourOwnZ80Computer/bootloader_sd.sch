@@ -76,7 +76,7 @@
             <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2017-12-24T14:2:30</timestamp>
+            <timestamp>2017-12-24T14:57:58</timestamp>
             <rect width="64" x="496" y="468" height="24" />
             <line x2="560" y1="480" y2="480" x1="496" />
             <line x2="0" y1="416" y2="416" x1="64" />

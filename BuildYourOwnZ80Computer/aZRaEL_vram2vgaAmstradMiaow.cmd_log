@@ -6,3 +6,5 @@ vhdtdtfi -lib work aZRaEL_vram2vgaAmstradMiaow.vhd -prj _BuildYourOwnZ80Computer
 spl2sym -intstyle ise -family spartan6 -w aZRaEL_vram2vgaAmstradMiaow.spl C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/aZRaEL_vram2vgaAmstradMiaow.sym 
 vhdtdtfi -lib work aZRaEL_vram2vgaAmstradMiaow.vhd -prj _BuildYourOwnZ80Computer -o aZRaEL_vram2vgaAmstradMiaow.spl -module aZRaEL_vram2vgaAmstradMiaow -template C:/Xilinx/14.7/ISE_DS/ISE//data/splfile.tft -deleteonerror 
 spl2sym -intstyle ise -family spartan6 -w aZRaEL_vram2vgaAmstradMiaow.spl C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/aZRaEL_vram2vgaAmstradMiaow.sym 
+vhdtdtfi -lib work aZRaEL_vram2vgaAmstradMiaow.vhd -prj _BuildYourOwnZ80Computer -o aZRaEL_vram2vgaAmstradMiaow.spl -module aZRaEL_vram2vgaAmstradMiaow -template C:/Xilinx/14.7/ISE_DS/ISE//data/splfile.tft -deleteonerror 
+spl2sym -intstyle ise -family spartan6 -w aZRaEL_vram2vgaAmstradMiaow.spl C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/aZRaEL_vram2vgaAmstradMiaow.sym 

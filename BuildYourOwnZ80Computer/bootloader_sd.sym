@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="bootloader_sd">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-24T14:3:3</timestamp>
+    <timestamp>2017-12-24T14:58:18</timestamp>
     <pin polarity="Input" x="0" y="-464" name="MISO" />
     <pin polarity="Input" x="0" y="-32" name="CLK4MHz" />
     <pin polarity="Input" x="0" y="-320" name="key_reset" />

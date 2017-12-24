@@ -84,7 +84,6 @@
         <signal name="XLXN_806" />
         <signal name="XLXN_807" />
         <signal name="XLXN_830" />
-        <signal name="XLXN_832" />
         <signal name="XLXN_835" />
         <signal name="crtc_W" />
         <signal name="A(15),A(14),A(9),A(8)" />
@@ -94,9 +93,6 @@
         <signal name="XLXN_849" />
         <signal name="crtc_D(7:0)" />
         <signal name="XLXN_852" />
-        <signal name="palette_W" />
-        <signal name="palette_A(12:0)" />
-        <signal name="palette_D(7:0)" />
         <signal name="XLXN_857(1:0)" />
         <signal name="XLXN_858" />
         <signal name="PWM_CLK" />
@@ -129,9 +125,6 @@
         <port polarity="Output" name="crtc_W" />
         <port polarity="Output" name="ram_W_n" />
         <port polarity="Output" name="crtc_D(7:0)" />
-        <port polarity="Output" name="palette_W" />
-        <port polarity="Output" name="palette_A(12:0)" />
-        <port polarity="Output" name="palette_D(7:0)" />
         <port polarity="Input" name="PWM_CLK" />
         <port polarity="Output" name="audio_bc" />
         <port polarity="Output" name="audio_ab" />
@@ -329,14 +322,9 @@
             <rect width="336" x="64" y="-704" height="768" />
         </blockdef>
         <blockdef name="simple_GateArrayInterrupt">
-            <timestamp>2011-12-13T8:46:58</timestamp>
+            <timestamp>2017-12-24T16:41:6</timestamp>
             <rect width="64" x="0" y="660" height="24" />
             <line x2="0" y1="672" y2="672" x1="64" />
-            <line x2="416" y1="528" y2="528" x1="352" />
-            <rect width="64" x="352" y="564" height="24" />
-            <line x2="416" y1="576" y2="576" x1="352" />
-            <rect width="64" x="352" y="612" height="24" />
-            <line x2="416" y1="624" y2="624" x1="352" />
             <line x2="0" y1="416" y2="416" x1="64" />
             <line x2="0" y1="480" y2="480" x1="64" />
             <rect width="64" x="352" y="404" height="24" />
@@ -783,11 +771,8 @@
             <blockpin signalname="XLXN_807" name="WAIT_MEM_n" />
             <blockpin signalname="XLXN_806" name="WAIT_n" />
             <blockpin name="ram_R" />
-            <blockpin signalname="palette_W" name="palette_W" />
             <blockpin signalname="crtc_A(15:0)" name="crtc_A(15:0)" />
             <blockpin signalname="crtc_D(7:0)" name="crtc_D(7:0)" />
-            <blockpin signalname="palette_A(12:0)" name="palette_A(12:0)" />
-            <blockpin signalname="palette_D(7:0)" name="palette_D(7:0)" />
         </block>
         <block symbolname="and2" name="XLXI_570">
             <blockpin signalname="XLXN_807" name="I0" />
@@ -1449,18 +1434,6 @@
             <wire x2="5552" y1="1008" y2="1008" x1="5488" />
             <wire x2="5552" y1="1008" y2="2080" x1="5552" />
         </branch>
-        <branch name="palette_W">
-            <wire x2="5648" y1="1328" y2="1328" x1="5488" />
-        </branch>
-        <branch name="palette_A(12:0)">
-            <wire x2="5648" y1="1376" y2="1376" x1="5488" />
-        </branch>
-        <branch name="palette_D(7:0)">
-            <wire x2="5648" y1="1424" y2="1424" x1="5488" />
-        </branch>
-        <iomarker fontsize="28" x="5648" y="1328" name="palette_W" orien="R0" />
-        <iomarker fontsize="28" x="5648" y="1376" name="palette_A(12:0)" orien="R0" />
-        <iomarker fontsize="28" x="5648" y="1424" name="palette_D(7:0)" orien="R0" />
         <branch name="XLXN_857(1:0)">
             <wire x2="3280" y1="608" y2="608" x1="3200" />
             <wire x2="3280" y1="608" y2="944" x1="3280" />

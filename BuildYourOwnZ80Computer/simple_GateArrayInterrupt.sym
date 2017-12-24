@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="simple_GateArrayInterrupt">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2011-12-13T8:46:58</timestamp>
+    <timestamp>2017-12-24T16:41:6</timestamp>
     <pin polarity="Input" x="0" y="416" name="IO_REQ_W" />
     <pin polarity="Input" x="0" y="480" name="IO_REQ_R" />
     <pin polarity="Input" x="0" y="32" name="IO_ACK" />
@@ -21,11 +21,8 @@
     <pin polarity="Output" x="416" y="-112" name="WAIT_MEM_n" />
     <pin polarity="Output" x="416" y="-160" name="WAIT_n" />
     <pin polarity="Output" x="416" y="320" name="ram_R" />
-    <pin polarity="Output" x="416" y="528" name="palette_W" />
     <pin polarity="Output" x="416" y="160" name="crtc_A(15:0)" />
     <pin polarity="Output" x="416" y="256" name="crtc_D(7:0)" />
-    <pin polarity="Output" x="416" y="576" name="palette_A(12:0)" />
-    <pin polarity="Output" x="416" y="624" name="palette_D(7:0)" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="208" y="-264" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="416" type="pin IO_REQ_W" />
@@ -47,18 +44,10 @@
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="-112" type="pin WAIT_MEM_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="-160" type="pin WAIT_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="320" type="pin ram_R" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="528" type="pin palette_W" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="160" type="pin crtc_A(15:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="256" type="pin crtc_D(7:0)" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="576" type="pin palette_A(12:0)" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="624" type="pin palette_D(7:0)" />
         <rect width="64" x="0" y="660" height="24" />
         <line x2="0" y1="672" y2="672" x1="64" />
-        <line x2="416" y1="528" y2="528" x1="352" />
-        <rect width="64" x="352" y="564" height="24" />
-        <line x2="416" y1="576" y2="576" x1="352" />
-        <rect width="64" x="352" y="612" height="24" />
-        <line x2="416" y1="624" y2="624" x1="352" />
         <line x2="0" y1="416" y2="416" x1="64" />
         <line x2="0" y1="480" y2="480" x1="64" />
         <rect width="64" x="352" y="404" height="24" />

@@ -114,8 +114,8 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 		  );
     Port ( DATA : in  STD_LOGIC_VECTOR (7 downto 0); -- buffer
            ADDRESS : out  STD_LOGIC_VECTOR (14 downto 0);
-			  PALETTE_D : in STD_LOGIC_VECTOR (7 downto 0);
-			  PALETTE_A : out STD_LOGIC_VECTOR (12 downto 0);
+			  --PALETTE_D : in STD_LOGIC_VECTOR (7 downto 0);
+			  --PALETTE_A : out STD_LOGIC_VECTOR (12 downto 0);
            RED : out  STD_LOGIC_VECTOR(1 downto 0);
            GREEN : out  STD_LOGIC_VECTOR(2 downto 0);
            BLUE : out  STD_LOGIC_VECTOR(1 downto 0);
@@ -198,13 +198,13 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 
 	constant PALETTE_H_OFFSET:integer:=16+1; --HTot/HardHZoom-16-1;
 	constant PALETTE_V_OFFSET:integer:=0; --VTot;
-	variable palette_horizontal_counter : integer range 0 to HTot:=PALETTE_H_OFFSET;
-	variable palette_vertical_counter : integer range 0 to VTot:=PALETTE_V_OFFSET;
-	variable palette_action:integer range 0 to 2:=0;
+	--variable palette_horizontal_counter : integer range 0 to HTot:=PALETTE_H_OFFSET;
+	--variable palette_vertical_counter : integer range 0 to VTot:=PALETTE_V_OFFSET;
+	--variable palette_action:integer range 0 to 2:=0;
 	constant DO_MODE:integer:=1;
 	constant DO_COLOR:integer:=2;
 	variable palette_color:integer range 0 to 16-1:=0;
-	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
+	--variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
 	variable etat_rgb : integer range 0 to 4:=DO_NOTHING_OUT;
 	variable etat_hsync : STD_LOGIC:=DO_NOTHING;
@@ -297,32 +297,32 @@ begin
 -- puis c'est trop petit cet RAM, à peine de quoi afficher 60 lignes en 33o par palette et 100 lignes en 32*5bit+2bit
 --donc il faudrai au minimum tripler la mémoire si on la joue serré, ou au maximum multiplier par 5
 --Number of RAMB16s: 18 out of      20   90% => on peut triper la mémoire mais pas plus
-		if palette_action=DO_MODE then
-			MODE_select<=palette_D(1 downto 0);
-		elsif palette_action=DO_COLOR then
-			pen(palette_color)<=palette(conv_integer(palette_D));
-		end if;
+--		if palette_action=DO_MODE then
+--			MODE_select<=palette_D(1 downto 0);
+--		elsif palette_action=DO_COLOR then
+--			pen(palette_color)<=palette(conv_integer(palette_D));
+--		end if;
 		
 --		MODE_select<="01"; -- para pruebas
 
-		if palette_vertical_counter mod VZoom=0 then -- une ligne sur deux déjà...
-			if palette_horizontal_counter<1 then
-				-- mode
-				palette_A<=palette_A_mem;
-				palette_A_mem:=palette_A_mem+1;
-				palette_action:=DO_MODE;
-			elsif palette_horizontal_counter<1+16 then
-				-- color
-				palette_A<=palette_A_mem;
-				palette_A_mem:=palette_A_mem+1;
-				palette_action:=DO_COLOR;
-				palette_color:=palette_horizontal_counter-1;
-			else
-				palette_action:=DO_NOTHING_OUT;
-			end if;
-		else
-			palette_action:=DO_NOTHING_OUT;
-		end if;
+--		if palette_vertical_counter mod VZoom=0 then -- une ligne sur deux déjà...
+--			if palette_horizontal_counter<1 then
+--				-- mode
+--				palette_A<=palette_A_mem;
+--				palette_A_mem:=palette_A_mem+1;
+--				palette_action:=DO_MODE;
+--			elsif palette_horizontal_counter<1+16 then
+--				-- color
+--				palette_A<=palette_A_mem;
+--				palette_A_mem:=palette_A_mem+1;
+--				palette_action:=DO_COLOR;
+--				palette_color:=palette_horizontal_counter-1;
+--			else
+--				palette_action:=DO_NOTHING_OUT;
+--			end if;
+--		else
+--			palette_action:=DO_NOTHING_OUT;
+--		end if;
 		
 		if horizontal_counter<HDsp/HardHZoom and vertical_counter<VDsp then
 			if vertical_counter <40 and horizontal_counter/DEBUG_LEDS_W < 8 then
@@ -385,17 +385,17 @@ begin
 			end if;
 		end if;
 		
-		palette_horizontal_counter:=palette_horizontal_counter+1;
-		if palette_horizontal_counter>=HTot/HardHZoom then
-			palette_horizontal_counter:=0;
-		end if;
-		if palette_horizontal_counter=0 then
-			palette_vertical_counter:=palette_vertical_counter+1;
-			if palette_vertical_counter>=VTot then
-				palette_vertical_counter:=0;
-				palette_A_mem:=conv_std_logic_vector((VDecal_negatif/VZoom)*(1+16),13);
-			end if;
-		end if;
+--		palette_horizontal_counter:=palette_horizontal_counter+1;
+--		if palette_horizontal_counter>=HTot/HardHZoom then
+--			palette_horizontal_counter:=0;
+--		end if;
+--		if palette_horizontal_counter=0 then
+--			palette_vertical_counter:=palette_vertical_counter+1;
+--			if palette_vertical_counter>=VTot then
+--				palette_vertical_counter:=0;
+--				palette_A_mem:=conv_std_logic_vector((VDecal_negatif/VZoom)*(1+16),13);
+--			end if;
+--		end if;
 		
 	end if;
 end process aZRaEL_vram2vgaAmstrad_process;

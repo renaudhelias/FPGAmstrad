@@ -139,7 +139,7 @@ port map (
    DO => data_block_out,      -- 8-bit Data Output
    DOP => open,    -- 1-bit parity Output
    ADDR => data_block_address11,  -- 11-bit Address Input
-   CLK => SCLK,    -- Clock
+   CLK => not(SCLK),    -- Clock
    DI => data_block_in,      -- 8-bit Data Input
    DIP => parity,    -- 1-bit parity Input
    EN => '1',      -- RAM Enable Input

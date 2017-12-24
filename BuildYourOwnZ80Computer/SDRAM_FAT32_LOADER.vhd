@@ -605,7 +605,8 @@ end function;
 		variable file_search_do:boolean := false;
 		variable file_search_done:boolean := false;
 		variable file_search_offset:integer range 0 to 12 := 0;
-
+		--variable nb_files:integer:=0;
+		--variable nbDIRStruct:integer:=0;
 	begin
 		load_init_done<=load_done;
 		pause<=pause_mem;
@@ -614,6 +615,9 @@ end function;
 		
 			--leds<=files_loaded & "111";
 			leds<=conv_std_logic_vector(step_var,8);
+			--leds<="11" & conv_std_logic_vector(nb_files,6);
+			--leds<='1' & conv_std_logic_vector(nb_files,7);
+			--leds<=conv_std_logic_vector(nbDIRStruct,8);
 			
 			if spi_init_done='1' then
 			
@@ -709,6 +713,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 							folder_DirStruct_number:=0;
 						end if;
 					when 8=> -- stepping DIRStruct
+					--nbDIRStruct:=nbDIRStruct+1;
 						--========================================================
 						--== STEPING DIRSTRUCT LIST OF A FOLDER_SECTOR_POINTER ==
 						--========================================================
@@ -761,6 +766,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 					when 29=>
 						if compare_result then
 							step_var:=26; --end of DIRSTRUCT stepping
+							--nb_files:=nb_files+1;
 						else
 							-- strange, perhaps a nice hidden file, go to next file then...
 							step_var:=8;
@@ -822,6 +828,7 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 							files_loaded(rom_number+1):='1';
 								get_var4b(file_size,folder_sector_pointer+(folder_DirStruct_number-1)*32+28);
 							step_var:=14;
+							--nb_files:=nb_files+1;
 						else
 							rom_number:=rom_number+1;
 							step_var:=10;

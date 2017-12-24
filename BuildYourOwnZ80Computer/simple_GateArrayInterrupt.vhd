@@ -49,9 +49,9 @@ entity simple_GateArrayInterrupt is
 			  ram_R : out  STD_LOGIC:='0';
 			  ram_D : inout  STD_LOGIC_VECTOR (7 downto 0);
 			  
-			  palette_A: out STD_LOGIC_VECTOR (12 downto 0):=(others=>'0');
-			  palette_D: out std_logic_vector(7 downto 0);
-			  palette_W: out std_logic;
+			  --palette_A: out STD_LOGIC_VECTOR (12 downto 0):=(others=>'0');
+			  --palette_D: out std_logic_vector(7 downto 0);
+			  --palette_W: out std_logic;
 			  reset:in  STD_LOGIC
 			  
 			  );
@@ -268,10 +268,10 @@ simple_GateArray_process : process(CLK4MHz) is
 		variable vram_horizontal_offset_counter:integer:=0;
 		variable vram_horizontal_counter:integer:=0;
 		
-		variable palette_A_mem:std_logic_vector(13 downto 0):=(others=>'0');
+		--variable palette_A_mem:std_logic_vector(13 downto 0):=(others=>'0');
 		variable last_disp:std_logic:='0';
-		variable palette_horizontal_counter:integer range 0 to 256-1:=0; --640/16
-		variable palette_color:integer range 0 to 32-1;
+--		variable palette_horizontal_counter:integer range 0 to 256-1:=0; --640/16
+--		variable palette_color:integer range 0 to 32-1;
 		
 		variable line_displayed:boolean:=false;
 		variable in_800x600:boolean:=false;
@@ -283,7 +283,7 @@ simple_GateArray_process : process(CLK4MHz) is
 		
 crtc_R<='0';
 crtc_W<='0';
-palette_W<='0';
+--palette_W<='0';
 
 -- Crazy Car II n'aime pas le little_reset
 			-- asphalt IACK sans test sur int_mem
@@ -343,9 +343,9 @@ end if;
 if etat_hsync=DO_HSYNC and last_etat_hsync=DO_NOTHING then
 	if vram_vertical_offset_counter<=VRAM_Voffset then
 		vram_vertical_offset_counter:=vram_vertical_offset_counter+1;
-		if vram_vertical_offset_counter>VRAM_Voffset then
-			palette_A_mem:=(others=>'0');
-		end if;
+--		if vram_vertical_offset_counter>VRAM_Voffset then
+--			palette_A_mem:=(others=>'0');
+--		end if;
 	else
 		vram_vertical_counter:=vram_vertical_counter+1;
 	end if;
@@ -365,27 +365,27 @@ if vram_horizontal_offset_counter>VRAM_Hoffset then
 			else
 				-- on nourri la palette
 				line_displayed:=true; -- oui mais non
-				if last_disp='0' then
-					palette_horizontal_counter:=0;
-				else
-					palette_horizontal_counter:=palette_horizontal_counter+1;
-				end if;
-				if palette_horizontal_counter<1 then
-					palette_A<=palette_A_mem(12 downto 0);
-					palette_D<="000000" & MODE_select;
-					if palette_A_mem(13)='0' then
-						palette_W<='1';
-					end if;
-					palette_A_mem:=palette_A_mem+1;
-				elsif palette_horizontal_counter<1+16 then
-					palette_A<=palette_A_mem(12 downto 0);
-					palette_color:=palette_horizontal_counter-1;
-					palette_D<=conv_std_logic_vector(pen(palette_color),8);
-					if palette_A_mem(13)='0' then
-						palette_W<='1';
-					end if;
-					palette_A_mem:=palette_A_mem+1;
-				end if;
+--				if last_disp='0' then
+--					palette_horizontal_counter:=0;
+--				else
+--					palette_horizontal_counter:=palette_horizontal_counter+1;
+--				end if;
+--				if palette_horizontal_counter<1 then
+--					palette_A<=palette_A_mem(12 downto 0);
+--					palette_D<="000000" & MODE_select;
+--					if palette_A_mem(13)='0' then
+--						palette_W<='1';
+--					end if;
+--					palette_A_mem:=palette_A_mem+1;
+--				elsif palette_horizontal_counter<1+16 then
+--					palette_A<=palette_A_mem(12 downto 0);
+--					palette_color:=palette_horizontal_counter-1;
+--					palette_D<=conv_std_logic_vector(pen(palette_color),8);
+--					if palette_A_mem(13)='0' then
+--						palette_W<='1';
+--					end if;
+--					palette_A_mem:=palette_A_mem+1;
+--				end if;
 			end if;
 			vram_A_mem:=conv_std_logic_vector(vram_vertical_counter*VRAM_HDsp+vram_horizontal_counter,vram_A_mem'length);
 		else
@@ -395,9 +395,9 @@ if vram_horizontal_offset_counter>VRAM_Hoffset then
 	elsif vram_horizontal_counter=VRAM_HDsp then
 		vram_horizontal_counter:=vram_horizontal_counter+1;
 		disp:='0';
-		if in_800x600 and not (line_displayed) then
-			palette_A_mem:=palette_A_mem+16+1;
-		end if;
+--		if in_800x600 and not (line_displayed) then
+--			palette_A_mem:=palette_A_mem+16+1;
+--		end if;
 	else
 		disp:='0';
 	end if;
