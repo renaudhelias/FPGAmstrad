@@ -19,7 +19,7 @@ entity simple_DSK is
            dsk_info_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
            dsk_A : out  STD_LOGIC_VECTOR (19 downto 0);
            dsk_W : out  STD_LOGIC;
-           dsk_R : out  STD_LOGIC;
+           --dsk_R : out  STD_LOGIC;
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  M1_n:in STD_LOGIC;
 			  transmit : out STD_LOGIC -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
@@ -112,7 +112,6 @@ begin
 --	dsk_A<=dsk_A_mem;
 
 	if reset='1' then
-		D_result<=(others=>'Z');
 		dsk_A<=(others=>'0');
 		current_track:=0;
 		current_sector:=0;
@@ -122,16 +121,26 @@ begin
 		result_restant:=0;
 		--phase <=PHASE_ATTENTE_COMMANDE;
 		etat:=ETAT_OSEF;
-		transmit<='0';
-		dsk_info_D<=(others=>'Z');
-		dsk_R<='0';
+		--dsk_R<='0';
+		
+		--relax
 		dsk_W<='0';
+		D_result<=(others=>'Z');
+		dsk_info_D<=(others=>'Z');
+		transmit<='0';
+
 		data:=(others=>'0');
 		
 		was_concerned:=false;
 		do_update:=false;
 	else
 		if rising_edge(CLK8(0)) then
+
+--relax by default
+transmit<='0';
+dsk_W<='0';
+dsk_info_D<=(others=>'Z');
+D_result<=(others=>'Z');
 
 if CLK8(2)='1' then
 	-- CRTC working
@@ -163,7 +172,7 @@ if (IO_RD='1' or IO_WR='1') and A10_A8_A7=b"010"  then
 else
 	-- I am not concerned : liberation entrée/sorties
 	if CLK8(1)='0' then
-		dsk_R<='0';
+		--dsk_R<='0';
 		dsk_W<='0';
 		dsk_info_D<=(others=>'Z');
 		D_result<=(others=>'Z');
@@ -175,7 +184,7 @@ end if;
 if do_update then
 			if CLK8(1)='0' then
 				-- z80 is solved
-				dsk_R<='0';
+				--dsk_R<='0';
 				dsk_W<='0';
 				dsk_info_D<=(others=>'Z');
 				D_result<=(others=>'Z');
@@ -206,7 +215,7 @@ if do_update then
 							end if;
 							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
-							dsk_R<='1';
+							--dsk_R<='1';
 							transmit<='1';
 							current_byte:=current_byte+1;
 						else
@@ -266,7 +275,7 @@ if do_update then
 							data:=dsk_info_D; --(others=>'0');
 							D_result<=data;
 							transmit<='0';
-							dsk_R<='0';
+							--dsk_R<='0';
 							if exec_restant=0 then
 								phase<=PHASE_RESULT;
 								result_restant:=7;

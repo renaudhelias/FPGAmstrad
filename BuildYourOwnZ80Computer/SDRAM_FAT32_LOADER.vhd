@@ -80,14 +80,18 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 		(x"4F53363132382020524F4D", -- OS6128.ROM
 		 x"4241534943312D31524F4D", -- BASIC1-1.ROM
 		x"414D53444F532020524F4D", -- AMSDOS.ROM
-		x"4D4158414D202020524F4D"); -- MAXAM.ROM
+		--x"4D4158414D202020524F4D", -- MAXAM.ROM
+		x"53435245454E2020524F4D"  --SCREEN.ROM
+		); 
 	subtype address_type is std_logic_vector(31 downto 0);
 	type file_rom_address_type is array(ROM_COUNT-1 downto 0) of address_type;
 	constant file_rom_address: file_rom_address_type:=
 		(x"00000000",
 		x"00004000",
 		x"00008000",
-		x"0000C000");
+		--x"0000C000",
+		 x"00" & "00000010" & "11000000" & x"00" -- &C000
+		);
 	
 	
 	
@@ -608,13 +612,15 @@ end function;
 		--variable nb_files:integer:=0;
 		--variable nbDIRStruct:integer:=0;
 	begin
+
 		load_init_done<=load_done;
 		pause<=pause_mem;
 		
 		if falling_edge(CLK4MHz) then
-		
-			--leds<=files_loaded & "111";
-			leds<=conv_std_logic_vector(step_var,8);
+			
+			
+			leds<=files_loaded & "111";
+			--leds<=conv_std_logic_vector(step_var,8);
 			--leds<="11" & conv_std_logic_vector(nb_files,6);
 			--leds<='1' & conv_std_logic_vector(nb_files,7);
 			--leds<=conv_std_logic_vector(nbDIRStruct,8);
@@ -631,6 +637,11 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 				
 				case step_var is
 					when 0 =>
+					
+						load_done:='0'; -- relax the A=init_A
+						pause_mem:='0';
+						switch_transmit_gripsou<=SWITCH_NONE;
+					
 						--============================================
 						--==  MBR : isFAT32 + FAT32_SECTOR0_OFFSET  ==
 						--============================================
@@ -912,50 +923,57 @@ end if;
 						
 						
 					when 26=> -- load done
-						if key_reset='1' then
-							files_loaded:=(others=>'0');
-							dsk_number:=(others=>'0');
-							load_done:='0';
-							step_var:=0;
-						elsif ZDSK_doInsert='1' then
-							files_loaded(0):='0';
-							dsk_number:=(others=>'0');
-							pause_mem:='1';
-							step_var:=0;
-						elsif ZDSK_doSelect='1' then
-							ZDSK_doCarac<='0';
-							-- place cursor front of file with nice number
-							file_search_do:=true;
-							file_search_done:=false;
-							file_search_offset:=0;
-							dsk_number:=(others=>'0');
-							step_var:=0;
-						elsif ZDSK_doneCarac='1' and ZDSK_doneCarac_old_mem='0' then
-							-- a char has been readen, go to next char.
-							ZDSK_doCarac<='0';
-							-- next CARAC or else CARAC_END_OF_NAME
-							if file_search_done then
-								file_search_offset:=file_search_offset+1;
-								if file_search_offset=12 then
-									file_search_done:=false;
-								else
-									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
-								end if;
-							else
-								ZDSK_CARAC<=CARAC_END_OF_NAME;
-								ZDSK_doCarac<='1';
-							end if;
-						elsif file_search_done and ZDSK_doneCarac='0' then
-							if file_search_done then
-								-- I'm front of file with nice number, exhibit a char !
-								ZDSK_CARAC<=data_reader1;
-								ZDSK_doCarac<='1';
-							else
-								ZDSK_CARAC<=CARAC_END_OF_NAME;
-								ZDSK_doCarac<='1';
-							end if;
-						end if;
-						ZDSK_doneCarac_old_mem:=ZDSK_doneCarac;
+					
+					load_done:='1'; -- relax the A=init_A
+					pause_mem:='0';
+					switch_transmit_gripsou<=SWITCH_NONE; -- relax ram_D
+					
+--						if key_reset='1' then
+--							files_loaded:=(others=>'0');
+--							dsk_number:=(others=>'0');
+--							load_done:='0';
+--							step_var:=0;
+--						elsif ZDSK_doInsert='1' then
+--							files_loaded(0):='0';
+--							dsk_number:=(others=>'0');
+--							pause_mem:='1';
+--							step_var:=0;
+--						elsif ZDSK_doSelect='1' then
+--							ZDSK_doCarac<='0';
+--							-- place cursor front of file with nice number
+--							file_search_do:=true;
+--							file_search_done:=false;
+--							file_search_offset:=0;
+--							dsk_number:=(others=>'0');
+--							step_var:=0;
+--						elsif ZDSK_doneCarac='1' and ZDSK_doneCarac_old_mem='0' then
+--							-- a char has been readen, go to next char.
+--							ZDSK_doCarac<='0';
+--							-- next CARAC or else CARAC_END_OF_NAME
+--							if file_search_done then
+--								file_search_offset:=file_search_offset+1;
+--								if file_search_offset=12 then
+--									file_search_done:=false;
+--								else
+--									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
+--								end if;
+--							else
+--								ZDSK_CARAC<=CARAC_END_OF_NAME;
+--								ZDSK_doCarac<='1';
+--							end if;
+--						elsif file_search_done and ZDSK_doneCarac='0' then
+--							if file_search_done then
+--								-- I'm front of file with nice number, exhibit a char !
+--								ZDSK_CARAC<=data_reader1;
+--								ZDSK_doCarac<='1';
+--							else
+--								ZDSK_CARAC<=CARAC_END_OF_NAME;
+--								ZDSK_doCarac<='1';
+--							end if;
+--						end if;
+--						ZDSK_doneCarac_old_mem:=ZDSK_doneCarac;
+
+
 					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
 					--when 29=>NULL; -- bad file cluster
@@ -1146,6 +1164,7 @@ end if;
 					when 18=> -- data transmit
 						gripsou_ram_A_mem:= "1" & conv_std_logic_vector(no_track,6) & conv_std_logic_vector(no_side,1) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
 						gripsou_ram_A<=gripsou_ram_A_mem;
+						gripsou_ram_W<='1';
 						gripsou_ram_D<=data_mem;
 						
 						input_A:=input_A+1;

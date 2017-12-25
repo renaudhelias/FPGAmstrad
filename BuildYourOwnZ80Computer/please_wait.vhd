@@ -29,6 +29,6 @@ end please_wait;
 
 architecture Behavioral of please_wait is
 begin
-CLK_WAIT_n<=CLK_n or not(WAIT_n) or pause;
+CLK_WAIT_n<=CLK_n or not(WAIT_n); -- or pause;
 end Behavioral;
 

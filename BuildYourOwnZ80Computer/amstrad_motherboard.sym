@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-24T16:42:58</timestamp>
+    <timestamp>2017-12-25T16:20:6</timestamp>
     <pin polarity="Input" x="0" y="-736" name="init_A(20:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-544" name="CLK16MHz" />
