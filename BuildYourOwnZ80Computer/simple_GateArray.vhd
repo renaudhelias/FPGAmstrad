@@ -52,6 +52,9 @@ begin
 		variable upperROMen_mem:STD_LOGIC:='1'; --init ne marche pas :='1'; -- je suppose ^^
 		variable RAMbank_mem:STD_LOGIC_VECTOR(2 downto 0):=(others=>'0');
 	begin
+		RAMbank<=RAMbank_mem;-- slices init_RAMbank;
+		lowerROMen<=lowerROMen_mem;
+		upperROMen<=upperROMen_mem;
 		if rising_edge(CLK) then
 		
 			if IO_REQ_W='1' and A15_A14(1) = '0' and A15_A14(0) = '1' then --7Fxx gate array --
@@ -75,12 +78,8 @@ begin
 					end if;
 				end if;
 			end if;
-			
-			RAMbank<=RAMbank_mem;-- slices init_RAMbank;
-			lowerROMen<=lowerROMen_mem;
-			upperROMen<=upperROMen_mem;
-			MODE<=MODE_mem;
 		end if;	
+		MODE<=MODE_mem;
 	end process simple_GateArray_process;
 
 end Behavioral;

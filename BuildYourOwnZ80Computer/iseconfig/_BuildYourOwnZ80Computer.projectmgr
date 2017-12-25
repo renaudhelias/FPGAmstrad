@@ -9,19 +9,21 @@
          <ClosedNodesVersion>2</ClosedNodesVersion>
          <ClosedNode>/T80 - rtl E:|fpga|ZXUNO|V4|8bit|CPC|T80.vhd</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_474 - VRAM32Ko_Amstrad</ClosedNode>
+         <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard/AmstradT80 - T80se - rtl</ClosedNode>
+         <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard/XLXI_494 - joykeyb</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_462 - bootloader_sd</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard</ClosedNode>
          <ClosedNode>/joykeyb E:|fpga|ZXUNO|V4|8bit|CPC|joykeyb.sch</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>XLXI_348 - AmstradRAMDSK - Behavioral (C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/AmstradRAMDSK.vhd)</SelectedItem>
+         <SelectedItem>amstrad_switch_z80_vga_sd (C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.sch)</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000271000000020000000000000000000000000200000064ffffffff000000810000000300000002000002710000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
-      <CurrentItem>XLXI_348 - AmstradRAMDSK - Behavioral (C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/AmstradRAMDSK.vhd)</CurrentItem>
+      <CurrentItem>amstrad_switch_z80_vga_sd (C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.sch)</CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_SCHEMATIC" guiview="Process" >
       <ClosedNodes>
@@ -36,26 +38,26 @@
          <ClosedNode>User Constraints</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem></SelectedItem>
+         <SelectedItem>Generate Programming File</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000150000000010000000100000000000000000000000064ffffffff000000810000000000000001000001500000000100000000</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000013f000000010000000100000000000000000000000064ffffffff0000008100000000000000010000013f0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem></CurrentItem>
+      <CurrentItem>Generate Programming File</CurrentItem>
    </ItemView>
    <ItemView guiview="File" >
       <ClosedNodes>
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>xilinx_syncram_dp.xise</SelectedItem>
+         <SelectedItem>ZXUNO_DSK_SELECT.vhd</SelectedItem>
       </SelectedItems>
-      <ScrollbarPosition orientation="vertical" >30</ScrollbarPosition>
+      <ScrollbarPosition orientation="vertical" >16</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000273000000040101000100000000000000000000000064ffffffff000000810000000000000004000000d20000000100000000000000d70000000100000000000000660000000100000000000000640000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem>xilinx_syncram_dp.xise</CurrentItem>
+      <CurrentItem>ZXUNO_DSK_SELECT.vhd</CurrentItem>
    </ItemView>
    <ItemView guiview="Library" >
       <ClosedNodes>
@@ -104,13 +106,13 @@
          <ClosedNode>User Constraints</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem/>
+         <SelectedItem></SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000150000000010000000100000000000000000000000064ffffffff000000810000000000000001000001500000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem/>
+      <CurrentItem></CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_XCO" guiview="Process" >
       <ClosedNodes>

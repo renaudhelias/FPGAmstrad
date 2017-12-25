@@ -103,17 +103,14 @@ begin
 	process(CLK8(0),reset) is -- transmit
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
 	begin
+		
 		if reset='1' then
-			-- relax
-			crtc_transmit<='0';
-			ram_D<=(others=>'Z');
-			crtc_D<=(others=>'0');
+			crtc_transmit<='0'; -- relax
+			ram_D<=(others=>'Z'); -- relax
 		else
 			-- address is solving
 			if rising_edge(CLK8(0)) then
-				--crtc_transmit<='0';
-				crtc_transmit<='1'; -- soit init_RAM soit crtc_RAM :p
-				
+				crtc_transmit<='0';
 				--ram_R<='0';
 				ram_D<=(others=>'Z');
 				if CLK8(2)='1' then
@@ -127,17 +124,13 @@ begin
 					elsif CLK8(1)='1' then
 						if crtc_R='1' then
 							D2:=ram_D;
+							crtc_D<=D2;
 						end if;
 					end if;
 				else
 					-- z80 working
 				end if;
 			end if;
-			
-			-- toujours lecture crtc_D :p
-			D2:=ram_D;
-			
-			crtc_D<=D2;
 		end if;
 	end process;
 
@@ -338,7 +331,6 @@ vsync<='0';
 					crtc_A_mem:=(others=>'0');
 				end if;
 				crtc_A(15 downto 0)<=crtc_A_mem(14 downto 0) & '0';
---crtc_D(7 downto 0)<=crtc_A_mem(7 downto 0);
 				crtc_R<='1';
 
 -- vram_A : adresse sur la VRAM32Ko

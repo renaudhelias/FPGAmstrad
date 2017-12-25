@@ -609,8 +609,6 @@ end function;
 		variable file_search_do:boolean := false;
 		variable file_search_done:boolean := false;
 		variable file_search_offset:integer range 0 to 12 := 0;
-		--variable nb_files:integer:=0;
-		--variable nbDIRStruct:integer:=0;
 	begin
 
 		load_init_done<=load_done;
@@ -621,9 +619,6 @@ end function;
 			
 			leds<=files_loaded & "111";
 			--leds<=conv_std_logic_vector(step_var,8);
-			--leds<="11" & conv_std_logic_vector(nb_files,6);
-			--leds<='1' & conv_std_logic_vector(nb_files,7);
-			--leds<=conv_std_logic_vector(nbDIRStruct,8);
 			
 			if spi_init_done='1' then
 			
@@ -637,28 +632,45 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 				
 				case step_var is
 					when 0 =>
-					
-						load_done:='0'; -- relax the A=init_A
-						pause_mem:='0';
-						switch_transmit_gripsou<=SWITCH_NONE;
-					
 						--============================================
 						--==  MBR : isFAT32 + FAT32_SECTOR0_OFFSET  ==
 						--============================================
-						-- MiST
-						--get_var1(data_reader1,x"000001FE");
-						-- ZX-Uno
-						get_var1b(data_reader1,x"000001FE");
-						step_var:=9;
-					when 9=>
-						-- check data(1FE)=55 (fixed value)
-						if data_reader1 = x"55" then
+--						-- MiST
+--						--get_var1(data_reader1,x"000001FE");
+--						-- ZX-Uno
+--						get_var1b(data_reader1,x"000001FE");
+--						--get_var1(data_reader1,x"00000000"); -- same result for SD and SDHC, x"BA"
+--						step_var:=32;
+--					when 32 =>
+--						-- check data(1FE)=55 (fixed value)
+--						if data_reader1 = x"55" then
+--							step_var:=33;
+--							-- MiST
+--							--get_var1(data_reader1,x"000001FF");
+--							-- ZX-Uno
+--							get_var1b(data_reader1,x"000001FF");
+--							--get_var1(data_reader1,x"00400003"); -- 4D
+--						end if;
+--					when 33 =>
+--						-- check data(1FF)=AA (fixed value)
+--						if data_reader1 = x"AA" then
+--							step_var:=34;
+--							--1BE+4=1C2
+--							-- MiST
+--							--get_var1(data_reader1,x"000001C2");
+--							-- ZX-Uno
+--							get_var1b(data_reader1,x"000001C2");
+--						end if;
+--					when 34 =>
+--						-- check data(1BE+4)=0B ou 0C (is_FAT32)
+--						if data_reader1 = x"0B" or data_reader1 = x"0C" then
 							step_var:=28;
+							-- 1BE+8=1C6
 							-- MiST
 							--get_var4(data_reader4,x"000001C6");
 							-- ZX-Uno
 							get_var4b(data_reader4,x"000001C6");
-						end if;
+--						end if;
 					when 28 =>
 						-- load data4Bytes(1BE+8) little endian, x512(=200h) = FAT32_SECTOR0_OFFSET
 						-- * 512 (=200h)
@@ -724,30 +736,29 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 							folder_DirStruct_number:=0;
 						end if;
 					when 8=> -- stepping DIRStruct
-					--nbDIRStruct:=nbDIRStruct+1;
 						--========================================================
 						--== STEPING DIRSTRUCT LIST OF A FOLDER_SECTOR_POINTER ==
 						--========================================================
 						if folder_DirStruct_number=conv_integer(BPB_SecPerClus)*(conv_integer(BPB_BytsPerSec)/32) then
 							-- last DataStruct of all sectors of current cluster done
-							--=========================
-							--== NEXT FOLDER CLUSTER ==
-							--=========================
-							if bc(folder_cluster_pointer) then
-								-- that's all sucks
-								load_done:='0';
-								switch_transmit_gripsou<=SWITCH_NONE;
-							else
-								get_var4b(folder_cluster_pointer,getFAT(folder_cluster_pointer));
-								step_var:=12;
-							end if;
+							step_var:=9;
 						else
 							folder_DirStruct_number:=folder_DirStruct_number+1;
 							rom_number:=0;
 							step_var:=30;
 						end if;
-					
-						
+					when 9=>
+						--=========================
+						--== NEXT FOLDER CLUSTER ==
+						--=========================
+						if bc(folder_cluster_pointer) then
+							-- that's all sucks
+							load_done:='0';
+							switch_transmit_gripsou<=SWITCH_NONE;
+						else
+							get_var4b(folder_cluster_pointer,getFAT(folder_cluster_pointer));
+							step_var:=12;
+						end if;
 					when 30=>
 						--================================
 						--== END OF DIRSTRUCT DETECTION ==
@@ -777,7 +788,6 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 					when 29=>
 						if compare_result then
 							step_var:=26; --end of DIRSTRUCT stepping
-							--nb_files:=nb_files+1;
 						else
 							-- strange, perhaps a nice hidden file, go to next file then...
 							step_var:=8;
@@ -839,7 +849,6 @@ if not(data_Rdo) and data_RWdone and not(transmit_do) and transmit_done and not(
 							files_loaded(rom_number+1):='1';
 								get_var4b(file_size,folder_sector_pointer+(folder_DirStruct_number-1)*32+28);
 							step_var:=14;
-							--nb_files:=nb_files+1;
 						else
 							rom_number:=rom_number+1;
 							step_var:=10;
@@ -923,57 +932,50 @@ end if;
 						
 						
 					when 26=> -- load done
-					
-					load_done:='1'; -- relax the A=init_A
-					pause_mem:='0';
-					switch_transmit_gripsou<=SWITCH_NONE; -- relax ram_D
-					
---						if key_reset='1' then
---							files_loaded:=(others=>'0');
---							dsk_number:=(others=>'0');
---							load_done:='0';
---							step_var:=0;
---						elsif ZDSK_doInsert='1' then
---							files_loaded(0):='0';
---							dsk_number:=(others=>'0');
---							pause_mem:='1';
---							step_var:=0;
---						elsif ZDSK_doSelect='1' then
---							ZDSK_doCarac<='0';
---							-- place cursor front of file with nice number
---							file_search_do:=true;
---							file_search_done:=false;
---							file_search_offset:=0;
---							dsk_number:=(others=>'0');
---							step_var:=0;
---						elsif ZDSK_doneCarac='1' and ZDSK_doneCarac_old_mem='0' then
---							-- a char has been readen, go to next char.
---							ZDSK_doCarac<='0';
---							-- next CARAC or else CARAC_END_OF_NAME
---							if file_search_done then
---								file_search_offset:=file_search_offset+1;
---								if file_search_offset=12 then
---									file_search_done:=false;
---								else
---									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
---								end if;
---							else
---								ZDSK_CARAC<=CARAC_END_OF_NAME;
---								ZDSK_doCarac<='1';
---							end if;
---						elsif file_search_done and ZDSK_doneCarac='0' then
---							if file_search_done then
---								-- I'm front of file with nice number, exhibit a char !
---								ZDSK_CARAC<=data_reader1;
---								ZDSK_doCarac<='1';
---							else
---								ZDSK_CARAC<=CARAC_END_OF_NAME;
---								ZDSK_doCarac<='1';
---							end if;
---						end if;
---						ZDSK_doneCarac_old_mem:=ZDSK_doneCarac;
-
-
+						if key_reset='1' then
+							files_loaded:=(others=>'0');
+							dsk_number:=(others=>'0');
+							load_done:='0';
+							step_var:=0;
+						elsif ZDSK_doInsert='1' then
+							files_loaded(0):='0';
+							dsk_number:=(others=>'0');
+							pause_mem:='1';
+							step_var:=0;
+						elsif ZDSK_doSelect='1' then
+							ZDSK_doCarac<='0';
+							-- place cursor front of file with nice number
+							file_search_do:=true;
+							file_search_done:=false;
+							file_search_offset:=0;
+							dsk_number:=(others=>'0');
+							step_var:=0;
+						elsif ZDSK_doneCarac='1' and ZDSK_doneCarac_old_mem='0' then
+							-- a char has been readen, go to next char.
+							ZDSK_doCarac<='0';
+							-- next CARAC or else CARAC_END_OF_NAME
+							if file_search_done then
+								file_search_offset:=file_search_offset+1;
+								if file_search_offset=12 then
+									file_search_done:=false;
+								else
+									get_var1b(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32+file_search_offset);
+								end if;
+							else
+								ZDSK_CARAC<=CARAC_END_OF_NAME;
+								ZDSK_doCarac<='1';
+							end if;
+						elsif file_search_done and ZDSK_doneCarac='0' then
+							if file_search_done then
+								-- I'm front of file with nice number, exhibit a char !
+								ZDSK_CARAC<=data_reader1;
+								ZDSK_doCarac<='1';
+							else
+								ZDSK_CARAC<=CARAC_END_OF_NAME;
+								ZDSK_doCarac<='1';
+							end if;
+						end if;
+						ZDSK_doneCarac_old_mem:=ZDSK_doneCarac;
 					--when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
 					--when 29=>NULL; -- bad file cluster

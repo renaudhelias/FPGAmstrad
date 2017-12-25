@@ -82,9 +82,6 @@ begin
 					-- z80 working
 					if CLK8(1)='0' then
 						-- address is solved
-						--if rd='1' then
-						--	ram_R<='1';
-						--els
 						if wr='1' then
 							ram_D<=Din;
 							ram_W<='1';

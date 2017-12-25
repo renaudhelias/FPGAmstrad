@@ -64,7 +64,7 @@
         <port polarity="Output" name="AUDIO_L" />
         <port polarity="Output" name="AUDIO_R" />
         <blockdef name="bootloader_sd">
-            <timestamp>2017-12-24T14:58:18</timestamp>
+            <timestamp>2017-12-25T19:32:44</timestamp>
             <rect width="64" x="496" y="212" height="24" />
             <line x2="560" y1="224" y2="224" x1="496" />
             <line x2="0" y1="160" y2="160" x1="64" />
@@ -91,7 +91,7 @@
             <rect width="432" x="64" y="-704" height="952" />
         </blockdef>
         <blockdef name="amstrad_video">
-            <timestamp>2017-12-24T16:38:12</timestamp>
+            <timestamp>2017-12-25T19:32:40</timestamp>
             <rect width="64" x="0" y="212" height="24" />
             <line x2="0" y1="224" y2="224" x1="64" />
             <line x2="0" y1="-480" y2="-480" x1="64" />
@@ -112,7 +112,7 @@
             <rect width="336" x="64" y="-640" height="944" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-25T16:20:6</timestamp>
+            <timestamp>2017-12-25T19:32:34</timestamp>
             <rect width="64" x="384" y="452" height="24" />
             <line x2="448" y1="464" y2="464" x1="384" />
             <line x2="448" y1="528" y2="528" x1="384" />
@@ -275,28 +275,12 @@
             <wire x2="6928" y1="448" y2="2944" x1="6928" />
             <wire x2="6928" y1="400" y2="448" x1="6928" />
         </branch>
-        <branch name="XLXN_646">
-            <wire x2="640" y1="1232" y2="1232" x1="528" />
-            <wire x2="4000" y1="928" y2="928" x1="640" />
-            <wire x2="4000" y1="928" y2="1456" x1="4000" />
-            <wire x2="4320" y1="1456" y2="1456" x1="4000" />
-            <wire x2="640" y1="928" y2="1232" x1="640" />
-        </branch>
         <branch name="CLK50MHz">
-            <wire x2="48" y1="960" y2="1232" x1="48" />
-            <wire x2="144" y1="1232" y2="1232" x1="48" />
+            <wire x2="48" y1="960" y2="1168" x1="48" />
+            <wire x2="144" y1="1168" y2="1168" x1="48" />
         </branch>
         <instance x="1424" y="2000" name="XLXI_512" orien="R0">
         </instance>
-        <branch name="XLXN_717">
-            <wire x2="592" y1="1296" y2="1296" x1="528" />
-            <wire x2="592" y1="1296" y2="1552" x1="592" />
-            <wire x2="864" y1="1552" y2="1552" x1="592" />
-            <wire x2="864" y1="1552" y2="2032" x1="864" />
-            <wire x2="1424" y1="2032" y2="2032" x1="864" />
-            <wire x2="1424" y1="1456" y2="1456" x1="864" />
-            <wire x2="864" y1="1456" y2="1552" x1="864" />
-        </branch>
         <branch name="ram_W_n">
             <wire x2="1936" y1="1264" y2="1264" x1="1872" />
         </branch>
@@ -420,14 +404,28 @@
             <wire x2="6080" y1="896" y2="896" x1="5456" />
             <wire x2="5456" y1="896" y2="2592" x1="5456" />
         </branch>
-        <instance x="144" y="1456" name="XLXI_513" orien="R0">
-        </instance>
         <branch name="XLXN_764(7:0)">
             <wire x2="4320" y1="1712" y2="1712" x1="4256" />
             <wire x2="4256" y1="1712" y2="1872" x1="4256" />
             <wire x2="6688" y1="1872" y2="1872" x1="4256" />
             <wire x2="6688" y1="960" y2="960" x1="6640" />
             <wire x2="6688" y1="960" y2="1872" x1="6688" />
+        </branch>
+        <branch name="XLXN_646">
+            <wire x2="4304" y1="1168" y2="1168" x1="528" />
+            <wire x2="4304" y1="1168" y2="1456" x1="4304" />
+            <wire x2="4320" y1="1456" y2="1456" x1="4304" />
+        </branch>
+        <instance x="144" y="1392" name="XLXI_513" orien="R0">
+        </instance>
+        <branch name="XLXN_717">
+            <wire x2="688" y1="1232" y2="1232" x1="528" />
+            <wire x2="688" y1="1232" y2="1552" x1="688" />
+            <wire x2="864" y1="1552" y2="1552" x1="688" />
+            <wire x2="864" y1="1552" y2="2032" x1="864" />
+            <wire x2="1424" y1="2032" y2="2032" x1="864" />
+            <wire x2="1424" y1="1456" y2="1456" x1="864" />
+            <wire x2="864" y1="1456" y2="1552" x1="864" />
         </branch>
     </sheet>
 </drawing>

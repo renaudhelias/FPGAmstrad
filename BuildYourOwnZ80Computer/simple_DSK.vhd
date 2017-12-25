@@ -123,24 +123,18 @@ begin
 		etat:=ETAT_OSEF;
 		--dsk_R<='0';
 		
-		--relax
+		-- relax
 		dsk_W<='0';
-		D_result<=(others=>'Z');
 		dsk_info_D<=(others=>'Z');
 		transmit<='0';
-
+		D_result<=(others=>'Z');
+		
 		data:=(others=>'0');
 		
 		was_concerned:=false;
 		do_update:=false;
 	else
 		if rising_edge(CLK8(0)) then
-
---relax by default
-transmit<='0';
-dsk_W<='0';
-dsk_info_D<=(others=>'Z');
-D_result<=(others=>'Z');
 
 if CLK8(2)='1' then
 	-- CRTC working
