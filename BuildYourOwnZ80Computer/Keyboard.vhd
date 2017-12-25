@@ -13,8 +13,8 @@ port (
 end Keyboard ;
 
 architecture rtl of Keyboard is
-type state_type is (delay, start, d0, d1, d2, d3, d4, d5, d6, d7, parity, stop, finish) ;
-signal data, clk, clk1, clk2, odd, fok_internal: std_logic ; -- 毛刺处理内部信号, odd为奇偶校验 --, 
+type state_type is (delay, start, d0, d1, d2, d3, d4, d5, d6, d7, parity, stop, badstop, finish) ;
+signal data, clk, clk1, clk2, odd, fok_internal: std_logic ;
 signal code : std_logic_vector(7 downto 0) ; 
 signal state : state_type ;
 begin
@@ -47,7 +47,7 @@ begin
 						if data = '0' then
 							state <= d0 ;
 						else
-							state <= delay ;
+							state <= start; --delay ;
 						end if ;
 					end if ;
 				when d0 =>
@@ -94,17 +94,34 @@ begin
 					IF clk = '1' then
 						if (data xor odd) = '1' then
 							state <= stop ;
+						elsif data='1' then -- FF realign instruction
+							fok <= '0' ;
+							fok_internal <='0';
+							state <= start;
 						else
-							state <= delay ;
+							state <= badstop;
 						end if;
 					END IF;
-
+				when badstop =>
+					IF clk = '1' then
+						if data = '1' then
+							--state <= finish;
+							fok <= '0' ;
+							fok_internal <='0';
+							state <= start;
+						else
+							state <= badstop;--delay;
+						end if;
+					END IF;
 				WHEN stop =>
 					IF clk = '1' then
 						if data = '1' then
-							state <= finish;
+							--state <= finish;
+							fok <= '1' ;
+							fok_internal <='1';
+							state <= start;
 						else
-							state <= delay;
+							state <= stop;--delay;
 						end if;
 					END IF;
 

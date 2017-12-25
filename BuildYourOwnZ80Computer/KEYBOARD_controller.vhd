@@ -44,8 +44,8 @@ begin
 
 process(CLK)
 	variable keycode_mem:std_logic_vector(keycode'range);
-	variable press_mem : std_logic:='0';
-	variable unpress_mem : std_logic:='0';
+	--variable press_mem : std_logic:='0';
+	--variable unpress_mem : std_logic:='0';
 	variable is_e0:std_logic:='0';
 	variable is_e1:std_logic:='0';
 	variable releasing:boolean:=false;
@@ -54,33 +54,65 @@ begin
 		press<='0';
 		unpress<='0';
 		if fok='1' then
-			-- les commandes
-			if scancode_in = x"FA" or scancode_in= x"AA" or scancode_in= x"EE" or scancode_in= x"FE" or scancode_in= x"00" or scancode_in= x"FF" then
-				--ignore
-			elsif releasing and not(scancode_in = x"F0" or scancode_in= x"E0") then
-				-- on est en train de relacher la touche RX_ShiftReg
-				-- de toute façon c'est tout pourri le PS/2 on peut pas appuyer sur beaucoup de touche à la fois...
+		
+		
+		
+--	00  Key Detection Error or Overrun Error for Scan Code Set 1,
+--	    replaces last key in the keyboard buffer if the buffer is full. 
+--	AA  BAT Completion Code, keyboard sends this to indicate the keyboard
+--	    test was successful.
+--	EE  Echo Response, response to the Echo command.
+--	F0  Break Code Prefix in Scan Code Sets 2 and 3.
+--	FA  Acknowledge, keyboard sends this whenever a valid command or
+--	    data byte is received (except on Echo and Resend commands).
+--	FC  BAT Failure Code, keyboard sends this to indicate the keyboard
+--	    test failed and stops scanning until a response or reset is sent.
+--	FE  Resend, keyboard request resend of data when data sent to it is
+--	    invalid or arrives with invalid parity.
+--	FF  Key Detection Error or Overrun Error for Scan Code Set 2 or 3,
+--	    replaces last key in the keyboard buffer if the buffer is full.
+--	id  Keyboard ID Response, keyboard sends a two byte ID after ACK'ing
+--	    the Read ID command.  The byte stream contains 83AB in LSB, MSB
+--	    order.  The keyboard then resumes scanning.
+		
+			if scancode_in= x"AA" or scancode_in= x"EE" or scancode_in = x"FA" or scancode_in = x"FC" or scancode_in= x"FE" then
+				--error
+				is_e0:='0';
+				is_e1:='0';
+			elsif scancode_in= x"00" or scancode_in= x"FF"  then
+				--ignore (overrun)
+			elsif releasing and not(scancode_in = x"F0" or scancode_in= x"E0" or scancode_in= x"E1") then
+				-- we are relaxing key RX_ShiftReg
 				releasing:=false;
 				unpress<='1';
-				
-				keycode_mem:=is_e0 & is_e1 & scancode_in;
+				if scancode_in = x"61" then
+					-- x61 idem que x55
+					keycode_mem:=is_e0 & is_e1 & x"55";
+				else
+					keycode_mem:=is_e0 & is_e1 & scancode_in;
+				end if;
 				keycode<=keycode_mem;
 				is_e0:='0';
 				is_e1:='0';
 			else
 				if scancode_in = x"F0" then
-					-- c'est un relachement
-					-- il faut zapper le paquet suivant !
+					-- let's relax
+					-- and so do zap next packet !
 					releasing:=true;
 				elsif scancode_in = x"E0" then
-					-- on s'en fou le paquet suivant c'est F0
+					-- we don't care : next packet is F0
 					is_e0:='1';
 				elsif scancode_in = x"E1" then
-					-- on s'en fou le paquet suivant c'est F0
+					-- we don't care : next packet is F0
 					is_e1:='1';
 				else
-					-- c'est une touche
-					keycode_mem:=is_e0 & is_e1 & scancode_in;
+					-- it's a key
+					if scancode_in = x"61" then
+						-- x61 idem que x55
+						keycode_mem:=is_e0 & is_e1 & x"55";
+					else
+						keycode_mem:=is_e0 & is_e1 & scancode_in;
+					end if;
 					keycode<=keycode_mem;
 					is_e0:='0';
 					is_e1:='0';
