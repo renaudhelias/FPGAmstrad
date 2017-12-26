@@ -110,28 +110,24 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 				  
 				  VRAM_HDsp:integer:=800; --suivant les mode, le nombre de pixels affichés est constant !
 				  VRAM_VDsp:integer:=300 --600/2
-				  --DEBUG_LEDS_W:integer:=32
 		  );
     Port ( DATA : in  STD_LOGIC_VECTOR (7 downto 0); -- buffer
            ADDRESS : out  STD_LOGIC_VECTOR (14 downto 0);
-			  --PALETTE_D : in STD_LOGIC_VECTOR (7 downto 0);
-			  --PALETTE_A : out STD_LOGIC_VECTOR (12 downto 0);
+			  PALETTE_D : in STD_LOGIC_VECTOR (7 downto 0);
+			  PALETTE_A : out STD_LOGIC_VECTOR (12 downto 0);
            RED : out  STD_LOGIC_VECTOR(1 downto 0);
            GREEN : out  STD_LOGIC_VECTOR(2 downto 0);
            BLUE : out  STD_LOGIC_VECTOR(1 downto 0);
            VSYNC : out  STD_LOGIC;
            HSYNC : out  STD_LOGIC;
-		   --debug_leds:in STD_LOGIC_VECTOR(7 downto 0);
            CLK_25MHz : in  STD_LOGIC
 			  );
 end aZRaEL_vram2vgaAmstradMiaow;
 
 architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
-	constant DO_NOTHING_OUT : integer range 0 to 3:=0;
-	constant DO_READ : integer range 0 to 3:=1;
-	constant DO_BORDER: integer range 0 to 3:=2;
-	--constant DO_LED_ON: integer range 0 to 4:=3;
-	--constant DO_LED_OFF: integer range 0 to 4:=4;
+	constant DO_NOTHING_OUT : integer range 0 to 2:=0;
+	constant DO_READ : integer range 0 to 2:=1;
+	constant DO_BORDER: integer range 0 to 2:=2;
 	
 	constant DO_NOTHING : STD_LOGIC:='0';
 	constant DO_HSYNC : STD_LOGIC:='1';
@@ -187,7 +183,7 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 		palette(30),palette( 0),palette(31),palette(14)
 	);
 	signal GREEN_FF:std_logic_vector(1 downto 0);
-	signal MODE_select:STD_LOGIC_VECTOR (1 downto 0):="01";
+	signal MODE_select:STD_LOGIC_VECTOR (1 downto 0);
 begin
 		
 GREEN<= GREEN_FF & "1" when GREEN_FF>"00" else "000";
@@ -198,15 +194,15 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 
 	constant PALETTE_H_OFFSET:integer:=16+1; --HTot/HardHZoom-16-1;
 	constant PALETTE_V_OFFSET:integer:=0; --VTot;
-	--variable palette_horizontal_counter : integer range 0 to HTot:=PALETTE_H_OFFSET;
-	--variable palette_vertical_counter : integer range 0 to VTot:=PALETTE_V_OFFSET;
-	--variable palette_action:integer range 0 to 2:=0;
+	variable palette_horizontal_counter : integer range 0 to HTot:=PALETTE_H_OFFSET;
+	variable palette_vertical_counter : integer range 0 to VTot:=PALETTE_V_OFFSET;
+	variable palette_action:integer range 0 to 2:=0;
 	constant DO_MODE:integer:=1;
 	constant DO_COLOR:integer:=2;
 	variable palette_color:integer range 0 to 16-1:=0;
-	--variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
+	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
-	variable etat_rgb : integer range 0 to 4:=DO_NOTHING_OUT;
+	variable etat_rgb : integer range 0 to 2:=DO_NOTHING_OUT;
 	variable etat_hsync : STD_LOGIC:=DO_NOTHING;
 	variable etat_vsync : STD_LOGIC:=DO_NOTHING;
 	variable color : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
@@ -225,7 +221,6 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable RA:STD_LOGIC_VECTOR(4 downto 0);
 	variable CA:STD_LOGIC_VECTOR(0 downto 0); -- sqrt(CHAR_WIDTH/8)-1 ?
 	variable no_char:integer range 0 to CHAR_WIDTH/8-1;
-	
 begin
 	if rising_edge(CLK_25MHz) then
 		if MODE_select="00" then
@@ -269,14 +264,6 @@ begin
 			RED     <="00";
 			GREEN_FF<="00";
 			BLUE    <="00";
---		elsif etat_rgb = DO_LED_ON then
---			RED     <="00";
---			GREEN_FF<="11";
---			BLUE    <="00";
---		elsif etat_rgb = DO_LED_OFF then
---			RED     <="11";
---			GREEN_FF<="00";
---			BLUE    <="11";
 		else
 			RED     <="00";
 			GREEN_FF<="00";
@@ -303,37 +290,28 @@ begin
 --			pen(palette_color)<=palette(conv_integer(palette_D));
 --		end if;
 		
---		MODE_select<="01"; -- para pruebas
+		MODE_select<="01"; -- para pruebas
 
---		if palette_vertical_counter mod VZoom=0 then -- une ligne sur deux déjà...
---			if palette_horizontal_counter<1 then
---				-- mode
---				palette_A<=palette_A_mem;
---				palette_A_mem:=palette_A_mem+1;
---				palette_action:=DO_MODE;
---			elsif palette_horizontal_counter<1+16 then
---				-- color
---				palette_A<=palette_A_mem;
---				palette_A_mem:=palette_A_mem+1;
---				palette_action:=DO_COLOR;
---				palette_color:=palette_horizontal_counter-1;
---			else
---				palette_action:=DO_NOTHING_OUT;
---			end if;
---		else
---			palette_action:=DO_NOTHING_OUT;
---		end if;
+		if palette_vertical_counter mod VZoom=0 then -- une ligne sur deux déjà...
+			if palette_horizontal_counter<1 then
+				-- mode
+				palette_A<=palette_A_mem;
+				palette_A_mem:=palette_A_mem+1;
+				palette_action:=DO_MODE;
+			elsif palette_horizontal_counter<1+16 then
+				-- color
+				palette_A<=palette_A_mem;
+				palette_A_mem:=palette_A_mem+1;
+				palette_action:=DO_COLOR;
+				palette_color:=palette_horizontal_counter-1;
+			else
+				palette_action:=DO_NOTHING_OUT;
+			end if;
+		else
+			palette_action:=DO_NOTHING_OUT;
+		end if;
 		
 		if horizontal_counter<HDsp/HardHZoom and vertical_counter<VDsp then
---			if vertical_counter <40 and horizontal_counter/DEBUG_LEDS_W < 8 then
---				if horizontal_counter mod DEBUG_LEDS_W = 0 then
---					etat_rgb:=DO_NOTHING_OUT;
---				elsif debug_leds(horizontal_counter/DEBUG_LEDS_W) = '1' then
---					etat_rgb:=DO_LED_ON;
---				else
---					etat_rgb:=DO_LED_OFF;
---				end if;
---			els
 			if horizontal_counter+HDecal_negatif<HDecal or vertical_counter+VDecal_negatif<VDecal or horizontal_counter+HDecal_negatif>=HDecal+HZoom*VRAM_HDsp or vertical_counter+VDecal_negatif>=VDecal+VZoom*VRAM_VDsp then
 				ADDRESS<= (others=>'0');
 				etat_rgb:=DO_BORDER;
@@ -386,17 +364,17 @@ begin
 			end if;
 		end if;
 		
---		palette_horizontal_counter:=palette_horizontal_counter+1;
---		if palette_horizontal_counter>=HTot/HardHZoom then
---			palette_horizontal_counter:=0;
---		end if;
---		if palette_horizontal_counter=0 then
---			palette_vertical_counter:=palette_vertical_counter+1;
---			if palette_vertical_counter>=VTot then
---				palette_vertical_counter:=0;
---				palette_A_mem:=conv_std_logic_vector((VDecal_negatif/VZoom)*(1+16),13);
---			end if;
---		end if;
+		palette_horizontal_counter:=palette_horizontal_counter+1;
+		if palette_horizontal_counter>=HTot/HardHZoom then
+			palette_horizontal_counter:=0;
+		end if;
+		if palette_horizontal_counter=0 then
+			palette_vertical_counter:=palette_vertical_counter+1;
+			if palette_vertical_counter>=VTot then
+				palette_vertical_counter:=0;
+				palette_A_mem:=conv_std_logic_vector((VDecal_negatif/VZoom)*(1+16),13);
+			end if;
+		end if;
 		
 	end if;
 end process aZRaEL_vram2vgaAmstrad_process;

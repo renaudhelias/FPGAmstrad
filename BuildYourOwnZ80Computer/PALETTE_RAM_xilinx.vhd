@@ -26,7 +26,7 @@ u1: entity work.palette_ram2
 	 douta => DO,
 	 wea(0)=> '0',
 	 
-    clkb  => not CLKI,
+    clkb  => CLKI,
 	 addrb => AI,
     dinb  => DI,
     doutb => open,

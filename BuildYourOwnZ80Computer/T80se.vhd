@@ -139,7 +139,7 @@ begin
 			IORQ_n <= '1';
 			MREQ_n <= '1';
 			DI_Reg <= "00000000";
-		elsif rising_edge(CLK_n) then
+		elsif CLK_n'event and CLK_n = '1' then
 			if CLKEN = '1' then
 				RD_n <= '1';
 				WR_n <= '1';

@@ -8,10 +8,8 @@ entity simple_DSK is
 		MAX_SECTORS:integer:=9;
 		MAX_TRACKS:integer:=40 -- 40 par face 79+1
 	);
-    Port ( --CLK8 : in STD_LOGIC_VECTOR (2 downto 0);
-           CLK16MHz : in STD_LOGIC;
-			  CLK8MHz : in STD_LOGIC;
-			  CLK4MHz : in STD_LOGIC;
+    Port ( CLK_bourin : in STD_LOGIC; -- horloge d'indexation
+           CLK8 : in STD_LOGIC_VECTOR (2 downto 0);
            reset : in STD_LOGIC;
            A10_A8_A7 : in  STD_LOGIC_VECTOR (2 downto 0);
            A0 : in  STD_LOGIC;
@@ -22,11 +20,12 @@ entity simple_DSK is
            dsk_info_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
            dsk_A : out  STD_LOGIC_VECTOR (19 downto 0);
            dsk_W : out  STD_LOGIC;
-           --dsk_R : out  STD_LOGIC;
+           dsk_R : out  STD_LOGIC;
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  M1_n:in STD_LOGIC;
-			  transmit : out STD_LOGIC -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
+			  transmit : out STD_LOGIC; -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
 			  --indexing: out STD_LOGIC -- z80 must wait (sur le reset du z80)
+			  is_ucpm : in std_logic
 			  --indexing_done:out std_logic
 			  );
 end simple_DSK;
@@ -68,7 +67,7 @@ status <= REQ_MASTER when phase = PHASE_ATTENTE_COMMANDE
 	
 -- vue qu'on doit prendre en compte directement les commandes demandés par le z80
 -- il va faloir gérer la RAM directement
-cortex:process(CLK16MHz,reset)
+cortex:process(CLK8(0),reset)
 	variable current_track:integer range 0 to MAX_TRACKS-1;
 	variable current_sector:integer range 0 to MAX_SECTORS-1;
 	variable current_byte:integer;
@@ -89,11 +88,17 @@ cortex:process(CLK16MHz,reset)
 	-- track 0 ou +
 	-- sector 0 ou +
 	-- return [sectTrack,sectSize,sectId,sectSize]
-	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1) return chrn_type is
+	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1;ucpm:std_logic) return chrn_type is
+		variable chrn:chrn_type;
 	begin
 		--return (track_id(track),x"00",sector_ids_of_tracks(track,sector),sector_sizes_of_tracks(track,sector));
 -- "C:/Users/freemac/BuildYourOwnZ80Computer/simple_DSK.vhd" line 170: Index value(s) does not match array range, simulation mismatch.
-		return (conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"C1",x"02");
+		if ucpm='1' then
+			chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"41",x"02");
+		else
+			chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"C1",x"02");
+		end if;
+		return chrn;
 	end getCHRN;
 	-- retourne le pointeur dans memory
 	function getData(chrn: in chrn_type) return std_logic_vector is
@@ -115,6 +120,7 @@ begin
 --	dsk_A<=dsk_A_mem;
 
 	if reset='1' then
+		D_result<=(others=>'Z');
 		dsk_A<=(others=>'0');
 		current_track:=0;
 		current_sector:=0;
@@ -124,26 +130,22 @@ begin
 		result_restant:=0;
 		--phase <=PHASE_ATTENTE_COMMANDE;
 		etat:=ETAT_OSEF;
-		--dsk_R<='0';
-		
-		-- relax
-		dsk_W<='0';
-		dsk_info_D<=(others=>'Z');
 		transmit<='0';
-		D_result<=(others=>'Z');
-		
+		dsk_info_D<=(others=>'Z');
+		dsk_R<='0';
+		dsk_W<='0';
 		data:=(others=>'0');
 		
 		was_concerned:=false;
 		do_update:=false;
 	else
-		if rising_edge(CLK16MHz) then
+		if rising_edge(CLK8(0)) then
 
-if CLK4MHz='1' then
+if CLK8(2)='1' then
 	-- CRTC working
 else
 	-- z80 working
-if CLK8MHz='0' then
+if CLK8(1)='0' then
 if (IO_RD='1' or IO_WR='1') and A10_A8_A7=b"010"  then
 	-- I am concerned
 	if was_concerned then --and M1_n='1'
@@ -168,8 +170,8 @@ if (IO_RD='1' or IO_WR='1') and A10_A8_A7=b"010"  then
 --	end if;
 else
 	-- I am not concerned : liberation entrée/sorties
-	if CLK8MHz='0' then
-		--dsk_R<='0';
+	if CLK8(1)='0' then
+		dsk_R<='0';
 		dsk_W<='0';
 		dsk_info_D<=(others=>'Z');
 		D_result<=(others=>'Z');
@@ -179,9 +181,9 @@ else
 end if;
 end if;
 if do_update then
-			if CLK8MHz='0' then
+			if CLK8(1)='0' then
 				-- z80 is solved
-				--dsk_R<='0';
+				dsk_R<='0';
 				dsk_W<='0';
 				dsk_info_D<=(others=>'Z');
 				D_result<=(others=>'Z');
@@ -195,7 +197,7 @@ if do_update then
 						end if;
 						if etat=ETAT_READ then
 							--transmit<='1';
-							chrn:=getCHRN(current_track,current_sector);
+							chrn:=getCHRN(current_track,current_sector,is_ucpm);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -208,11 +210,11 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector);
+								chrn:=getCHRN(current_track,current_sector,is_ucpm);
 							end if;
 							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
-							--dsk_R<='1';
+							dsk_R<='1';
 							transmit<='1';
 							current_byte:=current_byte+1;
 						else
@@ -233,7 +235,7 @@ if do_update then
 							exec_restant_write:=exec_restant_write-1;
 						end if;
 						if etat=ETAT_WRITE then
-							chrn:=getCHRN(current_track,current_sector);
+							chrn:=getCHRN(current_track,current_sector,is_ucpm);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -246,7 +248,7 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector);
+								chrn:=getCHRN(current_track,current_sector,is_ucpm);
 							end if;
 							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
@@ -261,7 +263,7 @@ if do_update then
 					end if;
 					-- au second tick
 				end if;
-			else --if CLK8MHz='1' then
+			elsif CLK8(1)='1' then
 				-- conclude
 				if (IO_RD='1' and A10_A8_A7=b"010" and A0='0') then
 					-- read status
@@ -272,7 +274,7 @@ if do_update then
 							data:=dsk_info_D; --(others=>'0');
 							D_result<=data;
 							transmit<='0';
-							--dsk_R<='0';
+							dsk_R<='0';
 							if exec_restant=0 then
 								phase<=PHASE_RESULT;
 								result_restant:=7;
@@ -346,7 +348,7 @@ if do_update then
 								results(0):=conv_std_logic_vector(current_track,8); -- PCN : Present Cylinder Number
 							when x"0a" => -- read id
 								command_restant:=1; -- select drive/side : osef
-								chrn:=getCHRN(current_track,current_sector);
+								chrn:=getCHRN(current_track,current_sector,is_ucpm);
 								result_restant:=7;
 								phase<=PHASE_COMMAND;
 								results(6):=ST0_SEEK_END;

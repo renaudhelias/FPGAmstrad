@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="AmstradRAMDSK">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-13T21:1:36</timestamp>
+    <timestamp>2017-12-26T15:48:56</timestamp>
     <pin polarity="Input" x="0" y="-160" name="transmit" />
     <pin polarity="Input" x="0" y="128" name="crtc_transmit" />
     <pin polarity="Input" x="0" y="32" name="init_done" />
     <pin polarity="Input" x="0" y="-96" name="A(17:0)" />
     <pin polarity="Input" x="0" y="-32" name="dsk_A(19:0)" />
-    <pin polarity="Input" x="0" y="96" name="init_A(20:0)" />
+    <pin polarity="Input" x="0" y="96" name="init_A(22:0)" />
     <pin polarity="Input" x="0" y="160" name="crtc_A(15:0)" />
     <pin polarity="Output" x="384" y="-32" name="ram_A(20:0)" />
     <graph>
@@ -17,7 +17,7 @@
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="32" type="pin init_done" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-96" type="pin A(17:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-32" type="pin dsk_A(19:0)" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="96" type="pin init_A(20:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="96" type="pin init_A(22:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="160" type="pin crtc_A(15:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="312" y="-32" type="pin ram_A(20:0)" />
         <line x2="0" y1="32" y2="32" x1="64" />

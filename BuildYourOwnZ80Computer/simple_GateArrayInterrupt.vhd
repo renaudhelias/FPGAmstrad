@@ -14,7 +14,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 -- ink 0,2,20
 -- speed ink 1,1
 entity simple_GateArrayInterrupt is
-	Generic (M1_OFFSET:integer :=3; -- from 0 to 3
+	Generic (LATENCE_MEM_WR:integer:=1;
 	NB_HSYNC_BY_INTERRUPT:integer:=52; --52; -- 52 normalement 52
 	NB_LINEH_BY_VSYNC:integer:=24+1; --4--5-- VSYNC normalement 4 HSYNC
 	-- continuer sur cette voie, fixer le moment de l'interruption exactement à la fin de la HSYNC
@@ -26,10 +26,7 @@ entity simple_GateArrayInterrupt is
   VRAM_Voffset:integer:=38*8-30*8-4*8+4  +0; -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
   BUG_Voffset:integer:=0 -- a CRTC original bug ?
 	);
-    Port ( --CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
-           CLK16MHz : in  STD_LOGIC;
-			  CLK8MHz : in  STD_LOGIC;
-			  CLK4MHz : in  STD_LOGIC;
+    Port ( CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
            IO_REQ_W : in  STD_LOGIC;
 			  IO_REQ_R : in  STD_LOGIC;
            A15_A14_A9_A8 : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -46,15 +43,15 @@ entity simple_GateArrayInterrupt is
            int : out  STD_LOGIC:='1';
 			  M1_n : in  STD_LOGIC;
 			  MEM_WR:in std_logic;
-			  --WAIT_MEM_n : out  STD_LOGIC:='1';
+			  WAIT_MEM_n : out  STD_LOGIC:='1';
            WAIT_n : out  STD_LOGIC:='1';
 			  
-			  --ram_R : out  STD_LOGIC:='0';
+			  ram_R : out  STD_LOGIC:='0';
 			  ram_D : inout  STD_LOGIC_VECTOR (7 downto 0);
 			  
-			  --palette_A: out STD_LOGIC_VECTOR (12 downto 0):=(others=>'0');
-			  --palette_D: out std_logic_vector(7 downto 0);
-			  --palette_W: out std_logic;
+			  palette_A: out STD_LOGIC_VECTOR (12 downto 0):=(others=>'0');
+			  palette_D: out std_logic_vector(7 downto 0);
+			  palette_W: out std_logic;
 			  reset:in  STD_LOGIC
 			  
 			  );
@@ -94,7 +91,7 @@ architecture Behavioral of simple_GateArrayInterrupt is
 	signal vsync:std_logic;
 	signal hsync:std_logic;
 	
-	--signal CLK4MHz : STD_LOGIC;
+	signal CLK4MHz : STD_LOGIC;
 	
 	signal crtc_R:STD_LOGIC:='0'; -- variable commune local
 
@@ -103,32 +100,26 @@ architecture Behavioral of simple_GateArrayInterrupt is
 begin
 
 -- scan de la RAM (de manière intrusive) par le CRTC, puis envoi à la VRAM
-	process(CLK16MHz,reset) is -- transmit
+	process(CLK8(0),reset) is -- transmit
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
-		variable crtc_transmit_mem:std_logic:='0';
 	begin
-		
+		crtc_D<=D2;
 		if reset='1' then
-			crtc_transmit<='0'; -- relax
-			ram_D<=(others=>'Z'); -- relax
 		else
-			crtc_transmit<=crtc_transmit_mem;
-			crtc_D<=D2;
-			ram_D<=(others=>'Z');
 			-- address is solving
-			if rising_edge(CLK16MHz) then
-				--ram_R<='0';
-				if CLK4MHz='1' then
+			if rising_edge(CLK8(0)) then
+				crtc_transmit<='0';
+				ram_R<='0';
+				ram_D<=(others=>'Z');
+				if CLK8(2)='1' then
 					-- CRTC working
-					if CLK8MHz='0' then
+					if CLK8(1)='0' then
 						-- address is solved
 						if crtc_R='1' then
-							--ram_R<='1';
-							crtc_transmit_mem:='1';
-						else
-							crtc_transmit_mem:='0';
+							ram_R<='1';
+							crtc_transmit<='1';
 						end if;
-					else --if CLK8MHz='1' then
+					elsif CLK8(1)='1' then
 						if crtc_R='1' then
 							D2:=ram_D;
 						end if;
@@ -140,7 +131,7 @@ begin
 		end if;
 	end process;
 
-	--CLK4MHz<=not(CLK8(2)); -- cad l'inverse de l'horloge du z80
+	CLK4MHz<=not(CLK8(2)); -- cad l'inverse de l'horloge du z80
 
 ctrcConfig_process:process(CLK4MHz) is
 	variable reg_select : integer range 0 to 17;
@@ -153,22 +144,22 @@ ctrcConfig_process:process(CLK4MHz) is
 	variable border_ink:STD_LOGIC;
 	variable ink_color:STD_LOGIC_VECTOR(4 downto 0);
 begin
-	if falling_edge(CLK4MHz) then
+	if rising_edge(CLK4MHz) then
 		
---		if IO_REQ_W='1' and A15_A14_A9_A8(3) = '0' and A15_A14_A9_A8(2) = '1' then
---			if D(7) ='0' then
---				-- ink -- osef
---				if D(6)='0' then
---					border_ink:=D(4);
---					ink:=D(3 downto 0);
---				else
---					ink_color:=D(4 downto 0);
---					if border_ink='0' then
---						pen(conv_integer(ink))<=conv_integer(ink_color);
---					end if;
---				end if;
---			end if;
---		end if;
+		if IO_REQ_W='1' and A15_A14_A9_A8(3) = '0' and A15_A14_A9_A8(2) = '1' then
+			if D(7) ='0' then
+				-- ink -- osef
+				if D(6)='0' then
+					border_ink:=D(4);
+					ink:=D(3 downto 0);
+				else
+					ink_color:=D(4 downto 0);
+					if border_ink='0' then
+						pen(conv_integer(ink))<=conv_integer(ink_color);
+					end if;
+				end if;
+			end if;
+		end if;
 	
 		--RVtotAdjust<="00" & potards(2 downto 0);
 		if (IO_REQ_W or IO_REQ_R)='1' and A15_A14_A9_A8(2)='0' then
@@ -234,7 +225,6 @@ begin
 	end if;
 end process ctrcConfig_process;
 
-
 	-- ATTENTION : partie CRTC testé et validé via testbench
 simple_GateArray_process : process(CLK4MHz) is
  
@@ -265,10 +255,10 @@ simple_GateArray_process : process(CLK4MHz) is
 
 		variable crtc_VSYNC_counter:std_logic_vector(7 downto 0):=(others=>'0');
 
-		variable was_M1:boolean:=false;
+		variable was_M1_1:boolean:=false;
 		variable waiting:boolean:=false;
-		variable was_MEMWR:boolean:=false;
-		variable slowDown:boolean:=false;
+		variable waiting_MEMWR:integer range 0 to LATENCE_MEM_WR:=LATENCE_MEM_WR;
+		variable was_MEMWR_0:boolean:=false;
 		
 		--(128*1024)/64 2*1024=2^11
 		variable zap_scan:boolean:=true; -- il n'y a pas eu de blank donc ne pas scanner la mémoire
@@ -278,22 +268,22 @@ simple_GateArray_process : process(CLK4MHz) is
 		variable vram_horizontal_offset_counter:integer:=0;
 		variable vram_horizontal_counter:integer:=0;
 		
-		--variable palette_A_mem:std_logic_vector(13 downto 0):=(others=>'0');
+		variable palette_A_mem:std_logic_vector(13 downto 0):=(others=>'0');
 		variable last_disp:std_logic:='0';
---		variable palette_horizontal_counter:integer range 0 to 256-1:=0; --640/16
---		variable palette_color:integer range 0 to 32-1;
+		variable palette_horizontal_counter:integer range 0 to 256-1:=0; --640/16
+		variable palette_color:integer range 0 to 32-1;
 		
 		variable line_displayed:boolean:=false;
 		variable in_800x600:boolean:=false;
 		
 	begin
-		if falling_edge(CLK4MHz) then
+		if rising_edge(CLK4MHz) then
 		
 		compteur1MHz:=(compteur1MHz+1) mod 4;
 		
 crtc_R<='0';
 crtc_W<='0';
---palette_W<='0';
+palette_W<='0';
 
 -- Crazy Car II n'aime pas le little_reset
 			-- asphalt IACK sans test sur int_mem
@@ -353,9 +343,9 @@ end if;
 if etat_hsync=DO_HSYNC and last_etat_hsync=DO_NOTHING then
 	if vram_vertical_offset_counter<=VRAM_Voffset then
 		vram_vertical_offset_counter:=vram_vertical_offset_counter+1;
---		if vram_vertical_offset_counter>VRAM_Voffset then
---			palette_A_mem:=(others=>'0');
---		end if;
+		if vram_vertical_offset_counter>VRAM_Voffset then
+			palette_A_mem:=(others=>'0');
+		end if;
 	else
 		vram_vertical_counter:=vram_vertical_counter+1;
 	end if;
@@ -375,27 +365,27 @@ if vram_horizontal_offset_counter>VRAM_Hoffset then
 			else
 				-- on nourri la palette
 				line_displayed:=true; -- oui mais non
---				if last_disp='0' then
---					palette_horizontal_counter:=0;
---				else
---					palette_horizontal_counter:=palette_horizontal_counter+1;
---				end if;
---				if palette_horizontal_counter<1 then
---					palette_A<=palette_A_mem(12 downto 0);
---					palette_D<="000000" & MODE_select;
---					if palette_A_mem(13)='0' then
---						palette_W<='1';
---					end if;
---					palette_A_mem:=palette_A_mem+1;
---				elsif palette_horizontal_counter<1+16 then
---					palette_A<=palette_A_mem(12 downto 0);
---					palette_color:=palette_horizontal_counter-1;
---					palette_D<=conv_std_logic_vector(pen(palette_color),8);
---					if palette_A_mem(13)='0' then
---						palette_W<='1';
---					end if;
---					palette_A_mem:=palette_A_mem+1;
---				end if;
+				if last_disp='0' then
+					palette_horizontal_counter:=0;
+				else
+					palette_horizontal_counter:=palette_horizontal_counter+1;
+				end if;
+				if palette_horizontal_counter<1 then
+					palette_A<=palette_A_mem(12 downto 0);
+					palette_D<="000000" & MODE_select;
+					if palette_A_mem(13)='0' then
+						palette_W<='1';
+					end if;
+					palette_A_mem:=palette_A_mem+1;
+				elsif palette_horizontal_counter<1+16 then
+					palette_A<=palette_A_mem(12 downto 0);
+					palette_color:=palette_horizontal_counter-1;
+					palette_D<=conv_std_logic_vector(pen(palette_color),8);
+					if palette_A_mem(13)='0' then
+						palette_W<='1';
+					end if;
+					palette_A_mem:=palette_A_mem+1;
+				end if;
 			end if;
 			vram_A_mem:=conv_std_logic_vector(vram_vertical_counter*VRAM_HDsp+vram_horizontal_counter,vram_A_mem'length);
 		else
@@ -405,9 +395,9 @@ if vram_horizontal_offset_counter>VRAM_Hoffset then
 	elsif vram_horizontal_counter=VRAM_HDsp then
 		vram_horizontal_counter:=vram_horizontal_counter+1;
 		disp:='0';
---		if in_800x600 and not (line_displayed) then
---			palette_A_mem:=palette_A_mem+16+1;
---		end if;
+		if in_800x600 and not (line_displayed) then
+			palette_A_mem:=palette_A_mem+16+1;
+		end if;
 	else
 		disp:='0';
 	end if;
@@ -459,65 +449,65 @@ last_etat_hsync:=etat_hsync;
 				end if;
 			end case;
 			
-			if MEM_WR='1' and not(was_MEMWR) then
-				slowDown:=true;
+			if was_MEMWR_0 and MEM_WR='1' then
+				waiting_MEMWR:=0;
 			end if;
 			
-			if waiting then
-				WAIT_n<='0';
+			if waiting_MEMWR<LATENCE_MEM_WR then
+				waiting_MEMWR:=waiting_MEMWR+1;
+				WAIT_MEM_n<='0';
 			else
-				WAIT_n<='1';
-			end if;
-			
-			if waiting and slowDown then
-				slowDown:=false;
-			else
+				WAIT_MEM_n<='1';
+				if waiting then
+					WAIT_n<='0';
+				else
+					WAIT_n<='1';
+				end if;
 
 				--z80_synchronise	
-				if M1_n='0' and not(was_M1) and compteur1MHz=M1_OFFSET then
+				if M1_n='0' and was_M1_1 and compteur1MHz=0 then
 					-- M---M---M---
 					-- 012301230123
 					-- cool
 					waiting:=false;
 					WAIT_n<='1';
-				elsif waiting and compteur1MHz=M1_OFFSET then
+				elsif waiting and compteur1MHz=0 then
 					waiting:=false;
 					WAIT_n<='1';
 				elsif waiting then
 					-- quand on pose un wait, cet idiot il garde M1_n=0 le tour suivant
-				elsif M1_n='0' and not(was_M1) then
+				elsif M1_n='0' and was_M1_1 then
 					-- M--M---M---
 					-- 012301230123
 					-- M--MW---M---
 					-- 012301230123
-				
+					
 					-- M-M---M---
 					-- 012301230123
 					-- M-MWW---M---
 					-- 012301230123
-			
+				
 					-- M----M---M---
 					-- 0123012301230123
 					-- M----MWWW---M---
 					-- 0123012301230123
-			
+				
 					-- pas cool
 					WAIT_n<='0';
 					waiting:=true;
-				elsif compteur1MHz=M1_OFFSET and not(waiting) then
+				elsif compteur1MHz=0 and not(waiting) then
 					-- il existe des instruction de plus de 4 Tstate (je confirme)
 				end if;
 			end if;
-			
-			if M1_n='0' then
-				was_M1:=true;
+			if M1_n='1' then
+				was_M1_1:=true;
 			else
-				was_M1:=false;
+				was_M1_1:=false;
 			end if;
-			if MEM_WR='1' then
-				was_MEMWR:=true;
+			if MEM_WR='0' then
+				was_MEMWR_0:=true;
 			else
-				was_MEMWR:=false;
+				was_MEMWR_0:=false;
 			end if;
 
 			
@@ -590,7 +580,7 @@ begin
 --INTERRUPT
 	
 --selon ma rétro-ingéniérie de Space Invaders sur MameVHDL, en fait le IO_ACK se déclanche lorsque l'interruption décide de finalement commencer, et lors du IO_ACK, le DATA_BUS est lu (selon l'interruption ça joue)
-	if falling_edge(CLK4MHz) then
+	if rising_edge(CLK4MHz) then
 		if IO_ACK='1' then
 			--the Gate Array will reset bit5 of the counter
 			int<='0'; -- supposé.

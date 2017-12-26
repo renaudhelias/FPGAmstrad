@@ -374,7 +374,8 @@ begin
 			Save_ALU_r <= '0';
 			PreserveC_r <= '0';
 			XY_Ind <= '0';
-		elsif rising_edge(CLK_n) then
+
+		elsif CLK_n'event and CLK_n = '1' then
 
 			if ClkEn = '1' then
 
@@ -704,7 +705,7 @@ begin
 ---------------------------------------------------------------------------
 	process (CLK_n)
 	begin
-		if rising_edge(CLK_n) then
+		if CLK_n'event and CLK_n = '1' then
 			if ClkEn = '1' then
 				-- Bus A / Write
 				RegAddrA_r <= Alternate & Set_BusA_To(2 downto 1);
@@ -841,7 +842,7 @@ begin
 ---------------------------------------------------------------------------
 	process (CLK_n)
 	begin
-		if rising_edge(CLK_n) then
+		if CLK_n'event and CLK_n = '1' then
 			if ClkEn = '1' then
 			case Set_BusB_To is
 			when "0111" =>
@@ -905,7 +906,7 @@ begin
 	begin
 		if RESET_n = '0' then
 			RFSH_n <= '1';
-		elsif rising_edge(CLK_n) then
+		elsif CLK_n'event and CLK_n = '1' then
 			if CEN = '1' then
 			if MCycle = "001" and ((TState = 2  and Wait_n = '1') or TState = 3) then
 				RFSH_n <= '0';
@@ -931,7 +932,7 @@ begin
 -- Syncronise inputs
 --
 -------------------------------------------------------------------------
-	process (RESET_n,CLK_n)
+	process (RESET_n, CLK_n)
 		variable OldNMI_n : std_logic;
 	begin
 		if RESET_n = '0' then
@@ -939,7 +940,7 @@ begin
 			INT_s <= '0';
 			NMI_s <= '0';
 			OldNMI_n := '0';
-		elsif rising_edge(CLK_n) then
+		elsif CLK_n'event and CLK_n = '1' then
 			if CEN = '1' then
 			BusReq_s <= not BUSRQ_n;
 			INT_s <= not INT_n;
@@ -958,7 +959,7 @@ begin
 -- Main state machine
 --
 -------------------------------------------------------------------------
-	process (RESET_n,CLK_n)
+	process (RESET_n, CLK_n)
 		variable wasINT_s_0:boolean:=false;
 		variable just_rising_INT_s:boolean:=false;
 		variable thats_rock:boolean:=false;
@@ -977,7 +978,7 @@ begin
 			Auto_Wait_t1 <= '0';
 			Auto_Wait_t2 <= '0';
 			M1_n <= '1';
-		elsif rising_edge(CLK_n) then
+		elsif CLK_n'event and CLK_n = '1' then
 		
 			if INT_s = '1' and wasINT_s_0 then
 				just_rising_INT_s:=true;
