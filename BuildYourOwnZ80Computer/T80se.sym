@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="T80se">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-24T11:47:49</timestamp>
+    <timestamp>2017-12-26T10:41:17</timestamp>
     <pin polarity="Input" x="0" y="-608" name="RESET_n" />
     <pin polarity="Input" x="0" y="-528" name="CLK_n" />
     <pin polarity="Input" x="0" y="-448" name="CLKEN" />
@@ -61,6 +61,6 @@
         <line x2="384" y1="-96" y2="-96" x1="320" />
         <rect width="64" x="320" y="-44" height="24" />
         <line x2="384" y1="-32" y2="-32" x1="320" />
-        <rect width="256" x="64" y="-640" height="640" />
+        <rect width="256" x="64" y="-640" height="704" />
     </graph>
 </symbol>

@@ -8,7 +8,10 @@ entity simple_DSK is
 		MAX_SECTORS:integer:=9;
 		MAX_TRACKS:integer:=40 -- 40 par face 79+1
 	);
-    Port ( CLK8 : in STD_LOGIC_VECTOR (2 downto 0);
+    Port ( --CLK8 : in STD_LOGIC_VECTOR (2 downto 0);
+           CLK16MHz : in STD_LOGIC;
+			  CLK8MHz : in STD_LOGIC;
+			  CLK4MHz : in STD_LOGIC;
            reset : in STD_LOGIC;
            A10_A8_A7 : in  STD_LOGIC_VECTOR (2 downto 0);
            A0 : in  STD_LOGIC;
@@ -65,7 +68,7 @@ status <= REQ_MASTER when phase = PHASE_ATTENTE_COMMANDE
 	
 -- vue qu'on doit prendre en compte directement les commandes demandés par le z80
 -- il va faloir gérer la RAM directement
-cortex:process(CLK8(0),reset)
+cortex:process(CLK16MHz,reset)
 	variable current_track:integer range 0 to MAX_TRACKS-1;
 	variable current_sector:integer range 0 to MAX_SECTORS-1;
 	variable current_byte:integer;
@@ -134,13 +137,13 @@ begin
 		was_concerned:=false;
 		do_update:=false;
 	else
-		if rising_edge(CLK8(0)) then
+		if rising_edge(CLK16MHz) then
 
-if CLK8(2)='1' then
+if CLK4MHz='1' then
 	-- CRTC working
 else
 	-- z80 working
-if CLK8(1)='0' then
+if CLK8MHz='0' then
 if (IO_RD='1' or IO_WR='1') and A10_A8_A7=b"010"  then
 	-- I am concerned
 	if was_concerned then --and M1_n='1'
@@ -165,7 +168,7 @@ if (IO_RD='1' or IO_WR='1') and A10_A8_A7=b"010"  then
 --	end if;
 else
 	-- I am not concerned : liberation entrée/sorties
-	if CLK8(1)='0' then
+	if CLK8MHz='0' then
 		--dsk_R<='0';
 		dsk_W<='0';
 		dsk_info_D<=(others=>'Z');
@@ -176,7 +179,7 @@ else
 end if;
 end if;
 if do_update then
-			if CLK8(1)='0' then
+			if CLK8MHz='0' then
 				-- z80 is solved
 				--dsk_R<='0';
 				dsk_W<='0';
@@ -258,7 +261,7 @@ if do_update then
 					end if;
 					-- au second tick
 				end if;
-			elsif CLK8(1)='1' then
+			else --if CLK8MHz='1' then
 				-- conclude
 				if (IO_RD='1' and A10_A8_A7=b"010" and A0='0') then
 					-- read status

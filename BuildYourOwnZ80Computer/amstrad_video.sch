@@ -20,7 +20,6 @@
         <signal name="XLXN_701(1:0)" />
         <signal name="XLXN_702(2:0)" />
         <signal name="XLXN_703(1:0)" />
-        <signal name="debug_leds(7:0)" />
         <signal name="XLXN_704(7:0)" />
         <port polarity="Input" name="crtc_W" />
         <port polarity="Input" name="crtc_D(7:0)" />
@@ -32,7 +31,6 @@
         <port polarity="Output" name="RED3(2:0)" />
         <port polarity="Output" name="GREEN3(2:0)" />
         <port polarity="Output" name="BLUE3(2:0)" />
-        <port polarity="Input" name="debug_leds(7:0)" />
         <blockdef name="NEXUS_RGB">
             <timestamp>2017-11-19T6:8:8</timestamp>
             <rect width="64" x="320" y="-428" height="24" />
@@ -65,9 +63,7 @@
             <line x2="384" y1="-352" y2="-352" x1="320" />
         </blockdef>
         <blockdef name="aZRaEL_vram2vgaAmstradMiaow">
-            <timestamp>2017-12-24T16:37:47</timestamp>
-            <rect width="64" x="0" y="20" height="24" />
-            <line x2="0" y1="32" y2="32" x1="64" />
+            <timestamp>2017-12-26T14:24:45</timestamp>
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <rect width="64" x="0" y="-236" height="24" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -95,7 +91,6 @@
         <block symbolname="aZRaEL_vram2vgaAmstradMiaow" name="joe_dalton">
             <blockpin signalname="CLK25MHz" name="CLK_25MHz" />
             <blockpin signalname="XLXN_704(7:0)" name="DATA(7:0)" />
-            <blockpin signalname="debug_leds(7:0)" name="debug_leds(7:0)" />
             <blockpin signalname="VSYNC" name="VSYNC" />
             <blockpin signalname="HSYNC" name="HSYNC" />
             <blockpin signalname="XLXN_693(14:0)" name="ADDRESS(14:0)" />
@@ -186,10 +181,6 @@
             <wire x2="320" y1="672" y2="880" x1="320" />
             <wire x2="544" y1="880" y2="880" x1="320" />
         </branch>
-        <branch name="debug_leds(7:0)">
-            <wire x2="1472" y1="1072" y2="1072" x1="1440" />
-        </branch>
-        <iomarker fontsize="28" x="1440" y="1072" name="debug_leds(7:0)" orien="R180" />
         <branch name="XLXN_704(7:0)">
             <wire x2="1200" y1="880" y2="880" x1="928" />
             <wire x2="1200" y1="816" y2="880" x1="1200" />

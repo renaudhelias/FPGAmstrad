@@ -109,7 +109,7 @@ architecture Behavioral of SDRAM_SPIMASTER is
 	end component;
 	
 	
-	
+	signal not_SCLK:std_logic;
 --	signal reset_released:std_logic:='0';
 
 begin
@@ -131,7 +131,7 @@ begin
 --	-- CPOL=1
 --	-- CPHA=1
 --end generate;
-
+not_SCLK<=not(SCLK);
 --only in NEXYS4's version (!IS_MIST_BOARD)
 nexys4_ram : if not(IS_MIST_BOARD) generate
 RAMB16_S9_inst : RAMB16_S9
@@ -139,7 +139,7 @@ port map (
    DO => data_block_out,      -- 8-bit Data Output
    DOP => open,    -- 1-bit parity Output
    ADDR => data_block_address11,  -- 11-bit Address Input
-   CLK => not(SCLK),    -- Clock
+   CLK => not_SCLK,    -- Clock
    DI => data_block_in,      -- 8-bit Data Input
    DIP => parity,    -- 1-bit parity Input
    EN => '1',      -- RAM Enable Input

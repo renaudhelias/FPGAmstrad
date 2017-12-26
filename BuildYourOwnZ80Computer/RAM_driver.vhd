@@ -31,7 +31,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity RAM_driver is
     Port ( --A : in  STD_LOGIC_VECTOR (18 downto 0);
-           CLK8 : in  STD_LOGIC_VECTOR (2 downto 0);
+           --CLK8 : in  STD_LOGIC_VECTOR (2 downto 0);
+			  CLK16MHz : in  STD_LOGIC;
+			  CLK8MHz : in  STD_LOGIC:='0';
+			  CLK4MHz : in  STD_LOGIC:='0';
            Din : in  STD_LOGIC_VECTOR (7 downto 0);
            Dout : inout  STD_LOGIC_VECTOR (7 downto 0);
 			  rd:in STD_LOGIC;
@@ -56,7 +59,7 @@ architecture Behavioral of RAM_driver is
 begin
 	
 
-	process(CLK8(0),reset) is -- transmit
+	process(CLK16MHz,reset) is -- transmit
 		variable D:STD_LOGIC_VECTOR (7 downto 0);
 	begin
 		
@@ -69,25 +72,25 @@ begin
 		else
 			
 			-- address is solving
-			if rising_edge(CLK8(0)) then
+			if rising_edge(CLK16MHz) then
 			
 				--ram_R<='0';
 				ram_W<='0';
 				ram_D<=(others=>'Z');
 				
-				if CLK8(2)='1' then
+				if CLK4MHz='1' then
 					-- CRTC working
 					
 				else
 					-- z80 working
-					if CLK8(1)='0' then
+					if CLK8MHz='0' then
 						-- address is solved
 						if wr='1' then
 							ram_D<=Din;
 							ram_W<='1';
 						end if;
 						Dout<=(others=>'Z');
-					elsif CLK8(1)='1' then
+					elsif CLK8MHz='1' then
 						if rd='1' then -- de toute façon on ne peut être qu'en PHASE_EXECUTION_READ :p
 							D:=ram_D;
 							Dout<=D;
