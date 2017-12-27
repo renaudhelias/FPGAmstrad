@@ -36,6 +36,7 @@
         <signal name="XLXN_701(1:0)" />
         <signal name="XLXN_702(2:0)" />
         <signal name="XLXN_703(1:0)" />
+        <signal name="DEBUG_LEDS(7:0)" />
         <port polarity="Input" name="crtc_W" />
         <port polarity="Input" name="crtc_D(7:0)" />
         <port polarity="Input" name="crtc_A(14:0)" />
@@ -49,6 +50,7 @@
         <port polarity="Output" name="RED3(2:0)" />
         <port polarity="Output" name="GREEN3(2:0)" />
         <port polarity="Output" name="BLUE3(2:0)" />
+        <port polarity="Input" name="DEBUG_LEDS(7:0)" />
         <blockdef name="inv">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-32" x1="0" />
@@ -135,8 +137,7 @@
             <line x2="384" y1="-352" y2="-352" x1="320" />
         </blockdef>
         <blockdef name="aZRaEL_vram2vgaAmstradMiaow">
-            <timestamp>2011-12-13T8:44:38</timestamp>
-            <rect width="384" x="64" y="-448" height="448" />
+            <timestamp>2017-12-27T18:40:57</timestamp>
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <rect width="64" x="0" y="-236" height="24" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -154,6 +155,9 @@
             <line x2="512" y1="-96" y2="-96" x1="448" />
             <rect width="64" x="448" y="-44" height="24" />
             <line x2="512" y1="-32" y2="-32" x1="448" />
+            <rect width="384" x="64" y="-448" height="448" />
+            <rect width="64" x="0" y="-300" height="24" />
+            <line x2="0" y1="-288" y2="-288" x1="64" />
         </blockdef>
         <block symbolname="inv" name="XLXI_320">
             <blockpin signalname="XLXN_627" name="I" />
@@ -226,6 +230,7 @@
             <blockpin signalname="XLXN_701(1:0)" name="RED(1:0)" />
             <blockpin signalname="XLXN_702(2:0)" name="GREEN(2:0)" />
             <blockpin signalname="XLXN_703(1:0)" name="BLUE(1:0)" />
+            <blockpin signalname="DEBUG_LEDS(7:0)" name="debug_leds(7:0)" />
         </block>
         <block symbolname="NEXUS_RGB" name="XLXI_418">
             <blockpin signalname="XLXN_701(1:0)" name="RED_FF(1:0)" />
@@ -408,5 +413,9 @@
             <wire x2="320" y1="672" y2="672" x1="224" />
             <wire x2="320" y1="672" y2="880" x1="320" />
         </branch>
+        <branch name="DEBUG_LEDS(7:0)">
+            <wire x2="1472" y1="752" y2="752" x1="1440" />
+        </branch>
+        <iomarker fontsize="28" x="1440" y="752" name="DEBUG_LEDS(7:0)" orien="R180" />
     </sheet>
 </drawing>

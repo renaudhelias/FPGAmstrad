@@ -102,7 +102,7 @@ begin
 	process(CLK8(0),reset) is -- transmit
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
 	begin
-		crtc_D<=D2;
+		
 		if reset='1' then
 			crtc_transmit<='0'; -- relax
 			ram_D<=(others=>'Z'); -- relax
@@ -121,6 +121,7 @@ begin
 					elsif CLK8(1)='1' then
 						if crtc_R='1' then
 							D2:=ram_D;
+							crtc_D<=D2;
 						end if;
 					end if;
 				else

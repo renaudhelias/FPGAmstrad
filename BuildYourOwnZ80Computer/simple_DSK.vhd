@@ -16,8 +16,8 @@ entity simple_DSK is
            IO_RD : in  STD_LOGIC;
            IO_WR : in  STD_LOGIC;
            D_command : in  STD_LOGIC_VECTOR (7 downto 0);
-           D_result : inout  STD_LOGIC_VECTOR (7 downto 0);
-           dsk_info_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
+           Dout : inout  STD_LOGIC_VECTOR (7 downto 0);
+           dsk_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
            dsk_A : out  STD_LOGIC_VECTOR (19 downto 0);
            dsk_W : out  STD_LOGIC;
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
@@ -119,7 +119,7 @@ begin
 --	dsk_A<=dsk_A_mem;
 
 	if reset='1' then
-		D_result<=(others=>'Z');
+		Dout<=(others=>'Z');
 		dsk_A<=(others=>'0');
 		current_track:=0;
 		current_sector:=0;
@@ -130,7 +130,7 @@ begin
 		--phase <=PHASE_ATTENTE_COMMANDE;
 		etat:=ETAT_OSEF;
 		transmit<='0';
-		dsk_info_D<=(others=>'Z');
+		dsk_D<=(others=>'Z');
 		dsk_W<='0';
 		data:=(others=>'0');
 		
@@ -170,8 +170,8 @@ else
 	-- I am not concerned : liberation entrée/sorties
 	if CLK8(1)='0' then
 		dsk_W<='0';
-		dsk_info_D<=(others=>'Z');
-		D_result<=(others=>'Z');
+		dsk_D<=(others=>'Z');
+		Dout<=(others=>'Z');
 	end if;
 	was_concerned:=false;
 	do_update:=false;
@@ -181,8 +181,8 @@ if do_update then
 			if CLK8(1)='0' then
 				-- z80 is solved
 				dsk_W<='0';
-				dsk_info_D<=(others=>'Z');
-				D_result<=(others=>'Z');
+				dsk_D<=(others=>'Z');
+				Dout<=(others=>'Z');
 				if (IO_RD='1' and A10_A8_A7=b"010" and A0='0') then
 					-- read status
 				elsif (IO_RD='1' and A10_A8_A7=b"010" and A0='1') then
@@ -249,7 +249,7 @@ if do_update then
 							dsk_A<=dsk_A_mem;
 							dsk_W<='1';
 							data:=D_command;
-							dsk_info_D<=data;
+							dsk_D<=data;
 							transmit<='1';
 							current_byte:=current_byte+1;
 						else
@@ -262,12 +262,12 @@ if do_update then
 				-- conclude
 				if (IO_RD='1' and A10_A8_A7=b"010" and A0='0') then
 					-- read status
-					D_result<=status;
+					Dout<=status;
 				elsif (IO_RD='1' and A10_A8_A7=b"010" and A0='1') then
 					if phase=PHASE_EXECUTION_READ then
 						if etat=ETAT_READ then
-							data:=dsk_info_D; --(others=>'0');
-							D_result<=data;
+							data:=dsk_D; --(others=>'0');
+							Dout<=data;
 							transmit<='0';
 							if exec_restant=0 then
 								phase<=PHASE_RESULT;
@@ -285,7 +285,7 @@ if do_update then
 						if result_restant>0 then
 							result_restant:=result_restant-1;
 							data:=results(result_restant); -- dépile
-							D_result<=data;
+							Dout<=data;
 							if result_restant=0 then
 								phase<=PHASE_ATTENTE_COMMANDE;
 								etat:=ETAT_OSEF;
@@ -303,7 +303,7 @@ if do_update then
 						if etat=ETAT_WRITE then
 							transmit<='0';
 							dsk_W<='0';
-							dsk_info_D<=(others=>'Z');
+							dsk_D<=(others=>'Z');
 							if exec_restant_write=0 then
 								phase<=PHASE_RESULT;
 								result_restant:=7;

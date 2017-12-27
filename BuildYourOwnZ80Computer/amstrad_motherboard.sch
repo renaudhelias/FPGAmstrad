@@ -331,7 +331,7 @@
             <rect width="288" x="64" y="-256" height="944" />
         </blockdef>
         <blockdef name="simple_DSK">
-            <timestamp>2017-12-27T17:28:12</timestamp>
+            <timestamp>2017-12-27T18:52:47</timestamp>
             <line x2="0" y1="96" y2="96" x1="64" />
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
@@ -345,14 +345,14 @@
             <line x2="480" y1="-352" y2="-352" x1="416" />
             <rect width="64" x="416" y="-236" height="24" />
             <line x2="480" y1="-224" y2="-224" x1="416" />
+            <line x2="0" y1="32" y2="32" x1="64" />
+            <line x2="0" y1="-160" y2="-160" x1="64" />
+            <rect width="64" x="0" y="-172" height="24" />
+            <rect width="352" x="64" y="-512" height="628" />
             <rect width="64" x="416" y="-172" height="24" />
             <line x2="480" y1="-160" y2="-160" x1="416" />
             <rect width="64" x="416" y="-108" height="24" />
             <line x2="480" y1="-96" y2="-96" x1="416" />
-            <line x2="0" y1="32" y2="32" x1="64" />
-            <rect width="352" x="64" y="-512" height="624" />
-            <line x2="0" y1="-160" y2="-160" x1="64" />
-            <rect width="64" x="0" y="-172" height="24" />
         </blockdef>
         <blockdef name="YM2149">
             <timestamp>2011-4-18T15:8:8</timestamp>
@@ -606,11 +606,11 @@
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="A(10),A(8),A(7)" name="A10_A8_A7(2:0)" />
             <blockpin signalname="D(7:0)" name="D_command(7:0)" />
-            <blockpin signalname="XLXN_283(7:0)" name="D_result(7:0)" />
-            <blockpin signalname="ram_D(7:0)" name="dsk_info_D(7:0)" />
             <blockpin signalname="XLXN_849" name="dsk_W" />
             <blockpin signalname="XLXN_621" name="transmit" />
             <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
+            <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
+            <blockpin signalname="ram_D(7:0)" name="dsk_D(7:0)" />
         </block>
         <block symbolname="inv" name="XLXI_332">
             <blockpin signalname="XLXN_835" name="I" />

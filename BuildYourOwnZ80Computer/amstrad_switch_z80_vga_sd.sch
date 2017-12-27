@@ -43,6 +43,7 @@
         <signal name="uno" />
         <signal name="DEBUG_LEDS(7:0)" />
         <signal name="DEBUG_LEDS2(7:0)" />
+        <signal name="XLXN_753(7:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Input" name="MISO" />
@@ -94,7 +95,9 @@
             <line x2="496" y1="-352" y2="-352" x1="432" />
         </blockdef>
         <blockdef name="amstrad_video">
-            <timestamp>2011-12-13T8:44:53</timestamp>
+            <timestamp>2017-12-27T18:41:38</timestamp>
+            <rect width="64" x="0" y="212" height="24" />
+            <line x2="0" y1="224" y2="224" x1="64" />
             <rect width="64" x="0" y="20" height="24" />
             <line x2="0" y1="32" y2="32" x1="64" />
             <rect width="64" x="0" y="84" height="24" />
@@ -115,7 +118,7 @@
             <line x2="464" y1="-160" y2="-160" x1="400" />
             <rect width="64" x="400" y="-60" height="24" />
             <line x2="464" y1="-48" y2="-48" x1="400" />
-            <rect width="336" x="64" y="-640" height="816" />
+            <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
             <timestamp>2017-12-27T17:30:39</timestamp>
@@ -190,6 +193,7 @@
             <blockpin signalname="RED3(2:0)" name="RED3(2:0)" />
             <blockpin signalname="GREEN3(2:0)" name="GREEN3(2:0)" />
             <blockpin signalname="BLUE3(2:0)" name="BLUE3(2:0)" />
+            <blockpin signalname="DEBUG_LEDS2(7:0)" name="DEBUG_LEDS(7:0)" />
         </block>
         <block symbolname="amstrad_motherboard" name="XLXI_512">
             <blockpin signalname="XLXN_737(22:0)" name="init_A(22:0)" />
@@ -318,8 +322,7 @@
         <branch name="XLXN_726">
             <wire x2="1344" y1="832" y2="1552" x1="1344" />
             <wire x2="1424" y1="1552" y2="1552" x1="1344" />
-            <wire x2="6640" y1="832" y2="832" x1="1344" />
-            <wire x2="6736" y1="832" y2="832" x1="6640" />
+            <wire x2="6736" y1="832" y2="832" x1="1344" />
             <wire x2="6736" y1="768" y2="768" x1="6640" />
             <wire x2="6736" y1="768" y2="832" x1="6736" />
         </branch>
@@ -418,8 +421,11 @@
         </branch>
         <iomarker fontsize="28" x="6544" y="1056" name="DEBUG_LEDS(7:0)" orien="R0" />
         <branch name="DEBUG_LEDS2(7:0)">
-            <wire x2="6656" y1="384" y2="384" x1="6640" />
-            <wire x2="6976" y1="384" y2="384" x1="6656" />
+            <wire x2="4320" y1="1712" y2="1712" x1="4240" />
+            <wire x2="4240" y1="1712" y2="1792" x1="4240" />
+            <wire x2="6976" y1="1792" y2="1792" x1="4240" />
+            <wire x2="6976" y1="384" y2="384" x1="6640" />
+            <wire x2="6976" y1="384" y2="1792" x1="6976" />
             <wire x2="6976" y1="304" y2="384" x1="6976" />
         </branch>
         <iomarker fontsize="28" x="6976" y="304" name="DEBUG_LEDS2(7:0)" orien="R270" />
