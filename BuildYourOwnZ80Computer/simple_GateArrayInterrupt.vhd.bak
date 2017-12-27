@@ -110,12 +110,14 @@ begin
 			-- address is solving
 			if rising_edge(CLK8(0)) then
 				crtc_transmit<='0';
+				ram_R<='0';
 				ram_D<=(others=>'Z');
 				if CLK8(2)='1' then
 					-- CRTC working
 					if CLK8(1)='0' then
 						-- address is solved
 						if crtc_R='1' then
+							ram_R<='1';
 							crtc_transmit<='1';
 						end if;
 					elsif CLK8(1)='1' then

@@ -269,6 +269,7 @@ if do_update then
 							data:=dsk_info_D; --(others=>'0');
 							D_result<=data;
 							transmit<='0';
+							dsk_R<='0';
 							if exec_restant=0 then
 								phase<=PHASE_RESULT;
 								result_restant:=7;

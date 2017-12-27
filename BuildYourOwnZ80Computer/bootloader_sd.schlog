@@ -1,0 +1,4 @@
+select figure at 892 1215 8 -branches -sn=1
+update symbols amstrad_motherboard
+select figure at 841 1293 8 -branches -sn=1
+select figure at 2337 721 8 -branches -sn=1

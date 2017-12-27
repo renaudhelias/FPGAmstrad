@@ -35,6 +35,9 @@ entity SDRAM_SPIMASTER is
 			  special_W:in STD_LOGIC:='0';
 			  leds:out std_logic_vector(7 downto 0):=(others=>'0')
 			  );
+			  attribute keep : string;
+				attribute keep of leds : signal is "TRUE";
+			  
 end SDRAM_SPIMASTER;
 
 architecture Behavioral of SDRAM_SPIMASTER is
@@ -115,7 +118,7 @@ port map (
    DO => data_block_out,      -- 8-bit Data Output
    DOP => open,    -- 1-bit parity Output
    ADDR => RAMB16_S9_address,  -- 11-bit Address Input
-   CLK => SCLK,    -- Clock
+   CLK => not(SCLK),    -- Clock
    DI => data_block_in2,      -- 8-bit Data Input
    DIP => parity,    -- 1-bit parity Input
    EN => '1',      -- RAM Enable Input
@@ -181,12 +184,12 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		--buffer_crc16<=buffer_crc16_mem;
 		--leds<=leds_mem;
 		--leds<=check_byte_leds;
-		if falling_edge(SCLK) then
+		if rising_edge(SCLK) then
 		
 			--SDCS<=SDCS_mem;
 		
 			--leds<=check_byte_leds;
-			leds<=conv_std_logic_vector(step_cmd,8);
+			--leds<=conv_std_logic_vector(step_cmd,8);
 		
 			--leds<=buffer_response_mem(buffer_response_mem'length-1 downto buffer_response_mem'length-8);		
 
@@ -646,7 +649,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 --		just_write<='0';
 		spi_init_done<=init_done;
 		
-		--leds<=conv_std_logic_vector(init_step,8);
+		leds<=conv_std_logic_vector(init_step,8);
 		--if read_step>1 then
 		--	leds<=conv_std_logic_vector(read_step,8);
 		--end if;

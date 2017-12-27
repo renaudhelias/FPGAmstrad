@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Users\Joe\Desktop\mist-git\FPGAmstrad\FPGAmstrad\BuildYourOwnZ80Computer\impact.xsl
+OUTFILE=C:\Users\Joe\Desktop\mist-git\FPGAmstrad\FPGAmstrad\BuildYourOwnZ80Computer\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Users\Joe\Desktop\mist-git\FPGAmstrad\FPGAmstrad\BuildYourOwnZ80Computer
+LICENSE=iMPACT
+USER_INFO=iMPACT

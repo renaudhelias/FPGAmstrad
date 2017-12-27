@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="simple_GateArrayInterrupt">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2011-12-13T8:46:58</timestamp>
+    <timestamp>2017-12-27T17:28:4</timestamp>
     <pin polarity="Input" x="0" y="416" name="IO_REQ_W" />
     <pin polarity="Input" x="0" y="480" name="IO_REQ_R" />
     <pin polarity="Input" x="0" y="32" name="IO_ACK" />
@@ -20,7 +20,6 @@
     <pin polarity="Output" x="416" y="-32" name="int" />
     <pin polarity="Output" x="416" y="-112" name="WAIT_MEM_n" />
     <pin polarity="Output" x="416" y="-160" name="WAIT_n" />
-    <pin polarity="Output" x="416" y="320" name="ram_R" />
     <pin polarity="Output" x="416" y="528" name="palette_W" />
     <pin polarity="Output" x="416" y="160" name="crtc_A(15:0)" />
     <pin polarity="Output" x="416" y="256" name="crtc_D(7:0)" />
@@ -46,7 +45,6 @@
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="-32" type="pin int" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="-112" type="pin WAIT_MEM_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="-160" type="pin WAIT_n" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="320" type="pin ram_R" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="528" type="pin palette_W" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="160" type="pin crtc_A(15:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="344" y="256" type="pin crtc_D(7:0)" />
@@ -83,7 +81,6 @@
         <line x2="416" y1="208" y2="208" x1="352" />
         <rect width="64" x="352" y="244" height="24" />
         <line x2="416" y1="256" y2="256" x1="352" />
-        <line x2="416" y1="320" y2="320" x1="352" />
         <rect width="64" x="352" y="356" height="24" />
         <line x2="416" y1="368" y2="368" x1="352" />
         <rect width="288" x="64" y="-256" height="944" />

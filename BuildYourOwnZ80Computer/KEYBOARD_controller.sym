@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="KEYBOARD_controller">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2011-4-21T12:12:9</timestamp>
+    <timestamp>2017-12-27T17:28:30</timestamp>
     <pin polarity="Input" x="0" y="-160" name="CLK" />
     <pin polarity="Input" x="0" y="-96" name="fok" />
     <pin polarity="Input" x="0" y="-32" name="scancode_in(7:0)" />

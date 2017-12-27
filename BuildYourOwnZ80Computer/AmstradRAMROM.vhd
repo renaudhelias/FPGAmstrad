@@ -100,7 +100,7 @@ begin
 	ram_A(17 downto 14)<=b"0000" when wr_z80='0' and lowerROMen='1' and (A(15)='0' and A(14)='0') -- lowerROM
 --		else b"0001" when wr_z80='0' and upperROMen='1' and not (ROMbank=b"0111") and (A(15)='1' and A(14)='1') --upperROM0
 		else b"0010" when wr_z80='0' and upperROMen='1' and ROMbank=b"0111" and (A(15)='1' and A(14)='1') --upperROM7
-		else b"0011" when wr_z80='0' and upperROMen='1' and ROMbank=b"0001" and (A(15)='1' and A(14)='1') --upperROM1
+		--MAXAM else b"0011" when wr_z80='0' and upperROMen='1' and ROMbank=b"0001" and (A(15)='1' and A(14)='1') --upperROM1
 		else b"0001" when wr_z80='0' and upperROMen='1' and (A(15)='1' and A(14)='1') --upperROM0
 		
 

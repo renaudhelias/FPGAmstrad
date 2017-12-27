@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="Keyboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2011-4-21T11:50:12</timestamp>
+    <timestamp>2017-12-27T17:28:36</timestamp>
     <pin polarity="Input" x="0" y="-224" name="datain" />
     <pin polarity="Input" x="0" y="-160" name="clkin" />
     <pin polarity="Input" x="0" y="-96" name="fclk" />

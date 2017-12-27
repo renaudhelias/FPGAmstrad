@@ -11,9 +11,9 @@ entity SDRAM_FAT32_LOADER is
 		-- windob ne formate pas en 512 block
 		ROM_COUNT:integer:=4; -- attention ya du code en dur : "if files_loaded="11111" then"
 		DSK_OFF:std_logic:='0'; -- si 1 alors ne cherche pas de disquette, si 0 alors cherche une disquette
-		BLOCK_SIZE:integer:=4096; -- bytes
+		BLOCK_SIZE:integer:=4096 -- bytes
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400C00" -- in byte
-		FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400000" -- in byte
+		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400000" -- in byte
 	);
     Port ( CLK:in STD_LOGIC;
            file_select:in std_logic_vector(7 downto 0);
@@ -32,6 +32,7 @@ entity SDRAM_FAT32_LOADER is
 			  );
 			  	attribute keep : string;
 				attribute keep of file_select : signal is "TRUE";
+				attribute keep of leds : signal is "TRUE";
 
 			  
 end SDRAM_FAT32_LOADER;
@@ -390,6 +391,7 @@ begin
 	end process;
 
 	tortue_geniale:process (CLK,file_select) is
+	   variable FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400000"; -- in byte
 		variable BPB_FATSz32:STD_LOGIC_VECTOR(31 downto 0);
 		variable BPB_TotSec32:STD_LOGIC_VECTOR(31 downto 0);
 		variable BPB_BytsPerSec:STD_LOGIC_VECTOR(15 downto 0);
@@ -551,7 +553,7 @@ end function;
 		load_init_done<=load_done;
 		--leds<=leds_mem;
 		
-		if rising_edge(CLK) then
+		if falling_edge(CLK) then
 			--file_select_mem:=file_select; -- sinon l'optimisateur coupe le fil...
 		
 			--leds<=conv_std_logic_vector(step_var,8);
@@ -587,6 +589,19 @@ if stop='0' and not(data_do) and data_done and not(transmit_do) and transmit_don
 				
 				case step_var is
 					when 0 =>
+						--============================================
+						--==  MBR : isFAT32 + FAT32_SECTOR0_OFFSET  ==
+						--============================================
+						-- ZX-Uno
+						get_var4(data_reader4,x"000001C6");
+						step_var:=28;
+					when 28 =>
+						-- load data4Bytes(1BE+8) little endian, x512(=200h) = FAT32_SECTOR0_OFFSET
+						-- * 512 (=200h)
+					   FAT32_SECTOR0_OFFSET:=fix_big_endian4(data_reader4)(31-9 downto 0) & "0" & x"00";
+						--=======================
+						--==  FAT32 VARIABLES  ==
+						--=======================
 						get_var4(BPB_FATSz32,BPB_FATSz32_addr+FAT32_SECTOR0_OFFSET);
 						step_var:=1;
 					when 1 =>
@@ -787,7 +802,7 @@ if stop='0' and not(data_do) and data_done and not(transmit_do) and transmit_don
 					when 23=>
 						folder_sector_pointer:=getSector(folder_cluster_pointer);
 						if bc(folder_cluster_pointer) then
-							step_var:=28;
+							-- STOP HERE step_var:=28;
 						else
 							step_var:=8;
 							folder_DirStruct_number:=0;
@@ -919,7 +934,7 @@ end if;
 					when 26=> -- load done
 					load_done:='1';
 					when 27=>NULL; -- bad root folder cluster
-					when 28=>NULL; -- bad next folder cluster
+					--when 28=>NULL; -- bad next folder cluster
 					when 29=>NULL; -- bad file cluster
 					--when 32=>NULL; -- bad root cluster pointer debug
 					--when 33=>NULL; -- bad firstaddress debug
@@ -967,7 +982,7 @@ end if;
 	begin
 		--is_ucpm<=ucpm;
 		--leds<=conv_std_logic_vector(gripsou_step,8);
-		if rising_edge(CLK) then
+		if falling_edge(CLK) then
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
 			if gripsou_write='1' and switch_transmit_gripsou=SWITCH_GRIPSOU then

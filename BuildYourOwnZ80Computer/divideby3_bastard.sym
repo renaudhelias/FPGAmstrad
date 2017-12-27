@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="divideby3_bastard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-23T15:51:4</timestamp>
+    <timestamp>2017-12-27T15:33:27</timestamp>
     <pin polarity="Input" x="0" y="-224" name="CLK50MHz" />
     <pin polarity="Output" x="384" y="-224" name="CLK25MHz" />
     <pin polarity="Output" x="384" y="-160" name="CLK16MHz" />

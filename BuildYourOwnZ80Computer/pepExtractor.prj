@@ -1,1 +1,6 @@
-work	"AmstradRAMDSK.vhd"
+work	"T80.vhd"
+work	"T80_ALU.vhd"
+work	"T80_MCode.vhd"
+work	"T80_Pack.vhd"
+work	"T80_RegX.vhd"
+work	"T80se.vhd"

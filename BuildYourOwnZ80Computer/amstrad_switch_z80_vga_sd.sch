@@ -41,6 +41,8 @@
         <signal name="cero,cero,cero,cero,cero,uno,uno,uno" />
         <signal name="cero" />
         <signal name="uno" />
+        <signal name="DEBUG_LEDS(7:0)" />
+        <signal name="DEBUG_LEDS2(7:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Input" name="MISO" />
@@ -58,6 +60,8 @@
         <port polarity="Input" name="PS2_CLK" />
         <port polarity="BiDirectional" name="JOYSTICK1(5:0)" />
         <port polarity="Output" name="AUDIO" />
+        <port polarity="Output" name="DEBUG_LEDS(7:0)" />
+        <port polarity="Output" name="DEBUG_LEDS2(7:0)" />
         <blockdef name="gnd">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-64" y2="-96" x1="64" />
@@ -67,20 +71,8 @@
             <line x2="64" y1="-64" y2="-80" x1="64" />
             <line x2="64" y1="-128" y2="-96" x1="64" />
         </blockdef>
-        <blockdef name="divideby3">
-            <timestamp>2011-4-20T16:38:52</timestamp>
-            <rect width="256" x="64" y="-64" height="64" />
-            <line x2="0" y1="-32" y2="-32" x1="64" />
-            <line x2="384" y1="-32" y2="-32" x1="320" />
-        </blockdef>
-        <blockdef name="divideby2">
-            <timestamp>2011-4-18T15:8:20</timestamp>
-            <rect width="256" x="64" y="-64" height="64" />
-            <line x2="0" y1="-32" y2="-32" x1="64" />
-            <line x2="384" y1="-32" y2="-32" x1="320" />
-        </blockdef>
         <blockdef name="bootloader_sd">
-            <timestamp>2017-12-26T15:43:46</timestamp>
+            <timestamp>2017-12-27T17:27:7</timestamp>
             <line x2="496" y1="32" y2="32" x1="432" />
             <line x2="0" y1="-464" y2="-464" x1="64" />
             <rect width="64" x="0" y="-268" height="24" />
@@ -97,7 +89,9 @@
             <rect width="64" x="432" y="-108" height="24" />
             <line x2="496" y1="-96" y2="-96" x1="432" />
             <line x2="496" y1="-32" y2="-32" x1="432" />
-            <rect width="368" x="64" y="-704" height="748" />
+            <rect width="368" x="64" y="-704" height="760" />
+            <rect width="64" x="432" y="-364" height="24" />
+            <line x2="496" y1="-352" y2="-352" x1="432" />
         </blockdef>
         <blockdef name="amstrad_video">
             <timestamp>2011-12-13T8:44:53</timestamp>
@@ -124,7 +118,7 @@
             <rect width="336" x="64" y="-640" height="816" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-26T15:55:11</timestamp>
+            <timestamp>2017-12-27T17:30:39</timestamp>
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
             <line x2="448" y1="336" y2="336" x1="384" />
@@ -160,10 +154,13 @@
             <line x2="64" y1="0" y2="-32" x1="64" />
             <line x2="32" y1="-64" y2="-64" x1="96" />
         </blockdef>
-        <block symbolname="divideby3" name="XLXI_415">
-            <blockpin signalname="CLK50MHz" name="CLKin" />
-            <blockpin signalname="XLXN_717" name="CLKout" />
-        </block>
+        <blockdef name="divideby3_bastard">
+            <timestamp>2017-12-27T15:33:27</timestamp>
+            <rect width="256" x="64" y="-256" height="120" />
+            <line x2="0" y1="-224" y2="-224" x1="64" />
+            <line x2="384" y1="-224" y2="-224" x1="320" />
+            <line x2="384" y1="-160" y2="-160" x1="320" />
+        </blockdef>
         <block symbolname="bootloader_sd" name="XLXI_462">
             <blockpin signalname="MISO" name="MISO" />
             <blockpin signalname="cero,cero,cero,cero,cero,uno,uno,uno" name="FILE_SELECT(7:0)" />
@@ -173,14 +170,11 @@
             <blockpin signalname="XLXN_737(22:0)" name="ram_A(22:0)" />
             <blockpin signalname="SCLK" name="SCLK" />
             <blockpin signalname="XLXN_736" name="ram_W_n" />
-            <blockpin name="LEDS(7:0)" />
+            <blockpin signalname="DEBUG_LEDS(7:0)" name="LEDS(7:0)" />
             <blockpin signalname="SS_n" name="SS_n" />
             <blockpin signalname="XLXN_726" name="is_ucpm" />
             <blockpin signalname="RESET_n" name="FILE_LOADED" />
-        </block>
-        <block symbolname="divideby2" name="XLXI_500">
-            <blockpin signalname="CLK50MHz" name="CLKin" />
-            <blockpin signalname="XLXN_646" name="CLKout" />
+            <blockpin signalname="DEBUG_LEDS2(7:0)" name="LEDS2(7:0)" />
         </block>
         <block symbolname="amstrad_video" name="XLXI_511">
             <blockpin signalname="XLXN_731" name="crtc_W" />
@@ -224,11 +218,13 @@
         <block symbolname="vcc" name="XLXI_256">
             <blockpin signalname="uno" name="P" />
         </block>
+        <block symbolname="divideby3_bastard" name="XLXI_513">
+            <blockpin signalname="CLK50MHz" name="CLK50MHz" />
+            <blockpin signalname="XLXN_646" name="CLK25MHz" />
+            <blockpin signalname="XLXN_717" name="CLK16MHz" />
+        </block>
     </netlist>
     <sheet sheetnum="1" width="7040" height="5440">
-        <iomarker fontsize="28" x="48" y="960" name="CLK50MHz" orien="R270" />
-        <instance x="208" y="1584" name="XLXI_415" orien="R0">
-        </instance>
         <instance x="6144" y="736" name="XLXI_462" orien="R0">
         </instance>
         <branch name="MISO">
@@ -247,8 +243,6 @@
         <iomarker fontsize="28" x="6688" y="704" name="SS_n" orien="R0" />
         <iomarker fontsize="28" x="6672" y="512" name="SCLK" orien="R0" />
         <iomarker fontsize="28" x="6688" y="128" name="MOSI" orien="R0" />
-        <instance x="48" y="1120" name="XLXI_500" orien="R0">
-        </instance>
         <instance x="4320" y="1488" name="XLXI_511" orien="R0">
         </instance>
         <branch name="BLUE3(2:0)">
@@ -288,33 +282,21 @@
             <wire x2="6928" y1="448" y2="2800" x1="6928" />
         </branch>
         <branch name="XLXN_646">
-            <wire x2="576" y1="1088" y2="1088" x1="432" />
-            <wire x2="3840" y1="928" y2="928" x1="576" />
+            <wire x2="1200" y1="1152" y2="1152" x1="992" />
+            <wire x2="3840" y1="928" y2="928" x1="1200" />
             <wire x2="3840" y1="928" y2="1456" x1="3840" />
             <wire x2="4320" y1="1456" y2="1456" x1="3840" />
-            <wire x2="576" y1="928" y2="1088" x1="576" />
+            <wire x2="1200" y1="928" y2="1152" x1="1200" />
         </branch>
         <branch name="CLK50MHz">
-            <wire x2="48" y1="1040" y2="1040" x1="32" />
-            <wire x2="48" y1="1040" y2="1088" x1="48" />
-            <wire x2="32" y1="1040" y2="1136" x1="32" />
-            <wire x2="64" y1="1136" y2="1136" x1="32" />
-            <wire x2="64" y1="1136" y2="1248" x1="64" />
-            <wire x2="560" y1="1248" y2="1248" x1="64" />
-            <wire x2="560" y1="1248" y2="1376" x1="560" />
-            <wire x2="640" y1="1376" y2="1376" x1="560" />
-            <wire x2="640" y1="1376" y2="1456" x1="640" />
-            <wire x2="48" y1="960" y2="1040" x1="48" />
-            <wire x2="128" y1="1456" y2="1552" x1="128" />
-            <wire x2="208" y1="1552" y2="1552" x1="128" />
-            <wire x2="640" y1="1456" y2="1456" x1="128" />
+            <wire x2="608" y1="1152" y2="1152" x1="384" />
         </branch>
         <instance x="1424" y="2000" name="XLXI_512" orien="R0">
         </instance>
         <branch name="XLXN_717">
-            <wire x2="864" y1="1552" y2="1552" x1="592" />
-            <wire x2="1424" y1="1456" y2="1456" x1="864" />
-            <wire x2="864" y1="1456" y2="1552" x1="864" />
+            <wire x2="1056" y1="1216" y2="1216" x1="992" />
+            <wire x2="1056" y1="1216" y2="1456" x1="1056" />
+            <wire x2="1424" y1="1456" y2="1456" x1="1056" />
         </branch>
         <branch name="ram_W_n">
             <wire x2="1936" y1="1264" y2="1264" x1="1872" />
@@ -336,7 +318,8 @@
         <branch name="XLXN_726">
             <wire x2="1344" y1="832" y2="1552" x1="1344" />
             <wire x2="1424" y1="1552" y2="1552" x1="1344" />
-            <wire x2="6736" y1="832" y2="832" x1="1344" />
+            <wire x2="6640" y1="832" y2="832" x1="1344" />
+            <wire x2="6736" y1="832" y2="832" x1="6640" />
             <wire x2="6736" y1="768" y2="768" x1="6640" />
             <wire x2="6736" y1="768" y2="832" x1="6736" />
         </branch>
@@ -423,5 +406,22 @@
             <wire x2="5392" y1="320" y2="368" x1="5392" />
         </branch>
         <instance x="5328" y="320" name="XLXI_256" orien="R0" />
+        <instance x="608" y="1376" name="XLXI_513" orien="R0">
+        </instance>
+        <iomarker fontsize="28" x="384" y="1152" name="CLK50MHz" orien="R180" />
+        <branch name="DEBUG_LEDS(7:0)">
+            <wire x2="6464" y1="960" y2="1056" x1="6464" />
+            <wire x2="6544" y1="1056" y2="1056" x1="6464" />
+            <wire x2="6832" y1="960" y2="960" x1="6464" />
+            <wire x2="6832" y1="640" y2="640" x1="6640" />
+            <wire x2="6832" y1="640" y2="960" x1="6832" />
+        </branch>
+        <iomarker fontsize="28" x="6544" y="1056" name="DEBUG_LEDS(7:0)" orien="R0" />
+        <branch name="DEBUG_LEDS2(7:0)">
+            <wire x2="6656" y1="384" y2="384" x1="6640" />
+            <wire x2="6976" y1="384" y2="384" x1="6656" />
+            <wire x2="6976" y1="304" y2="384" x1="6976" />
+        </branch>
+        <iomarker fontsize="28" x="6976" y="304" name="DEBUG_LEDS2(7:0)" orien="R270" />
     </sheet>
 </drawing>

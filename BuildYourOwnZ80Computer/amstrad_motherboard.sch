@@ -105,7 +105,6 @@
         <signal name="XLXN_857(1:0)" />
         <signal name="XLXN_858" />
         <signal name="XLXN_859" />
-        <signal name="XLXN_860" />
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
@@ -220,14 +219,13 @@
             <rect width="256" x="64" y="-192" height="372" />
         </blockdef>
         <blockdef name="RAM_driver">
-            <timestamp>2011-12-7T10:59:21</timestamp>
+            <timestamp>2017-12-27T17:27:43</timestamp>
             <line x2="0" y1="32" y2="32" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
             <rect width="64" x="0" y="-44" height="24" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
             <line x2="384" y1="-288" y2="-288" x1="320" />
-            <line x2="384" y1="-224" y2="-224" x1="320" />
             <rect width="64" x="320" y="-172" height="24" />
             <line x2="384" y1="-160" y2="-160" x1="320" />
             <rect width="64" x="320" y="-44" height="24" />
@@ -237,7 +235,7 @@
             <rect width="256" x="64" y="-320" height="364" />
         </blockdef>
         <blockdef name="T80se">
-            <timestamp>2011-5-12T7:22:33</timestamp>
+            <timestamp>2017-12-27T17:30:5</timestamp>
             <line x2="0" y1="-608" y2="-608" x1="64" />
             <line x2="0" y1="-528" y2="-528" x1="64" />
             <line x2="0" y1="-448" y2="-448" x1="64" />
@@ -296,7 +294,7 @@
             <rect width="336" x="64" y="-704" height="768" />
         </blockdef>
         <blockdef name="simple_GateArrayInterrupt">
-            <timestamp>2011-12-13T8:46:58</timestamp>
+            <timestamp>2017-12-27T17:28:4</timestamp>
             <rect width="64" x="0" y="660" height="24" />
             <line x2="0" y1="672" y2="672" x1="64" />
             <line x2="416" y1="528" y2="528" x1="352" />
@@ -328,15 +326,13 @@
             <line x2="416" y1="208" y2="208" x1="352" />
             <rect width="64" x="352" y="244" height="24" />
             <line x2="416" y1="256" y2="256" x1="352" />
-            <line x2="416" y1="320" y2="320" x1="352" />
             <rect width="64" x="352" y="356" height="24" />
             <line x2="416" y1="368" y2="368" x1="352" />
             <rect width="288" x="64" y="-256" height="944" />
         </blockdef>
         <blockdef name="simple_DSK">
-            <timestamp>2011-4-18T15:7:54</timestamp>
+            <timestamp>2017-12-27T17:28:12</timestamp>
             <line x2="0" y1="96" y2="96" x1="64" />
-            <line x2="0" y1="-480" y2="-480" x1="64" />
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
@@ -346,7 +342,6 @@
             <rect width="64" x="0" y="-44" height="24" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
             <line x2="480" y1="-480" y2="-480" x1="416" />
-            <line x2="480" y1="-416" y2="-416" x1="416" />
             <line x2="480" y1="-352" y2="-352" x1="416" />
             <rect width="64" x="416" y="-236" height="24" />
             <line x2="480" y1="-224" y2="-224" x1="416" />
@@ -407,7 +402,7 @@
             <line x2="320" y1="-192" y2="-192" x1="384" />
         </blockdef>
         <blockdef name="joykeyb">
-            <timestamp>2017-12-26T15:39:8</timestamp>
+            <timestamp>2017-12-27T17:28:47</timestamp>
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -514,7 +509,6 @@
             <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="XLXN_555" name="ram_W" />
-            <blockpin name="ram_R" />
         </block>
         <block symbolname="T80se" name="AmstradT80">
             <blockpin signalname="RESET_n" name="RESET_n" />
@@ -603,7 +597,6 @@
             <blockpin signalname="XLXN_303" name="P" />
         </block>
         <block symbolname="simple_DSK" name="XLXI_344">
-            <blockpin signalname="XLXN_832" name="CLK_bourin" />
             <blockpin signalname="XLXN_858" name="reset" />
             <blockpin signalname="A(0)" name="A0" />
             <blockpin signalname="IO_RD" name="IO_RD" />
@@ -616,7 +609,6 @@
             <blockpin signalname="XLXN_283(7:0)" name="D_result(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="dsk_info_D(7:0)" />
             <blockpin signalname="XLXN_849" name="dsk_W" />
-            <blockpin name="dsk_R" />
             <blockpin signalname="XLXN_621" name="transmit" />
             <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
         </block>
@@ -761,7 +753,6 @@
             <blockpin signalname="XLXN_835" name="int" />
             <blockpin signalname="XLXN_807" name="WAIT_MEM_n" />
             <blockpin signalname="XLXN_806" name="WAIT_n" />
-            <blockpin name="ram_R" />
             <blockpin signalname="palette_W" name="palette_W" />
             <blockpin signalname="crtc_A(15:0)" name="crtc_A(15:0)" />
             <blockpin signalname="crtc_D(7:0)" name="crtc_D(7:0)" />
@@ -1426,16 +1417,12 @@
             <wire x2="2976" y1="4064" y2="4064" x1="1232" />
             <wire x2="2992" y1="4064" y2="4064" x1="2976" />
             <wire x2="1232" y1="3984" y2="4064" x1="1232" />
-            <wire x2="2976" y1="2816" y2="4064" x1="2976" />
-            <wire x2="4144" y1="2816" y2="2816" x1="2976" />
             <wire x2="3888" y1="3968" y2="3968" x1="2992" />
             <wire x2="3888" y1="3968" y2="4496" x1="3888" />
             <wire x2="5600" y1="4496" y2="4496" x1="3888" />
             <wire x2="5600" y1="4496" y2="4928" x1="5600" />
             <wire x2="6000" y1="4928" y2="4928" x1="5600" />
             <wire x2="2992" y1="3968" y2="4064" x1="2992" />
-            <wire x2="4144" y1="2672" y2="2816" x1="4144" />
-            <wire x2="5824" y1="2672" y2="2672" x1="4144" />
         </branch>
         <branch name="RESET_n">
             <wire x2="960" y1="2688" y2="2688" x1="912" />

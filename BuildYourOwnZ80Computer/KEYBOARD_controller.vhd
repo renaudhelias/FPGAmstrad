@@ -50,7 +50,7 @@ process(CLK)
 	variable is_e1:std_logic:='0';
 	variable releasing:boolean:=false;
 begin
-	if rising_edge(CLK) then
+	if falling_edge(CLK) then
 		press<='0';
 		unpress<='0';
 		if fok='1' then
