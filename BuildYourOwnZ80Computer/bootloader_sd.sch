@@ -23,15 +23,10 @@
         <signal name="SS_n" />
         <signal name="XLXN_76" />
         <signal name="DO_STOP" />
-        <signal name="nCLK50MHz" />
+        <signal name="CLK4MHz" />
         <signal name="is_ucpm" />
         <signal name="FILE_LOADED" />
-        <signal name="XLXN_89" />
-        <signal name="XLXN_90" />
-        <signal name="XLXN_91" />
         <signal name="zero,zero,zero,zero,zero,zero,zero,zero" />
-        <signal name="zero" />
-        <signal name="CLK50MHz" />
         <signal name="LEDS2(7:0)" />
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
@@ -42,12 +37,12 @@
         <port polarity="Output" name="ram_W_n" />
         <port polarity="Output" name="LEDS(7:0)" />
         <port polarity="Output" name="SS_n" />
+        <port polarity="Input" name="CLK4MHz" />
         <port polarity="Output" name="is_ucpm" />
         <port polarity="Output" name="FILE_LOADED" />
-        <port polarity="Input" name="CLK50MHz" />
         <port polarity="Output" name="LEDS2(7:0)" />
         <blockdef name="SDRAM_SPIMASTER">
-            <timestamp>2017-12-27T17:24:50</timestamp>
+            <timestamp>2017-12-27T21:54:18</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
             <rect width="64" x="320" y="20" height="24" />
             <line x2="384" y1="32" y2="32" x1="320" />
@@ -61,13 +56,8 @@
             <rect width="64" x="320" y="-44" height="24" />
             <line x2="384" y1="-32" y2="-32" x1="320" />
             <line x2="384" y1="-96" y2="-96" x1="320" />
-            <line x2="384" y1="-160" y2="-160" x1="320" />
-            <line x2="384" y1="96" y2="96" x1="320" />
             <rect width="64" x="0" y="20" height="24" />
             <line x2="0" y1="32" y2="32" x1="64" />
-            <line x2="0" y1="96" y2="96" x1="64" />
-            <line x2="0" y1="160" y2="160" x1="64" />
-            <line x2="0" y1="224" y2="224" x1="64" />
         </blockdef>
         <blockdef name="inv">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -118,24 +108,19 @@
             <line x2="32" y1="-64" y2="-64" x1="96" />
         </blockdef>
         <block symbolname="SDRAM_SPIMASTER" name="XLXI_1">
-            <blockpin signalname="nCLK50MHz" name="SCLK" />
+            <blockpin signalname="CLK4MHz" name="SCLK" />
             <blockpin signalname="MISO" name="MISO" />
-            <blockpin signalname="XLXN_89" name="CD_n" />
             <blockpin signalname="XLXN_61" name="spi_R" />
-            <blockpin signalname="XLXN_90" name="spi_W" />
-            <blockpin signalname="XLXN_91" name="special_W" />
             <blockpin signalname="XLXN_55(31:0)" name="address(31:0)" />
             <blockpin signalname="zero,zero,zero,zero,zero,zero,zero,zero" name="data_in(7:0)" />
             <blockpin signalname="MOSI" name="MOSI" />
-            <blockpin name="SS_n" />
             <blockpin signalname="XLXN_57" name="spi_Rdone" />
-            <blockpin name="spi_Wdone" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
             <blockpin signalname="XLXN_52(7:0)" name="data_out(7:0)" />
             <blockpin signalname="LEDS2(7:0)" name="leds(7:0)" />
         </block>
         <block symbolname="SDRAM_FAT32_LOADER" name="XLXI_7">
-            <blockpin signalname="nCLK50MHz" name="CLK" />
+            <blockpin signalname="CLK4MHz" name="CLK" />
             <blockpin signalname="XLXN_57" name="spi_done" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
             <blockpin signalname="DO_STOP" name="stop" />
@@ -164,24 +149,8 @@
         <block symbolname="gnd" name="XLXI_43">
             <blockpin signalname="DO_STOP" name="G" />
         </block>
-        <block symbolname="gnd" name="XLXI_52">
-            <blockpin signalname="XLXN_89" name="G" />
-        </block>
-        <block symbolname="gnd" name="XLXI_53">
-            <blockpin signalname="XLXN_90" name="G" />
-        </block>
-        <block symbolname="gnd" name="XLXI_54">
-            <blockpin signalname="XLXN_91" name="G" />
-        </block>
-        <block symbolname="gnd" name="XLXI_55">
-            <blockpin signalname="zero" name="G" />
-        </block>
-        <block symbolname="inv" name="XLXI_62">
-            <blockpin signalname="CLK50MHz" name="I" />
-            <blockpin signalname="nCLK50MHz" name="O" />
-        </block>
         <block symbolname="inv" name="XLXI_64">
-            <blockpin signalname="nCLK50MHz" name="I" />
+            <blockpin signalname="CLK4MHz" name="I" />
             <blockpin signalname="SCLK" name="O" />
         </block>
     </netlist>
@@ -263,19 +232,16 @@
         <iomarker fontsize="28" x="2736" y="800" name="LEDS(7:0)" orien="R0" />
         <iomarker fontsize="28" x="2192" y="1312" name="SS_n" orien="R90" />
         <instance x="1952" y="1200" name="XLXI_43" orien="R0" />
-        <branch name="nCLK50MHz">
-            <wire x2="464" y1="448" y2="448" x1="400" />
-            <wire x2="400" y1="448" y2="560" x1="400" />
-            <wire x2="544" y1="560" y2="560" x1="400" />
-            <wire x2="544" y1="560" y2="960" x1="544" />
+        <branch name="CLK4MHz">
+            <wire x2="400" y1="640" y2="640" x1="208" />
+            <wire x2="544" y1="640" y2="640" x1="400" />
+            <wire x2="544" y1="640" y2="960" x1="544" />
             <wire x2="672" y1="960" y2="960" x1="544" />
-            <wire x2="1328" y1="560" y2="560" x1="544" />
-            <wire x2="400" y1="560" y2="592" x1="400" />
-            <wire x2="496" y1="592" y2="592" x1="400" />
-            <wire x2="496" y1="592" y2="640" x1="496" />
-            <wire x2="496" y1="640" y2="640" x1="464" />
-            <wire x2="1328" y1="416" y2="560" x1="1328" />
+            <wire x2="1328" y1="640" y2="640" x1="544" />
+            <wire x2="464" y1="448" y2="448" x1="400" />
+            <wire x2="400" y1="448" y2="640" x1="400" />
             <wire x2="2160" y1="416" y2="416" x1="1328" />
+            <wire x2="1328" y1="416" y2="640" x1="1328" />
         </branch>
         <branch name="is_ucpm">
             <wire x2="2752" y1="1248" y2="1248" x1="2592" />
@@ -285,26 +251,9 @@
             <wire x2="2608" y1="992" y2="992" x1="2592" />
             <wire x2="2752" y1="992" y2="992" x1="2608" />
         </branch>
-        <branch name="XLXN_89">
-            <wire x2="672" y1="1280" y2="1280" x1="640" />
-        </branch>
-        <instance x="512" y="1216" name="XLXI_52" orien="R90" />
-        <branch name="XLXN_90">
-            <wire x2="672" y1="1344" y2="1344" x1="640" />
-        </branch>
-        <instance x="512" y="1280" name="XLXI_53" orien="R90" />
-        <branch name="XLXN_91">
-            <wire x2="672" y1="1408" y2="1408" x1="640" />
-        </branch>
-        <instance x="512" y="1344" name="XLXI_54" orien="R90" />
         <branch name="zero,zero,zero,zero,zero,zero,zero,zero">
             <attrtext style="alignment:SOFT-RIGHT" attrname="Name" x="528" y="1216" type="branch" />
             <wire x2="672" y1="1216" y2="1216" x1="528" />
-        </branch>
-        <instance x="432" y="1600" name="XLXI_55" orien="R90" />
-        <branch name="zero">
-            <attrtext style="alignment:SOFT-LEFT" attrname="Name" x="608" y="1664" type="branch" />
-            <wire x2="608" y1="1664" y2="1664" x1="560" />
         </branch>
         <branch name="XLXN_52(7:0)">
             <wire x2="1856" y1="1152" y2="1152" x1="1056" />
@@ -332,11 +281,7 @@
         </branch>
         <instance x="672" y="1184" name="XLXI_1" orien="R0">
         </instance>
-        <branch name="CLK50MHz">
-            <wire x2="240" y1="640" y2="640" x1="208" />
-        </branch>
-        <iomarker fontsize="28" x="208" y="640" name="CLK50MHz" orien="R180" />
-        <instance x="240" y="672" name="XLXI_62" orien="R0" />
+        <iomarker fontsize="28" x="208" y="640" name="CLK4MHz" orien="R180" />
         <iomarker fontsize="28" x="2752" y="992" name="FILE_LOADED" orien="R0" />
         <branch name="LEDS2(7:0)">
             <wire x2="1088" y1="1216" y2="1216" x1="1056" />

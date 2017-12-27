@@ -67,7 +67,7 @@ entity YM2149 is
   -- data bus
   I_DA                : in  std_logic_vector(7 downto 0);
   O_DA                : out std_logic_vector(7 downto 0);
-  O_DA_OE_L           : out std_logic;
+  --O_DA_OE_L           : out std_logic;
   -- control
   I_A9_L              : in  std_logic;
   I_A8                : in  std_logic;
@@ -179,11 +179,11 @@ dont_mock:if not(MOCK) generate
     end case;
   end process;
 
-  p_oe                   : process(busctrl_re)
-  begin
-    -- if we are emulating a real chip, maybe clock this to fake up the tristate typ delay of 100ns
-    O_DA_OE_L <= not (busctrl_re);
-  end process;
+--  p_oe                   : process(busctrl_re)
+--  begin
+--    -- if we are emulating a real chip, maybe clock this to fake up the tristate typ delay of 100ns
+--    O_DA_OE_L <= not (busctrl_re);
+--  end process;
 
   --
   -- CLOCKED

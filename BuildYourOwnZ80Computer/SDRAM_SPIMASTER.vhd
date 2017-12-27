@@ -24,15 +24,15 @@ entity SDRAM_SPIMASTER is
            SCLK : in  STD_LOGIC; -- 25MHz
            MOSI : out  STD_LOGIC;
            MISO : in  STD_LOGIC;
-           SS_n : out  STD_LOGIC;
-			  CD_n : in  STD_LOGIC; -- useless here, just for plug
+--           SS_n : out  STD_LOGIC;
+--			  CD_n : in  STD_LOGIC; -- useless here, just for plug
 			  --SDCS : out STD_LOGIC; -- actif 1, après on on a un not SS_n SS_n=0 tout le temps donne le même effet
            spi_R:in STD_LOGIC;
 			  spi_Rdone:out STD_LOGIC:='1';
-			  spi_W:in STD_LOGIC:='0';
-			  spi_Wdone:out STD_LOGIC:='1';
+--			  spi_W:in STD_LOGIC:='0';
+--			  spi_Wdone:out STD_LOGIC:='1';
 			  spi_init_done:out std_logic:='0';
-			  special_W:in STD_LOGIC:='0';
+--			  special_W:in STD_LOGIC:='0';
 			  leds:out std_logic_vector(7 downto 0):=(others=>'0')
 			  );
 			  attribute keep : string;
@@ -48,7 +48,7 @@ architecture Behavioral of SDRAM_SPIMASTER is
 	constant CRC_ON_OFF:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(59,6);
 	constant SINGLE_BLOCK_READ:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(17,6);
 	constant SET_BLOCKLEN:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(16,6);
-	constant WRITE_BLOCK:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(24,6);
+	--constant WRITE_BLOCK:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(24,6);
 	
 	
 	constant APP_CMD:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(55,6); -- à lancer avant une ACMD
@@ -73,15 +73,15 @@ architecture Behavioral of SDRAM_SPIMASTER is
 	
 	
 	signal data_block_in:std_logic_vector(7 downto 0);
-	signal data_block_in2:std_logic_vector(7 downto 0);
+	--signal data_block_in2:std_logic_vector(7 downto 0);
 	--signal data_block_in_cmd:std_logic_vector(7 downto 0);
 	--signal data_block_in_write:std_logic_vector(7 downto 0);
 	
 	signal data_block_w:std_logic:='0';
-	signal data_block_w2:std_logic:='0';
+	--signal data_block_w2:std_logic:='0';
 	--signal just_write:std_logic:='0';
 	signal data_block_address:std_logic_vector(BLOCK_SQRT-1 downto 0);
-	signal data_block_address2:std_logic_vector(BLOCK_SQRT-1 downto 0);
+	--signal data_block_address2:std_logic_vector(BLOCK_SQRT-1 downto 0);
 	signal RAMB16_S9_address:std_logic_vector(10 downto 0);
 	signal parity:std_logic_vector(0 downto 0);
 	
@@ -119,21 +119,21 @@ port map (
    DOP => open,    -- 1-bit parity Output
    ADDR => RAMB16_S9_address,  -- 11-bit Address Input
    CLK => not(SCLK),    -- Clock
-   DI => data_block_in2,      -- 8-bit Data Input
+   DI => data_block_in,      -- 8-bit Data Input
    DIP => parity,    -- 1-bit parity Input
    EN => '1',      -- RAM Enable Input
    SSR => '0',    -- Synchronous Set/Reset Input
-   WE => data_block_w2       -- Write Enable Input
+   WE => data_block_w       -- Write Enable Input
 );
-SS_n<='0';
+--SS_n<='0';
 --data_block_in<=data_block_in_write when just_write='1' else data_block_in_cmd;
 --data_block_w2<='1' when just_write='1' else data_block_w;
 
-data_block_w2<='1' when special_W='1' else data_block_w;
-data_block_in2<=data_in when special_W='1' else data_block_in;
-data_block_address2<=address(BLOCK_SQRT-1 downto 0) when special_W='1' else data_block_address;
+--data_block_w2<=data_block_w; --'1' when special_W='1' else 
+--data_block_in2<=data_block_in; --data_in when special_W='1' else 
+--data_block_address2<=data_block_address; --address(BLOCK_SQRT-1 downto 0) when special_W='1' else 
 
-RAMB16_S9_address<="00" & data_block_address2;
+RAMB16_S9_address<="00" & data_block_address;
 data_out<=data_block_out;
 
 parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_block_in(3) xor data_block_in(4) xor data_block_in(5) xor data_block_in(6) xor data_block_in(7);
@@ -206,7 +206,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 				ram_Tdone<=false;
 			end if;
 			
-			if CD_n='0' then
+			--if CD_n='0' then
 			
 				if not(ram_Tdone) then
 					case step_cmd is
@@ -473,7 +473,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 						when 18=> -- no return 0
 					end case;
 				end if;
-			end if;
+			--end if;
 		end if;
 	end process native_send_cmd;
 	
@@ -616,9 +616,9 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		if command=SINGLE_BLOCK_READ then
 			length_data_block<=BLOCK_SIZE; -- provocate READ BYTES
 			length_data_block_write<=0;
-		elsif command=WRITE_BLOCK then
-			length_data_block<=0;
-			length_data_block_write<=BLOCK_SIZE; -- provocate WRITE BYTES
+		--elsif command=WRITE_BLOCK then
+		--	length_data_block<=0;
+		--	length_data_block_write<=BLOCK_SIZE; -- provocate WRITE BYTES
 		end if;
 		ram_T<=true;
 	end send_cmd;
@@ -634,7 +634,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		variable address_loaded:STD_LOGIC_VECTOR(32-BLOCK_SQRT-1 downto 0):=(others=>'1'); -- à multiplier par 8 du coup ?
 		variable wanted_address:STD_LOGIC_VECTOR(31 downto 0);
 		variable spi_Rmem:std_logic:='1';
-		variable spi_Wmem:std_logic:='1';
+		--variable spi_Wmem:std_logic:='1';
 		variable address_loaded_safe:boolean:=false; -- address_loaded a bien été load au moins une fois...
 		
 		variable init_done:std_logic:='0';
@@ -642,7 +642,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		variable ccs:std_logic:='0';
 	begin
 		spi_Rdone<=spi_Rmem;
-		spi_Wdone<=spi_Wmem;
+		--spi_Wdone<=spi_Wmem;
 		--leds<=leds_mem;
 		if falling_edge(SCLK) then
 		
@@ -789,23 +789,23 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 			
 --				length_crc16<=16;
 				
-				if spi_R='1' or spi_W='1' then
-					if spi_Wmem='0' or spi_Rmem='0' then
+				if spi_R='1' then --or spi_W='1' then
+					if spi_Rmem='0' then --spi_Wmem='0' or 
 						overrun:=true; -- over run
 					else 
-						if spi_W='1' then
-							spi_Wmem:='0';
-							write_step:=0;
-		--==============================================
-		--==============================================
-		--==============================================
-		--==============================================
-		--==============================================
-		--==============================================
-		-- je suppose qu'on ne peut écrire que par gros BLOCK_SIZE bytes
-		-- étape 1 : read BLOCK sauf octet écrit
-		-- étape 2 : write BLOCK
-						end if;
+--						if spi_W='1' then
+--							spi_Wmem:='0';
+--							write_step:=0;
+--		--==============================================
+--		--==============================================
+--		--==============================================
+--		--==============================================
+--		--==============================================
+--		--==============================================
+--		-- je suppose qu'on ne peut écrire que par gros BLOCK_SIZE bytes
+--		-- étape 1 : read BLOCK sauf octet écrit
+--		-- étape 2 : write BLOCK
+--						end if;
 
 						if address_loaded_safe and address_loaded=address(31 downto BLOCK_SQRT) then
 							-- its perfect do nothing
@@ -869,30 +869,30 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 							when 6=>NULL; -- over run (on a demandé trop tôt un run)
 								overrun:=true;
 						end case;
-					elsif spi_Wmem='0' then
+					--elsif spi_Wmem='0' then
 						
-						case write_step is
-							when 0 =>
-								-- change byte value on RAM with new one
---								just_write<='1';
-								--data_block_in_write<=data;
-								write_step:=1;
-							when 1 =>
---								just_write<='0';
-								-- write them all !
-								if ccs='0' then
-									send_cmd(WRITE_BLOCK,wanted_address);
-								else
-									send_cmd(WRITE_BLOCK,x"00" & "0" & wanted_address(31 downto BLOCK_SQRT));
-								end if;
-								write_step:=2;
-							when 2=>
-								if not (ram_T) and ram_Tdone then
-									spi_Wmem:='1';
-									write_step:=3;
-								end if;
-							when 3=> -- write done
-						end case;
+--						case write_step is
+--							when 0 =>
+--								-- change byte value on RAM with new one
+----								just_write<='1';
+--								--data_block_in_write<=data;
+--								write_step:=1;
+--							when 1 =>
+----								just_write<='0';
+--								-- write them all !
+--								if ccs='0' then
+--									send_cmd(WRITE_BLOCK,wanted_address);
+--								else
+--									send_cmd(WRITE_BLOCK,x"00" & "0" & wanted_address(31 downto BLOCK_SQRT));
+--								end if;
+--								write_step:=2;
+--							when 2=>
+--								if not (ram_T) and ram_Tdone then
+--									spi_Wmem:='1';
+--									write_step:=3;
+--								end if;
+--							when 3=> -- write done
+--						end case;
 					end if;
 				end if;
 			end if;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_video">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-27T18:41:38</timestamp>
+    <timestamp>2017-12-27T20:35:19</timestamp>
     <pin polarity="Input" x="0" y="-480" name="crtc_W" />
     <pin polarity="Input" x="0" y="-416" name="crtc_D(7:0)" />
     <pin polarity="Input" x="0" y="-352" name="crtc_A(14:0)" />
@@ -10,12 +10,12 @@
     <pin polarity="Input" x="0" y="32" name="palette_D(7:0)" />
     <pin polarity="Input" x="0" y="96" name="palette_A(12:0)" />
     <pin polarity="Input" x="0" y="160" name="palette_W" />
+    <pin polarity="Input" x="0" y="224" name="DEBUG_LEDS(7:0)" />
     <pin polarity="Output" x="464" y="-496" name="HSYNC" />
     <pin polarity="Output" x="464" y="-608" name="VSYNC" />
     <pin polarity="Output" x="464" y="-272" name="RED3(2:0)" />
     <pin polarity="Output" x="464" y="-160" name="GREEN3(2:0)" />
     <pin polarity="Output" x="464" y="-48" name="BLUE3(2:0)" />
-    <pin polarity="Input" x="0" y="224" name="DEBUG_LEDS(7:0)" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="232" y="-648" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-480" type="pin crtc_W" />
@@ -26,12 +26,12 @@
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="32" type="pin palette_D(7:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="96" type="pin palette_A(12:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="160" type="pin palette_W" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="224" type="pin DEBUG_LEDS(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="392" y="-496" type="pin HSYNC" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="392" y="-608" type="pin VSYNC" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="392" y="-272" type="pin RED3(2:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="392" y="-160" type="pin GREEN3(2:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="392" y="-48" type="pin BLUE3(2:0)" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="224" type="pin DEBUG_LEDS(7:0)" />
         <rect width="64" x="0" y="212" height="24" />
         <line x2="0" y1="224" y2="224" x1="64" />
         <rect width="64" x="0" y="20" height="24" />

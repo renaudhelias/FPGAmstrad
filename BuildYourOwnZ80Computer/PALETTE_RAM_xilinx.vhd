@@ -16,21 +16,37 @@ END PALETTE_RAM;
 
 
 ARCHITECTURE Behavioral OF PALETTE_RAM IS
+
+COMPONENT PALETTE_RAM2
+  PORT (
+    clka : IN STD_LOGIC;
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    douta : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addrb : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+    dinb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+  );
+END COMPONENT;
+
 BEGIN
 
-u1: entity work.palette_ram2
-  port map (
-    clka  => CLKO,
-	 addra => AO,
-	 dina  => "00000000",
-	 douta => DO,
-	 wea(0)=> '0',
-	 
-    clkb  => CLKI,
-	 addrb => AI,
-    dinb  => DI,
-    doutb => open,
-	 web(0)=> WR
+your_instance_name : PALETTE_RAM2
+  PORT MAP (
+    clka  => CLKI,
+	 addra => AI,
+    dina  => DI,
+    douta => open,
+	 wea(0)=> WR,
+
+    clkb  => CLKO,
+	 addrb => AO,
+	 dinb  => "00000000",
+	 doutb => DO,
+	 web(0)=> '0'
 	 );
 
 END Behavioral;

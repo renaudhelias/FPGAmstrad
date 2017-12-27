@@ -96,21 +96,23 @@ architecture Behavioral of simple_GateArrayInterrupt is
 
 	type pen_type is array(15 downto 0) of integer range 0 to 31;
 	signal pen:pen_type:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
+	
+	signal crtc_D_inside:std_logic_vector(7 downto 0);
 begin
 
 -- scan de la RAM (de manière intrusive) par le CRTC, puis envoi à la VRAM
 	process(CLK8(0),reset) is -- transmit
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
 	begin
-		
+		ram_D<=(others=>'Z'); -- relax (read only)
 		if reset='1' then
 			crtc_transmit<='0'; -- relax
-			ram_D<=(others=>'Z'); -- relax
+			--ram_D<=(others=>'Z'); -- relax
 		else
 			-- address is solving
 			if rising_edge(CLK8(0)) then
 				crtc_transmit<='0';
-				ram_D<=(others=>'Z');
+				
 				if CLK8(2)='1' then
 					-- CRTC working
 					if CLK8(1)='0' then
@@ -121,7 +123,7 @@ begin
 					elsif CLK8(1)='1' then
 						if crtc_R='1' then
 							D2:=ram_D;
-							crtc_D<=D2;
+							crtc_D_inside<=D2;
 						end if;
 					end if;
 				else
@@ -276,8 +278,9 @@ simple_GateArray_process : process(CLK4MHz) is
 		variable line_displayed:boolean:=false;
 		variable in_800x600:boolean:=false;
 		
+		variable crtc_D_mem:std_logic_vector(7 downto 0);
 	begin
-		if rising_edge(CLK4MHz) then
+		if falling_edge(CLK4MHz) then
 		
 		compteur1MHz:=(compteur1MHz+1) mod 4;
 		
@@ -436,6 +439,8 @@ last_etat_hsync:=etat_hsync;
 				end if;
 			when 1=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '0';
+				crtc_D_mem:=crtc_D_inside;
+				crtc_D<=crtc_D_mem;
 				if disp='1' then
 					crtc_W<='1';
 				end if;
@@ -444,6 +449,8 @@ last_etat_hsync:=etat_hsync;
 				crtc_R<='1';
 			when 3=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '1';
+				crtc_D_mem:=crtc_D_inside;
+				crtc_D<=crtc_D_mem;
 				if disp='1' then
 					crtc_W<='1';
 				end if;

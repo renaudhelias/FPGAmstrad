@@ -202,11 +202,10 @@
             <rect width="256" x="64" y="-192" height="256" />
         </blockdef>
         <blockdef name="AmstradRAMDSK">
-            <timestamp>2017-12-26T15:48:56</timestamp>
+            <timestamp>2017-12-27T22:42:5</timestamp>
             <line x2="0" y1="32" y2="32" x1="64" />
             <rect width="64" x="0" y="84" height="24" />
             <line x2="0" y1="96" y2="96" x1="64" />
-            <line x2="0" y1="-160" y2="-160" x1="64" />
             <rect width="64" x="0" y="-108" height="24" />
             <line x2="0" y1="-96" y2="-96" x1="64" />
             <rect width="64" x="0" y="-44" height="24" />
@@ -216,7 +215,8 @@
             <line x2="0" y1="160" y2="160" x1="64" />
             <rect width="64" x="0" y="148" height="24" />
             <line x2="0" y1="128" y2="128" x1="64" />
-            <rect width="256" x="64" y="-192" height="372" />
+            <rect width="256" x="64" y="-192" height="376" />
+            <line x2="0" y1="-160" y2="-160" x1="64" />
         </blockdef>
         <blockdef name="RAM_driver">
             <timestamp>2017-12-27T17:27:43</timestamp>
@@ -331,7 +331,7 @@
             <rect width="288" x="64" y="-256" height="944" />
         </blockdef>
         <blockdef name="simple_DSK">
-            <timestamp>2017-12-27T18:52:47</timestamp>
+            <timestamp>2017-12-27T22:40:53</timestamp>
             <line x2="0" y1="96" y2="96" x1="64" />
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
@@ -342,20 +342,20 @@
             <rect width="64" x="0" y="-44" height="24" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
             <line x2="480" y1="-480" y2="-480" x1="416" />
-            <line x2="480" y1="-352" y2="-352" x1="416" />
             <rect width="64" x="416" y="-236" height="24" />
             <line x2="480" y1="-224" y2="-224" x1="416" />
             <line x2="0" y1="32" y2="32" x1="64" />
             <line x2="0" y1="-160" y2="-160" x1="64" />
             <rect width="64" x="0" y="-172" height="24" />
-            <rect width="352" x="64" y="-512" height="628" />
             <rect width="64" x="416" y="-172" height="24" />
             <line x2="480" y1="-160" y2="-160" x1="416" />
             <rect width="64" x="416" y="-108" height="24" />
             <line x2="480" y1="-96" y2="-96" x1="416" />
+            <rect width="352" x="64" y="-512" height="628" />
+            <line x2="480" y1="-352" y2="-352" x1="416" />
         </blockdef>
         <blockdef name="YM2149">
-            <timestamp>2011-4-18T15:8:8</timestamp>
+            <timestamp>2017-12-27T21:46:50</timestamp>
             <line x2="0" y1="-736" y2="-736" x1="64" />
             <line x2="0" y1="-672" y2="-672" x1="64" />
             <line x2="0" y1="-608" y2="-608" x1="64" />
@@ -369,7 +369,6 @@
             <line x2="0" y1="-160" y2="-160" x1="64" />
             <rect width="64" x="0" y="-108" height="24" />
             <line x2="0" y1="-96" y2="-96" x1="64" />
-            <line x2="384" y1="-736" y2="-736" x1="320" />
             <rect width="64" x="320" y="-412" height="24" />
             <line x2="384" y1="-400" y2="-400" x1="320" />
             <rect width="64" x="320" y="-300" height="24" />
@@ -484,7 +483,6 @@
             <blockpin signalname="XLXN_556" name="O" />
         </block>
         <block symbolname="AmstradRAMDSK" name="XLXI_348">
-            <blockpin signalname="XLXN_621" name="transmit" />
             <blockpin signalname="XLXN_852" name="crtc_transmit" />
             <blockpin signalname="RESET_n" name="init_done" />
             <blockpin signalname="vram_A(17:0)" name="A(17:0)" />
@@ -492,6 +490,7 @@
             <blockpin signalname="init_A(22:0)" name="init_A(22:0)" />
             <blockpin signalname="crtc_A(15:0)" name="crtc_A(15:0)" />
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
+            <blockpin signalname="XLXN_621" name="dsk_transmit" />
         </block>
         <block symbolname="ROMselect" name="XLXI_345">
             <blockpin signalname="XLXN_435" name="CLK" />
@@ -606,11 +605,11 @@
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="A(10),A(8),A(7)" name="A10_A8_A7(2:0)" />
             <blockpin signalname="D(7:0)" name="D_command(7:0)" />
-            <blockpin signalname="XLXN_849" name="dsk_W" />
-            <blockpin signalname="XLXN_621" name="transmit" />
-            <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
             <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="dsk_D(7:0)" />
+            <blockpin signalname="XLXN_849" name="dsk_W" />
+            <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
+            <blockpin signalname="XLXN_621" name="dsk_transmit" />
         </block>
         <block symbolname="inv" name="XLXI_332">
             <blockpin signalname="XLXN_835" name="I" />
@@ -628,7 +627,6 @@
             <blockpin signalname="XLXN_551" name="CLK" />
             <blockpin signalname="XLXN_462(7:0)" name="I_DA(7:0)" />
             <blockpin signalname="XLXN_518(7:0)" name="I_IOA(7:0)" />
-            <blockpin name="O_DA_OE_L" />
             <blockpin signalname="XLXN_519(7:0)" name="O_DA(7:0)" />
             <blockpin signalname="XLXN_486(7:0)" name="O_AUDIO(7:0)" />
         </block>
@@ -850,7 +848,8 @@
         <branch name="ram_D(7:0)">
             <wire x2="3472" y1="1632" y2="1632" x1="3296" />
             <wire x2="3472" y1="1632" y2="1920" x1="3472" />
-            <wire x2="6368" y1="1920" y2="1920" x1="3472" />
+            <wire x2="3536" y1="1920" y2="1920" x1="3472" />
+            <wire x2="6368" y1="1920" y2="1920" x1="3536" />
             <wire x2="6368" y1="1920" y2="3056" x1="6368" />
             <wire x2="3472" y1="1504" y2="1504" x1="3440" />
             <wire x2="3472" y1="1504" y2="1632" x1="3472" />

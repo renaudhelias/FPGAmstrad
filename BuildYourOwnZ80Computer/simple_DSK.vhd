@@ -22,7 +22,7 @@ entity simple_DSK is
            dsk_W : out  STD_LOGIC;
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  M1_n:in STD_LOGIC;
-			  transmit : out STD_LOGIC; -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
+			  dsk_transmit : out STD_LOGIC; -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
 			  --indexing: out STD_LOGIC -- z80 must wait (sur le reset du z80)
 			  is_ucpm : in std_logic
 			  --indexing_done:out std_logic
@@ -129,7 +129,7 @@ begin
 		result_restant:=0;
 		--phase <=PHASE_ATTENTE_COMMANDE;
 		etat:=ETAT_OSEF;
-		transmit<='0';
+		dsk_transmit<='0';
 		dsk_D<=(others=>'Z');
 		dsk_W<='0';
 		data:=(others=>'0');
@@ -192,7 +192,7 @@ if do_update then
 							exec_restant:=exec_restant-1;
 						end if;
 						if etat=ETAT_READ then
-							--transmit<='1';
+							--dsk_transmit<='1';
 							chrn:=getCHRN(current_track,current_sector,is_ucpm);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
@@ -210,7 +210,7 @@ if do_update then
 							end if;
 							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
-							transmit<='1';
+							dsk_transmit<='1';
 							current_byte:=current_byte+1;
 						else
 							-- BIZARRE
@@ -250,7 +250,7 @@ if do_update then
 							dsk_W<='1';
 							data:=D_command;
 							dsk_D<=data;
-							transmit<='1';
+							dsk_transmit<='1';
 							current_byte:=current_byte+1;
 						else
 							-- BIZARRE
@@ -268,7 +268,7 @@ if do_update then
 						if etat=ETAT_READ then
 							data:=dsk_D; --(others=>'0');
 							Dout<=data;
-							transmit<='0';
+							dsk_transmit<='0';
 							if exec_restant=0 then
 								phase<=PHASE_RESULT;
 								result_restant:=7;
@@ -301,7 +301,7 @@ if do_update then
 					if phase=PHASE_EXECUTION_WRITE then
 						-- not implemented
 						if etat=ETAT_WRITE then
-							transmit<='0';
+							dsk_transmit<='0';
 							dsk_W<='0';
 							dsk_D<=(others=>'Z');
 							if exec_restant_write=0 then
@@ -450,7 +450,7 @@ if do_update then
 							end if;
 							if exec_restant>0 then
 								phase<=PHASE_EXECUTION_READ; -- on passe en mode execution_read
-								--transmit<='1';
+								--dsk_transmit<='1';
 							elsif exec_restant_write>0 then
 								phase<=PHASE_EXECUTION_WRITE;
 							elsif result_restant>0 then

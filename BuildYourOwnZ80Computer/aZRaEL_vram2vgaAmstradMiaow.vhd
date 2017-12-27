@@ -5,7 +5,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity aZRaEL_vram2vgaAmstradMiaow is
     Generic(
-	 HardHZoom : integer:=1; -- divise l'horloge nécessaire par HardHZoom et HZoom HardHZoom fois
+	 --HardHZoom : integer:=1; -- divise l'horloge nécessaire par HardHZoom et HZoom HardHZoom fois
 	 -- Amstrad
 	 -- 
 	 --OFFSET:STD_LOGIC_VECTOR(15 downto 0):=x"C000";
@@ -116,9 +116,9 @@ entity aZRaEL_vram2vgaAmstradMiaow is
            ADDRESS : out  STD_LOGIC_VECTOR (14 downto 0);
 			  PALETTE_D : in STD_LOGIC_VECTOR (7 downto 0);
 			  PALETTE_A : out STD_LOGIC_VECTOR (12 downto 0);
-           RED : out  STD_LOGIC_VECTOR(1 downto 0);
-           GREEN : out  STD_LOGIC_VECTOR(2 downto 0);
-           BLUE : out  STD_LOGIC_VECTOR(1 downto 0);
+           RED3 : out  STD_LOGIC_VECTOR (2 downto 0);
+           GREEN3 : out  STD_LOGIC_VECTOR (2 downto 0);
+           BLUE3 : out  STD_LOGIC_VECTOR (2 downto 0);
            VSYNC : out  STD_LOGIC;
            HSYNC : out  STD_LOGIC;
 		   debug_leds:in STD_LOGIC_VECTOR(7 downto 0);
@@ -127,11 +127,11 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 end aZRaEL_vram2vgaAmstradMiaow;
 
 architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
-	constant DO_NOTHING_OUT : integer range 0 to 4:=0;
-	constant DO_READ : integer range 0 to 4:=1;
-	constant DO_BORDER: integer range 0 to 4:=2;
-	constant DO_LED_ON: integer range 0 to 4:=3;
-	constant DO_LED_OFF: integer range 0 to 4:=4;
+	constant DO_NOTHING_OUT : integer range 0 to 3:=0;
+	constant DO_READ : integer range 0 to 3:=1;
+	--constant DO_BORDER: integer range 0 to 4:=2;
+	constant DO_LED_ON: integer range 0 to 3:=2;
+	constant DO_LED_OFF: integer range 0 to 3:=3;
 	
 	constant DO_NOTHING : STD_LOGIC:='0';
 	constant DO_HSYNC : STD_LOGIC:='1';
@@ -186,12 +186,26 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 		palette(13),palette(22),palette( 6),palette(23),
 		palette(30),palette( 0),palette(31),palette(14)
 	);
+	signal RED_FF:std_logic_vector(1 downto 0);
 	signal GREEN_FF:std_logic_vector(1 downto 0);
+	signal BLUE_FF:std_logic_vector(1 downto 0);
 	signal MODE_select:STD_LOGIC_VECTOR (1 downto 0);
+	signal debug_leds_i:std_logic_vector(7 downto 0);
 begin
+
+RED3<= RED_FF & "1" when RED_FF>"00" else "000";
+GREEN3<= GREEN_FF & "1" when GREEN_FF>"00" else "000";
+BLUE3<= BLUE_FF & "1" when BLUE_FF>"00" else "000";
 		
-GREEN<= GREEN_FF & "1" when GREEN_FF>"00" else "000";
-		
+process(CLK_25MHz) is
+	variable debug_leds_mem:std_logic_vector(7 downto 0);
+begin
+	if falling_edge(CLK_25MHz) then
+		debug_leds_mem:=debug_leds;
+		debug_leds_i<=debug_leds_mem;
+	end if;
+end process;
+
 aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable horizontal_counter : integer range 0 to HTot:=0;
 	variable vertical_counter : integer range 0 to VTot:=0;
@@ -206,7 +220,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable palette_color:integer range 0 to 16-1:=0;
 	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
-	variable etat_rgb : integer range 0 to 4:=DO_NOTHING_OUT;
+	variable etat_rgb : integer range 0 to 3:=DO_NOTHING_OUT;
 	variable etat_hsync : STD_LOGIC:=DO_NOTHING;
 	variable etat_vsync : STD_LOGIC:=DO_NOTHING;
 	variable color : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
@@ -225,6 +239,14 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable RA:STD_LOGIC_VECTOR(4 downto 0);
 	variable CA:STD_LOGIC_VECTOR(0 downto 0); -- sqrt(CHAR_WIDTH/8)-1 ?
 	variable no_char:integer range 0 to CHAR_WIDTH/8-1;
+	
+	variable debug_leds_mem_cursor:integer range 0 to 7:=0;
+	variable pen_mem:std_logic_vector(5 downto 0);
+	
+	constant PEN_MODE_11:std_logic_vector(5 downto 0):="011101";
+	constant PEN_LED_ON:std_logic_vector(5 downto 0):="001100";
+	constant PEN_LED_OFF:std_logic_vector(5 downto 0):="110011";
+	constant PEN_NONE:std_logic_vector(5 downto 0):="000000";
 begin
 	if rising_edge(CLK_25MHz) then
 		if MODE_select="00" then
@@ -248,39 +270,25 @@ begin
 			end loop;
 			if MODE_select="00" then
 				color_patch:=color(3) & color(1) & color(2) & color(0); -- pas relou xD
-				RED     <=pen(conv_integer(color_patch))(5 downto 4);
-				GREEN_FF<=pen(conv_integer(color_patch))(3 downto 2);
-				BLUE    <=pen(conv_integer(color_patch))(1 downto 0);
+				pen_mem:=pen(conv_integer(color_patch));
 			elsif MODE_select="01" then
-				RED     <=pen(conv_integer(color(3 downto 2)))(5 downto 4);
-				GREEN_FF<=pen(conv_integer(color(3 downto 2)))(3 downto 2);
-				BLUE    <=pen(conv_integer(color(3 downto 2)))(1 downto 0);
+				pen_mem:=pen(conv_integer(color(3 downto 2)));
 			elsif MODE_select="10" then
-				RED     <=pen(conv_integer(color(3)))(5 downto 4);
-				GREEN_FF<=pen(conv_integer(color(3)))(3 downto 2);
-				BLUE    <=pen(conv_integer(color(3)))(1 downto 0);
+				pen_mem:=pen(conv_integer(color(3)));
 			else -- MODE 11
-				RED     <="01";
-				GREEN_FF<="11";
-				BLUE    <="01";
+				pen_mem:=PEN_MODE_11;
 			end if;
-		elsif etat_rgb = DO_BORDER then
-			RED     <="00";
-			GREEN_FF<="00";
-			BLUE    <="00";
 		elsif etat_rgb = DO_LED_ON then
-			RED     <="00";
-			GREEN_FF<="11";
-			BLUE    <="00";
+			pen_mem:=PEN_LED_ON;
 		elsif etat_rgb = DO_LED_OFF then
-			RED     <="11";
-			GREEN_FF<="00";
-			BLUE    <="11";
+			pen_mem:=PEN_LED_OFF;
 		else
-			RED     <="00";
-			GREEN_FF<="00";
-			BLUE    <="00";
+			pen_mem:=PEN_NONE;
 		end if;
+		RED_FF     <=pen_mem(5 downto 4);
+		GREEN_FF   <=pen_mem(3 downto 2);
+		BLUE_FF    <=pen_mem(1 downto 0);
+		
 		if etat_hsync = DO_HSYNC then
 			hsync<='1' xor nhsync;
 		else
@@ -323,46 +331,35 @@ begin
 			palette_action:=DO_NOTHING_OUT;
 		end if;
 		
-		if horizontal_counter<HDsp/HardHZoom and vertical_counter<VDsp then
-			if vertical_counter <40 and horizontal_counter/DEBUG_LEDS_W < 8 then
-				if horizontal_counter mod DEBUG_LEDS_W = 0 then
-					etat_rgb:=DO_NOTHING_OUT;
-				elsif debug_leds(horizontal_counter/DEBUG_LEDS_W) = '1' then
-					etat_rgb:=DO_LED_ON;
-				else
-					etat_rgb:=DO_LED_OFF;
-				end if;
-			elsif horizontal_counter+HDecal_negatif<HDecal or vertical_counter+VDecal_negatif<VDecal or horizontal_counter+HDecal_negatif>=HDecal+HZoom*VRAM_HDsp or vertical_counter+VDecal_negatif>=VDecal+VZoom*VRAM_VDsp then
-				ADDRESS<= (others=>'0');
-				etat_rgb:=DO_BORDER;
-			else
-				v:=(vertical_counter+VDecal_negatif-VDecal)/(VZoom);
-				h:=(horizontal_counter+HDecal_negatif-HDecal)/(HZoom);
-				no_char:=(h / 8) mod (CHAR_WIDTH/8);
-				-- 640×200 pixels with 2 colours ("Mode 2", 80 text columns) donc bien 8 pixels physique par octets
-				if NB_PIXEL_PER_OCTET=2 then
-					cursor_pixel_ref:=(((h-1+8) mod 8) / 4) mod 8;
-					cursor_pixel:=cursor_pixel_ref;
-				elsif NB_PIXEL_PER_OCTET=4 then
-					cursor_pixel_ref:=(((h-1+8) mod 8) / 2) mod 8; -- ok
-					cursor_pixel:=cursor_pixel_ref; -- correction trajectoire... retard arrivé data par rapport adressage : un temps
-				elsif NB_PIXEL_PER_OCTET=8 then
-					cursor_pixel_ref:=(((h-1+8) mod 8) / 1) mod 8;
-					cursor_pixel:=cursor_pixel_ref; -- cacher un pixel sur deux
-				end if;
-				new_h:=h/CHAR_WIDTH; -- véritablement un octet représente physique 8 pixels, 
-				etat_rgb:=DO_READ;
-
-				MA:=conv_std_logic_vector(v*(VRAM_HDsp/CHAR_WIDTH),14);
-				MA:=new_h+MA;
-				CA:=conv_std_logic_vector(no_char,1);
-				ADDRESS<=MA(13 downto 0) & CA(0);
+		if horizontal_counter<HDsp and vertical_counter<VDsp then
+			v:=(vertical_counter+VDecal_negatif-VDecal)/(VZoom);
+			h:=(horizontal_counter+HDecal_negatif-HDecal)/(HZoom);
+			no_char:=(h / 8) mod (CHAR_WIDTH/8);
+			-- 640×200 pixels with 2 colours ("Mode 2", 80 text columns) donc bien 8 pixels physique par octets
+			if NB_PIXEL_PER_OCTET=2 then
+				cursor_pixel_ref:=(((h-1+8) mod 8) / 4) mod 8;
+				cursor_pixel:=cursor_pixel_ref;
+			elsif NB_PIXEL_PER_OCTET=4 then
+				cursor_pixel_ref:=(((h-1+8) mod 8) / 2) mod 8; -- ok
+				cursor_pixel:=cursor_pixel_ref; -- correction trajectoire... retard arrivé data par rapport adressage : un temps
+			elsif NB_PIXEL_PER_OCTET=8 then
+				cursor_pixel_ref:=(((h-1+8) mod 8) / 1) mod 8;
+				cursor_pixel:=cursor_pixel_ref; -- cacher un pixel sur deux
 			end if;
+			new_h:=h/CHAR_WIDTH; -- véritablement un octet représente physique 8 pixels, 
+			etat_rgb:=DO_READ;
+
+			MA:=conv_std_logic_vector(v*(VRAM_HDsp/CHAR_WIDTH),14);
+			MA:=new_h+MA;
+			CA:=conv_std_logic_vector(no_char,1);
+			ADDRESS<=MA(13 downto 0) & CA(0);
 		else
 			ADDRESS<= (others=>'0');
 			etat_rgb:=DO_NOTHING_OUT;
 		end if;
-		if horizontal_counter>=HSS/HardHZoom and horizontal_counter<HSE/HardHZoom then
+		
+		
+		if horizontal_counter>=HSS and horizontal_counter<HSE then
 			etat_hsync:=DO_HSYNC;
 		else
 			etat_hsync:=DO_NOTHING;
@@ -374,7 +371,7 @@ begin
 		end if;
 
 		horizontal_counter:=horizontal_counter+1;
-		if horizontal_counter>=HTot/HardHZoom then
+		if horizontal_counter>=HTot then
 			horizontal_counter:=0;
 		end if;
 		if horizontal_counter=0 then
@@ -385,7 +382,7 @@ begin
 		end if;
 		
 		palette_horizontal_counter:=palette_horizontal_counter+1;
-		if palette_horizontal_counter>=HTot/HardHZoom then
+		if palette_horizontal_counter>=HTot then
 			palette_horizontal_counter:=0;
 		end if;
 		if palette_horizontal_counter=0 then
@@ -396,7 +393,23 @@ begin
 			end if;
 		end if;
 		
+		
+		if horizontal_counter<8*DEBUG_LEDS_W and vertical_counter<40 then
+			if horizontal_counter = 0 then
+				debug_leds_mem_cursor:=0;
+			elsif horizontal_counter mod DEBUG_LEDS_W = 0 then
+				debug_leds_mem_cursor:=debug_leds_mem_cursor+1;
+			elsif debug_leds_i(debug_leds_mem_cursor) = '1' then
+				etat_rgb:=DO_LED_ON;
+			else
+				etat_rgb:=DO_LED_OFF;
+			end if;
+		end if;
+		
 	end if;
 end process aZRaEL_vram2vgaAmstrad_process;
+
+
+
 
 end Behavioral;

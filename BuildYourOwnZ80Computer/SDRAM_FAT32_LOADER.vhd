@@ -556,8 +556,8 @@ end function;
 		if falling_edge(CLK) then
 			--file_select_mem:=file_select; -- sinon l'optimisateur coupe le fil...
 		
-			--leds<=conv_std_logic_vector(step_var,8);
-			leds<=files_loaded & "111";
+			leds<=conv_std_logic_vector(step_var,8);
+			--leds<=files_loaded & "111";
 			--leds<=dsk_number;
 			--leds<=conv_std_logic_vector(folder_DirStruct_number,8);
 			--leds<=files_loaded & locker & "0";
