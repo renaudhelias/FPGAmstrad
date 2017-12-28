@@ -96,11 +96,14 @@ architecture Behavioral of simple_GateArrayInterrupt is
 
 	type pen_type is array(15 downto 0) of integer range 0 to 31;
 	signal pen:pen_type:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
+	
+	--signal crtc_A_i:STD_LOGIC_VECTOR (15 downto 0); -- test A/D
 begin
 
 -- scan de la RAM (de manière intrusive) par le CRTC, puis envoi à la VRAM
 	process(CLK8(0),reset) is -- transmit
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
+		variable crtc_R_do:boolean:=false;-- test A/D
 	begin
 		
 		if reset='1' then
@@ -117,16 +120,20 @@ begin
 						-- address is solved
 						if crtc_R='1' then
 							crtc_transmit<='1';
+							crtc_R_do:=true;
+						else
+							crtc_R_do:=false;
 						end if;
 					elsif CLK8(1)='1' then
-						if crtc_R='1' then
+						if crtc_R_do then
 							D2:=ram_D;
-							crtc_D<=D2;
+							--D2:=crtc_A_i(8 downto 1); -- test A/D : fail
 						end if;
 					end if;
 				else
 					-- z80 working
 				end if;
+				crtc_D<=D2;
 			end if;
 		end if;
 	end process;
@@ -329,6 +336,7 @@ vsync<='0';
 					crtc_A_mem:=(others=>'0');
 				end if;
 				crtc_A(15 downto 0)<=crtc_A_mem(14 downto 0) & '0';
+				--crtc_A_i(15 downto 0)<=crtc_A_mem(14 downto 0) & '0';
 				crtc_R<='1';
 
 -- vram_A : adresse sur la VRAM32Ko
@@ -437,14 +445,17 @@ last_etat_hsync:=etat_hsync;
 				end if;
 			when 1=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '0';
+				--crtc_A_i(15 downto 0)<=crtc_A_mem(14 downto 0) & '0';
 				if disp='1' then
 					crtc_W<='1';
 				end if;
 			when 2=>
 				crtc_A(15 downto 0)<=crtc_A_mem(14 downto 0) & '1';
+				--crtc_A_i(15 downto 0)<=crtc_A_mem(14 downto 0) & '1';
 				crtc_R<='1';
 			when 3=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '1';
+				--crtc_A_i(15 downto 0)<=crtc_A_mem(14 downto 0) & '1';
 				if disp='1' then
 					crtc_W<='1';
 				end if;

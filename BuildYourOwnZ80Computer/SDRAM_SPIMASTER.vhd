@@ -479,6 +479,8 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		
 		spi_init_done<=init_done;
 		
+		leds<=conv_std_logic_vector(init_step,8);
+		
 			ram_T<=false;
 			if not(init_done='1') then
 				length_data_block<=0;
