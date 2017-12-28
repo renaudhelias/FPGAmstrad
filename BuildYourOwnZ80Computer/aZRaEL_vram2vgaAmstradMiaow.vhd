@@ -304,13 +304,13 @@ begin
 -- puis c'est trop petit cet RAM, à peine de quoi afficher 60 lignes en 33o par palette et 100 lignes en 32*5bit+2bit
 --donc il faudrai au minimum tripler la mémoire si on la joue serré, ou au maximum multiplier par 5
 --Number of RAMB16s: 18 out of      20   90% => on peut triper la mémoire mais pas plus
-		if palette_action=DO_MODE then
-			MODE_select<=palette_D(1 downto 0);
-		elsif palette_action=DO_COLOR then
-			pen(palette_color)<=palette(conv_integer(palette_D));
-		end if;
+--		if palette_action=DO_MODE then
+--			MODE_select<=palette_D(1 downto 0);
+--		elsif palette_action=DO_COLOR then
+--			pen(palette_color)<=palette(conv_integer(palette_D));
+--		end if;
 		
---		MODE_select<="01"; -- para pruebas
+		MODE_select<="01"; -- para pruebas
 
 		if palette_vertical_counter mod VZoom=0 then -- une ligne sur deux déjà...
 			if palette_horizontal_counter<1 then

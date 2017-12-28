@@ -740,6 +740,7 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 					when 23=>
 						folder_sector_pointer:=getSector(folder_cluster_pointer);
 						if bc(folder_cluster_pointer) then
+							-- last FAT pointer : no more next FileEntry. (case root for me)
 							-- STOP HERE step_var:=28;
 						else
 							step_var:=8;

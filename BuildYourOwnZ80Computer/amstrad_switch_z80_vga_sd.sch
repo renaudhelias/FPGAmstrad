@@ -38,9 +38,8 @@
         <signal name="XLXN_744" />
         <signal name="XLXN_745(12:0)" />
         <signal name="XLXN_746(7:0)" />
-        <signal name="cero,cero,cero,cero,cero,uno,uno,uno" />
+        <signal name="cero,cero,cero,cero,cero,cero,cero,cero" />
         <signal name="cero" />
-        <signal name="uno" />
         <signal name="DEBUG_LEDS(7:0)" />
         <signal name="DEBUG_LEDS2(7:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
@@ -150,12 +149,6 @@
             <line x2="448" y1="-96" y2="-96" x1="384" />
             <rect width="320" x="64" y="-768" height="1196" />
         </blockdef>
-        <blockdef name="vcc">
-            <timestamp>2000-1-1T10:10:10</timestamp>
-            <line x2="64" y1="-32" y2="-64" x1="64" />
-            <line x2="64" y1="0" y2="-32" x1="64" />
-            <line x2="32" y1="-64" y2="-64" x1="96" />
-        </blockdef>
         <blockdef name="divideby3_bastard">
             <timestamp>2017-12-27T15:33:27</timestamp>
             <rect width="256" x="64" y="-256" height="120" />
@@ -165,7 +158,7 @@
         </blockdef>
         <block symbolname="bootloader_sd" name="XLXI_462">
             <blockpin signalname="MISO" name="MISO" />
-            <blockpin signalname="cero,cero,cero,cero,cero,uno,uno,uno" name="FILE_SELECT(7:0)" />
+            <blockpin signalname="cero,cero,cero,cero,cero,cero,cero,cero" name="FILE_SELECT(7:0)" />
             <blockpin signalname="CLK8(2)" name="CLK4MHz" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="MOSI" name="MOSI" />
@@ -201,9 +194,6 @@
         </block>
         <block symbolname="gnd" name="XLXI_253">
             <blockpin signalname="cero" name="G" />
-        </block>
-        <block symbolname="vcc" name="XLXI_256">
-            <blockpin signalname="uno" name="P" />
         </block>
         <block symbolname="divideby3_bastard" name="XLXI_513">
             <blockpin signalname="CLK50MHz" name="CLK50MHz" />
@@ -328,7 +318,7 @@
             <wire x2="4320" y1="1392" y2="1392" x1="3056" />
             <wire x2="3056" y1="1392" y2="1456" x1="3056" />
         </branch>
-        <branch name="cero,cero,cero,cero,cero,uno,uno,uno">
+        <branch name="cero,cero,cero,cero,cero,cero,cero,cero">
             <attrtext style="alignment:SOFT-RIGHT;fontsize:28;fontname:Arial" attrname="Name" x="5968" y="480" type="branch" />
             <wire x2="6144" y1="480" y2="480" x1="5968" />
         </branch>
@@ -337,11 +327,6 @@
             <wire x2="5408" y1="480" y2="512" x1="5408" />
         </branch>
         <instance x="5344" y="640" name="XLXI_253" orien="R0" />
-        <branch name="uno">
-            <attrtext style="alignment:SOFT-VRIGHT" attrname="Name" x="5392" y="368" type="branch" />
-            <wire x2="5392" y1="320" y2="368" x1="5392" />
-        </branch>
-        <instance x="5328" y="320" name="XLXI_256" orien="R0" />
         <instance x="608" y="1376" name="XLXI_513" orien="R0">
         </instance>
         <iomarker fontsize="28" x="384" y="1152" name="CLK50MHz" orien="R180" />
