@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="SDRAM_SPIMASTER">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-27T21:54:18</timestamp>
+    <timestamp>2017-12-28T1:26:28</timestamp>
     <pin polarity="Input" x="0" y="-224" name="SCLK" />
     <pin polarity="Input" x="0" y="-160" name="MISO" />
     <pin polarity="Input" x="0" y="-96" name="spi_R" />

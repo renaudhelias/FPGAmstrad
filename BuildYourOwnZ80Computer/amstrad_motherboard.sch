@@ -29,7 +29,6 @@
         <signal name="A(15:14)" />
         <signal name="CLK8(0)" />
         <signal name="CLK8(2)" />
-        <signal name="CLK8(1)" />
         <signal name="MEM_WR" />
         <signal name="XLXN_621" />
         <signal name="XLXN_435" />
@@ -104,7 +103,7 @@
         <signal name="palette_D(7:0)" />
         <signal name="XLXN_857(1:0)" />
         <signal name="XLXN_858" />
-        <signal name="XLXN_859" />
+        <signal name="CLK8(1)" />
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
@@ -757,20 +756,20 @@
             <blockpin signalname="palette_A(12:0)" name="palette_A(12:0)" />
             <blockpin signalname="palette_D(7:0)" name="palette_D(7:0)" />
         </block>
+        <block symbolname="inv" name="XLXI_417">
+            <blockpin signalname="CLK16MHz" name="I" />
+            <blockpin signalname="CLK8(0)" name="O" />
+        </block>
         <block symbolname="cb4ce" name="XLXI_579">
             <blockpin signalname="CLK16MHz" name="C" />
             <blockpin signalname="XLXN_542" name="CE" />
             <blockpin signalname="XLXN_118" name="CLR" />
             <blockpin name="CEO" />
-            <blockpin signalname="XLXN_859" name="Q0" />
-            <blockpin signalname="CLK8(1)" name="Q1" />
-            <blockpin signalname="CLK8(2)" name="Q2" />
+            <blockpin signalname="CLK8(1)" name="Q0" />
+            <blockpin signalname="CLK8(2)" name="Q1" />
+            <blockpin name="Q2" />
             <blockpin name="Q3" />
             <blockpin name="TC" />
-        </block>
-        <block symbolname="inv" name="XLXI_417">
-            <blockpin signalname="XLXN_859" name="I" />
-            <blockpin signalname="CLK8(0)" name="O" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="7040" height="5440">
@@ -848,8 +847,7 @@
         <branch name="ram_D(7:0)">
             <wire x2="3472" y1="1632" y2="1632" x1="3296" />
             <wire x2="3472" y1="1632" y2="1920" x1="3472" />
-            <wire x2="3536" y1="1920" y2="1920" x1="3472" />
-            <wire x2="6368" y1="1920" y2="1920" x1="3536" />
+            <wire x2="6368" y1="1920" y2="1920" x1="3472" />
             <wire x2="6368" y1="1920" y2="3056" x1="6368" />
             <wire x2="3472" y1="1504" y2="1504" x1="3440" />
             <wire x2="3472" y1="1504" y2="1632" x1="3472" />
@@ -888,11 +886,6 @@
             <wire x2="2480" y1="1152" y2="1344" x1="2480" />
             <wire x2="1808" y1="1152" y2="1184" x1="1808" />
         </branch>
-        <branch name="CLK8(1)">
-            <wire x2="2432" y1="1344" y2="1344" x1="2384" />
-            <wire x2="2432" y1="1344" y2="1408" x1="2432" />
-            <wire x2="2480" y1="1408" y2="1408" x1="2432" />
-        </branch>
         <branch name="XLXN_621">
             <wire x2="3488" y1="1648" y2="1648" x1="3392" />
             <wire x2="3392" y1="1648" y2="2000" x1="3392" />
@@ -915,6 +908,7 @@
         <branch name="CLK16MHz">
             <wire x2="1808" y1="1600" y2="1600" x1="1536" />
             <wire x2="2000" y1="1600" y2="1600" x1="1808" />
+            <wire x2="1808" y1="1408" y2="1600" x1="1808" />
         </branch>
         <instance x="2768" y="576" name="GA" orien="R0">
         </instance>
@@ -1182,10 +1176,9 @@
             <wire x2="2464" y1="1920" y2="1920" x1="1664" />
             <wire x2="2464" y1="1920" y2="2000" x1="2464" />
             <wire x2="1664" y1="1920" y2="2320" x1="1664" />
-            <wire x2="2400" y1="1408" y2="1408" x1="2384" />
-            <wire x2="2400" y1="1408" y2="1472" x1="2400" />
-            <wire x2="2432" y1="1472" y2="1472" x1="2400" />
-            <wire x2="2464" y1="1472" y2="1472" x1="2432" />
+            <wire x2="2416" y1="1344" y2="1344" x1="2384" />
+            <wire x2="2416" y1="1344" y2="1472" x1="2416" />
+            <wire x2="2464" y1="1472" y2="1472" x1="2416" />
             <wire x2="2480" y1="1472" y2="1472" x1="2464" />
             <wire x2="2464" y1="1472" y2="1920" x1="2464" />
         </branch>
@@ -1413,8 +1406,7 @@
             <wire x2="2064" y1="4544" y2="5024" x1="2064" />
             <wire x2="2864" y1="5024" y2="5024" x1="2064" />
             <wire x2="1232" y1="4064" y2="4064" x1="1136" />
-            <wire x2="2976" y1="4064" y2="4064" x1="1232" />
-            <wire x2="2992" y1="4064" y2="4064" x1="2976" />
+            <wire x2="2992" y1="4064" y2="4064" x1="1232" />
             <wire x2="1232" y1="3984" y2="4064" x1="1232" />
             <wire x2="3888" y1="3968" y2="3968" x1="2992" />
             <wire x2="3888" y1="3968" y2="4496" x1="3888" />
@@ -1493,15 +1485,12 @@
         <text style="fontsize:30;fontname:Arial" x="1740" y="4668">110 Orion</text>
         <instance x="5072" y="800" name="GA_interrupt" orien="R0">
         </instance>
-        <instance x="2000" y="1728" name="XLXI_579" orien="R0" />
         <instance x="1840" y="1408" name="XLXI_417" orien="R270" />
-        <branch name="XLXN_859">
-            <wire x2="1712" y1="1120" y2="1488" x1="1712" />
-            <wire x2="1808" y1="1488" y2="1488" x1="1712" />
-            <wire x2="2448" y1="1120" y2="1120" x1="1712" />
-            <wire x2="2448" y1="1120" y2="1280" x1="2448" />
-            <wire x2="1808" y1="1408" y2="1488" x1="1808" />
+        <branch name="CLK8(1)">
             <wire x2="2448" y1="1280" y2="1280" x1="2384" />
+            <wire x2="2448" y1="1280" y2="1408" x1="2448" />
+            <wire x2="2480" y1="1408" y2="1408" x1="2448" />
         </branch>
+        <instance x="2000" y="1728" name="XLXI_579" orien="R0" />
     </sheet>
 </drawing>

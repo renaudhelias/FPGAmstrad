@@ -72,7 +72,7 @@
             <line x2="64" y1="-128" y2="-96" x1="64" />
         </blockdef>
         <blockdef name="bootloader_sd">
-            <timestamp>2017-12-27T21:56:42</timestamp>
+            <timestamp>2017-12-28T1:27:10</timestamp>
             <line x2="496" y1="32" y2="32" x1="432" />
             <line x2="0" y1="-464" y2="-464" x1="64" />
             <rect width="64" x="0" y="-268" height="24" />
@@ -120,7 +120,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-27T22:42:29</timestamp>
+            <timestamp>2017-12-27T23:24:55</timestamp>
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
             <line x2="448" y1="336" y2="336" x1="384" />
@@ -166,6 +166,7 @@
         <block symbolname="bootloader_sd" name="XLXI_462">
             <blockpin signalname="MISO" name="MISO" />
             <blockpin signalname="cero,cero,cero,cero,cero,uno,uno,uno" name="FILE_SELECT(7:0)" />
+            <blockpin signalname="CLK8(2)" name="CLK4MHz" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="MOSI" name="MOSI" />
             <blockpin signalname="XLXN_737(22:0)" name="ram_A(22:0)" />
@@ -176,7 +177,6 @@
             <blockpin signalname="XLXN_726" name="is_ucpm" />
             <blockpin signalname="RESET_n" name="FILE_LOADED" />
             <blockpin signalname="DEBUG_LEDS2(7:0)" name="LEDS2(7:0)" />
-            <blockpin signalname="CLK8(2)" name="CLK4MHz" />
         </block>
         <block symbolname="amstrad_motherboard" name="XLXI_512">
             <blockpin signalname="XLXN_737(22:0)" name="init_A(22:0)" />

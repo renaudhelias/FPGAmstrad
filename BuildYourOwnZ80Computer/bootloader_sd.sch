@@ -22,7 +22,6 @@
         <signal name="LEDS(7:0)" />
         <signal name="SS_n" />
         <signal name="XLXN_76" />
-        <signal name="DO_STOP" />
         <signal name="CLK4MHz" />
         <signal name="is_ucpm" />
         <signal name="FILE_LOADED" />
@@ -42,7 +41,7 @@
         <port polarity="Output" name="FILE_LOADED" />
         <port polarity="Output" name="LEDS2(7:0)" />
         <blockdef name="SDRAM_SPIMASTER">
-            <timestamp>2017-12-27T21:54:18</timestamp>
+            <timestamp>2017-12-28T1:26:28</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
             <rect width="64" x="320" y="20" height="24" />
             <line x2="384" y1="32" y2="32" x1="320" />
@@ -69,9 +68,8 @@
             <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2017-12-27T17:26:36</timestamp>
+            <timestamp>2017-12-28T0:29:1</timestamp>
             <line x2="432" y1="480" y2="480" x1="368" />
-            <line x2="0" y1="416" y2="416" x1="64" />
             <line x2="0" y1="224" y2="224" x1="64" />
             <line x2="432" y1="224" y2="224" x1="368" />
             <line x2="0" y1="96" y2="96" x1="64" />
@@ -91,15 +89,6 @@
             <rect width="64" x="368" y="-44" height="24" />
             <line x2="432" y1="-32" y2="-32" x1="368" />
             <rect width="304" x="64" y="-384" height="896" />
-        </blockdef>
-        <blockdef name="gnd">
-            <timestamp>2000-1-1T10:10:10</timestamp>
-            <line x2="64" y1="-64" y2="-96" x1="64" />
-            <line x2="52" y1="-48" y2="-48" x1="76" />
-            <line x2="60" y1="-32" y2="-32" x1="68" />
-            <line x2="40" y1="-64" y2="-64" x1="88" />
-            <line x2="64" y1="-64" y2="-80" x1="64" />
-            <line x2="64" y1="-128" y2="-96" x1="64" />
         </blockdef>
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -123,7 +112,6 @@
             <blockpin signalname="CLK4MHz" name="CLK" />
             <blockpin signalname="XLXN_57" name="spi_done" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
-            <blockpin signalname="DO_STOP" name="stop" />
             <blockpin signalname="FILE_SELECT(7:0)" name="file_select(7:0)" />
             <blockpin signalname="XLXN_52(7:0)" name="spi_D(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
@@ -145,9 +133,6 @@
         </block>
         <block symbolname="vcc" name="XLXI_41">
             <blockpin signalname="XLXN_76" name="P" />
-        </block>
-        <block symbolname="gnd" name="XLXI_43">
-            <blockpin signalname="DO_STOP" name="G" />
         </block>
         <block symbolname="inv" name="XLXI_64">
             <blockpin signalname="CLK4MHz" name="I" />
@@ -214,14 +199,6 @@
             <wire x2="1952" y1="1248" y2="1312" x1="1952" />
             <wire x2="1968" y1="1248" y2="1248" x1="1952" />
         </branch>
-        <branch name="DO_STOP">
-            <attrtext style="alignment:SOFT-TVCENTER" attrname="Name" x="2112" y="1104" type="branch" />
-            <wire x2="2016" y1="1056" y2="1072" x1="2016" />
-            <wire x2="2112" y1="1056" y2="1056" x1="2016" />
-            <wire x2="2112" y1="1056" y2="1104" x1="2112" />
-            <wire x2="2112" y1="1104" y2="1184" x1="2112" />
-            <wire x2="2160" y1="1184" y2="1184" x1="2112" />
-        </branch>
         <iomarker fontsize="28" x="320" y="752" name="MISO" orien="R180" />
         <iomarker fontsize="28" x="1680" y="784" name="MOSI" orien="R0" />
         <iomarker fontsize="28" x="2096" y="608" name="FILE_SELECT(7:0)" orien="R180" />
@@ -231,7 +208,6 @@
         <iomarker fontsize="28" x="2880" y="448" name="ram_W_n" orien="R270" />
         <iomarker fontsize="28" x="2736" y="800" name="LEDS(7:0)" orien="R0" />
         <iomarker fontsize="28" x="2192" y="1312" name="SS_n" orien="R90" />
-        <instance x="1952" y="1200" name="XLXI_43" orien="R0" />
         <branch name="CLK4MHz">
             <wire x2="400" y1="640" y2="640" x1="208" />
             <wire x2="544" y1="640" y2="640" x1="400" />

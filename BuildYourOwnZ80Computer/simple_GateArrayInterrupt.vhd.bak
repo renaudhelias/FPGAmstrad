@@ -102,7 +102,7 @@ begin
 	process(CLK8(0),reset) is -- transmit
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
 	begin
-		crtc_D<=D2;
+		
 		if reset='1' then
 			crtc_transmit<='0'; -- relax
 			ram_D<=(others=>'Z'); -- relax
@@ -110,19 +110,18 @@ begin
 			-- address is solving
 			if rising_edge(CLK8(0)) then
 				crtc_transmit<='0';
-				ram_R<='0';
-				ram_D<=(others=>'Z');
+				ram_D<=(others=>'Z'); -- relax (read only)
 				if CLK8(2)='1' then
 					-- CRTC working
 					if CLK8(1)='0' then
 						-- address is solved
 						if crtc_R='1' then
-							ram_R<='1';
 							crtc_transmit<='1';
 						end if;
 					elsif CLK8(1)='1' then
 						if crtc_R='1' then
 							D2:=ram_D;
+							crtc_D<=D2;
 						end if;
 					end if;
 				else
@@ -279,6 +278,7 @@ simple_GateArray_process : process(CLK4MHz) is
 		
 	begin
 		if rising_edge(CLK4MHz) then
+		--if falling_edge(CLK4MHz) then
 		
 		compteur1MHz:=(compteur1MHz+1) mod 4;
 		
@@ -437,6 +437,8 @@ last_etat_hsync:=etat_hsync;
 				end if;
 			when 1=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '0';
+				crtc_D_mem:=crtc_D_inside;
+				crtc_D<=crtc_D_mem;
 				if disp='1' then
 					crtc_W<='1';
 				end if;
@@ -445,6 +447,8 @@ last_etat_hsync:=etat_hsync;
 				crtc_R<='1';
 			when 3=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '1';
+				crtc_D_mem:=crtc_D_inside;
+				crtc_D<=crtc_D_mem;
 				if disp='1' then
 					crtc_W<='1';
 				end if;
