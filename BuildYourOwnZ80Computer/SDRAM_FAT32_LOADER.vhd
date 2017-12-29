@@ -17,7 +17,7 @@ entity SDRAM_FAT32_LOADER is
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400000" -- in byte
 	);
     Port ( CLK:in STD_LOGIC;
-           file_select:in std_logic_vector(7 downto 0);
+           --file_select:in std_logic_vector(7 downto 0);
            ram_A : out  STD_LOGIC_VECTOR (22 downto 0):=(others=>'0');
            ram_D : inout  STD_LOGIC_VECTOR (7 downto 0):=(others=>'Z'); -- for sim
            ram_W : out  STD_LOGIC:='0';
@@ -28,10 +28,11 @@ entity SDRAM_FAT32_LOADER is
 			  spi_init_done : in STD_LOGIC;
 			  leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
-			  is_ucpm:out std_logic:='0'
+			  is_ucpm:out std_logic:='0';
+			  key_reset:in std_logic
 			  );
 			  	attribute keep : string;
-				attribute keep of file_select : signal is "TRUE";
+				--attribute keep of file_select : signal is "TRUE";
 				attribute keep of leds : signal is "TRUE";
 
 			  
@@ -124,7 +125,7 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 	signal gripsou_data:std_logic_vector(ram_D'range):=(others=>'Z');
 	signal gripsou_write:std_logic:='0';
 	
-
+	signal key_reset_i:std_logic;
 begin
 
 	ram_A<= gripsou_ram_A when switch_transmit_gripsou=SWITCH_GRIPSOU else transmit_ram_A when switch_transmit_gripsou=SWITCH_TRANSMIT else (others=>'0');
@@ -343,8 +344,17 @@ begin
 			end if;
 		end if;
 	end process;
+	
+	key_reset_scan : process(CLK)
+		variable key_reset_mem:std_logic;
+	begin
+		if rising_edge(CLK) then
+			key_reset_mem:=key_reset;
+			key_reset_i<=key_reset_mem;
+		end if;
+	end process;
 
-	tortue_geniale:process (CLK,file_select) is
+	tortue_geniale:process (CLK) is
 		variable FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400000"; -- in byte
 		variable BPB_FATSz32:STD_LOGIC_VECTOR(31 downto 0);
 		variable BPB_TotSec32:STD_LOGIC_VECTOR(31 downto 0);
@@ -509,15 +519,16 @@ end function;
 	--files_loaded(1:3) : rom 1 2 3 loaded
 	variable files_loaded:std_logic_vector((1+ROM_COUNT)-1 downto 0):="0000" & TEST_DSK_OFF; -- méchant doute(TEST_DSK_OFF,others=>'0');
 
+	variable file_select:std_logic_vector(7 downto 0):=(others=>'0');
 		
 	begin
 		load_init_done<=load_done;
 		
 		if falling_edge(CLK) then
-			leds<=conv_std_logic_vector(step_var,8);
+			--leds<=conv_std_logic_vector(step_var,8);
 			--leds<=files_loaded & "111";
 		
-			if load_done='0' and spi_init_done='1' then
+			if spi_init_done='1' then
 			
 				data_do<=false;
 				compare_do<=false;
@@ -741,7 +752,9 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 						folder_sector_pointer:=getSector(folder_cluster_pointer);
 						if bc(folder_cluster_pointer) then
 							-- last FAT pointer : no more next FileEntry. (case root for me)
-							-- STOP HERE step_var:=28;
+							switch_transmit_gripsou<=SWITCH_NONE;
+							file_select:=(others=>'0'); -- remet la première disquette
+							step_var:=26;
 						else
 							step_var:=8;
 							folder_DirStruct_number:=0;
@@ -871,6 +884,15 @@ end if;
 --	step_var:=23;
 					when 26=> -- load done
 					load_done:='1';
+					
+					if key_reset_i ='1' then
+						step_var:=0;
+						dsk_number:=(others=>'0');
+						load_done:='0';
+						files_loaded:="0000" & TEST_DSK_OFF;
+						file_select:=file_select+1;
+					end if;
+					
 					when 27=>NULL; -- bad root folder cluster
 					--when 28=>NULL; -- bad next folder cluster
 					when 29=>NULL; -- bad file cluster
@@ -919,8 +941,8 @@ end if;
 		variable sector_order:sector_order_type;
 	begin
 		--is_ucpm<=ucpm;
-		--leds<=conv_std_logic_vector(gripsou_step,8);
 		if falling_edge(CLK) then
+			leds<=conv_std_logic_vector(gripsou_step,8);
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
 			if gripsou_write='1' and switch_transmit_gripsou=SWITCH_GRIPSOU then

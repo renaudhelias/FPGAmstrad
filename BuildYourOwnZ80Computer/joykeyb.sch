@@ -19,6 +19,7 @@
         <signal name="XLXN_31" />
         <signal name="PPI_portA(7:0)" />
         <signal name="joystick1(5:0)" />
+        <signal name="key_reset" />
         <port polarity="Input" name="reset" />
         <port polarity="Input" name="PS2_CLK" />
         <port polarity="Input" name="PS2_DATA" />
@@ -26,6 +27,7 @@
         <port polarity="Input" name="PPI_portC(3:0)" />
         <port polarity="Output" name="PPI_portA(7:0)" />
         <port polarity="Input" name="joystick1(5:0)" />
+        <port polarity="Output" name="key_reset" />
         <blockdef name="Keyboard">
             <timestamp>2017-12-29T20:18:43</timestamp>
             <line x2="384" y1="32" y2="32" x1="320" />
@@ -38,7 +40,8 @@
             <rect width="256" x="64" y="-256" height="320" />
         </blockdef>
         <blockdef name="KEYBOARD_driver">
-            <timestamp>2017-12-29T20:19:48</timestamp>
+            <timestamp>2017-12-29T22:13:31</timestamp>
+            <line x2="384" y1="160" y2="160" x1="320" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
             <line x2="0" y1="-160" y2="-160" x1="64" />
             <rect width="64" x="0" y="-108" height="24" />
@@ -51,7 +54,7 @@
             <rect width="64" x="320" y="-236" height="24" />
             <line x2="384" y1="0" y2="0" x1="320" />
             <rect width="64" x="320" y="-12" height="24" />
-            <rect width="256" x="64" y="-256" height="448" />
+            <rect width="256" x="64" y="-256" height="512" />
         </blockdef>
         <blockdef name="KEYBOARD_controller">
             <timestamp>2017-12-29T20:18:54</timestamp>
@@ -95,6 +98,7 @@
             <blockpin signalname="PPI_portC(3:0)" name="portC(3:0)" />
             <blockpin signalname="joystick1(5:0)" name="joystick1(5:0)" />
             <blockpin signalname="XLXN_27(9:0)" name="keycode(9:0)" />
+            <blockpin signalname="key_reset" name="key_reset" />
             <blockpin signalname="PPI_portA(7:0)" name="portA(7:0)" />
         </block>
         <block symbolname="vcc" name="XLXI_4">
@@ -180,5 +184,9 @@
         </branch>
         <iomarker fontsize="28" x="2880" y="752" name="joystick1(5:0)" orien="R0" />
         <instance x="2288" y="640" name="XLXI_4" orien="R270" />
+        <branch name="key_reset">
+            <wire x2="2880" y1="912" y2="912" x1="2848" />
+        </branch>
+        <iomarker fontsize="28" x="2880" y="912" name="key_reset" orien="R0" />
     </sheet>
 </drawing>

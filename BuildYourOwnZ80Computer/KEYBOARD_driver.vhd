@@ -12,12 +12,14 @@ entity KEYBOARD_driver is
            portC : in  STD_LOGIC_VECTOR (3 downto 0);
 			  joystick1 : in STD_LOGIC_VECTOR(5 downto 0);
            keycode : in  STD_LOGIC_VECTOR (9 downto 0); -- e0 & e1 & scancode
-           portA : out  STD_LOGIC_VECTOR (7 downto 0)
+           portA : out  STD_LOGIC_VECTOR (7 downto 0);
+           key_reset : out std_logic:='0'
 			  );
 end KEYBOARD_driver;
 
 architecture Behavioral of KEYBOARD_driver is
 		type amstrad_decode_type is array(0 to 15,0 to 7) of STD_LOGIC_VECTOR(7 downto 0); --integer range 0 to 127;
+		constant RESET_KEY:STD_LOGIC_VECTOR(7 downto 0):=x"7D"; -- page up
 		constant NO_KEY:STD_LOGIC_VECTOR(7 downto 0):=x"FF"; -- x"00" is also another candidate of "NO_KEY" in PC 102 keyboard
 	constant amstrad_decode:amstrad_decode_type:=(
 			(x"75",x"74",x"72",x"01",x"0B",x"04",x"69",x"7A"),--  0 ligne 19 /\ -> \/ 9 6 3 Enter . -- Enter is "End" here
@@ -42,6 +44,7 @@ architecture Behavioral of KEYBOARD_driver is
 	signal keyb:keyb_type;
 	signal joystick1_8:std_logic_vector(7 downto 0);
 
+	--signal key_reset_i:std_logic;
 begin
 
 	keybscan : process(CLK)
@@ -83,7 +86,28 @@ begin
 			end if;
 		end if;
 	end process;
-	
+			
+	key_reset_scan : process(CLK)
+		variable key_reset_mem:std_logic;
+	begin
+		if rising_edge(CLK) then
+			
+			if RESET_KEY=keycode(7 downto 0) then
+				--if unpress='1' then
+				--	key_reset_mem:='0';
+				--els
+				if press='1' then
+					key_reset_mem:='1';
+				else
+					key_reset_mem:='0';
+				end if;
+			else
+				key_reset_mem:='0';
+			end if;
+			key_reset<=key_reset_mem;
+		end if;
+	end process;
+
 	process(CLK)
 		variable joystick1_8mem:std_logic_vector(7 downto 0):=(others=>'0');
 	begin

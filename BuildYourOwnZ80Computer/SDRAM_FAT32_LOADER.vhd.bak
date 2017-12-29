@@ -10,8 +10,9 @@ entity SDRAM_FAT32_LOADER is
 		-- le SPI mode ne fonctionne pas avec 2048 block, c'est bizarre
 		-- windob ne formate pas en 512 block
 		ROM_COUNT:integer:=4; -- attention ya du code en dur : "if files_loaded="11111" then"
-		DSK_OFF:std_logic:='0'; -- si 1 alors ne cherche pas de disquette, si 0 alors cherche une disquette
-		BLOCK_SIZE:integer:=4096 -- bytes
+		TEST_DSK_OFF:std_logic:='0'; -- si 1 alors ne cherche pas de disquette, si 0 alors cherche une disquette
+		--BLOCK_SIZE:integer:=4096 -- bytes
+		BLOCK_SIZE_MAXIMUM:integer:=65536 --4096; -- bytes
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400C00" -- in byte
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400000" -- in byte
 	);
@@ -28,6 +29,7 @@ entity SDRAM_FAT32_LOADER is
 			  leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
 			  is_ucpm:out std_logic:='0'
+			  key_reset:in std_logic_vector(1 downto 0); -- key_reset : 1, key_reset_space : 0
 			  );
 			  	attribute keep : string;
 				attribute keep of file_select : signal is "TRUE";
@@ -49,8 +51,8 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 		(x"4F53363132382020524F4D", -- OS6128.ROM
 		 x"4241534943312D31524F4D", -- BASIC1-1.ROM
 		x"414D53444F532020524F4D", -- AMSDOS.ROM
-		--x"4D4158414D202020524F4D", -- MAXAM.ROM
-		x"53435245454E2020524F4D"  --SCREEN.ROM
+		x"4D4158414D202020524F4D" -- MAXAM.ROM
+		--x"53435245454E2020524F4D"  --SCREEN.ROM
 		); 
 	subtype address_type is std_logic_vector(31 downto 0);
 	type file_rom_address_type is array(ROM_COUNT-1 downto 0) of address_type;
@@ -58,8 +60,8 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 		(x"00000000",
 		x"00004000",
 		x"00008000",
-		--x"0000C000",
-		 x"00" & "00000010" & "11000000" & x"00" -- &C000
+		x"0000C000"
+		--x"00" & "00000010" & "11000000" & x"00" -- &C000
 		);
 	
 	
@@ -97,7 +99,7 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 
 	signal transmit_address_from:STD_LOGIC_VECTOR(31 downto 0);
 	signal transmit_address_to:STD_LOGIC_VECTOR(31 downto 0);
-	signal transmit_length:integer range 0 to BLOCK_SIZE;
+	signal transmit_length:integer range 0 to BLOCK_SIZE_MAXIMUM;
 	signal transmit_do:boolean:=false;
 	signal transmit_done:boolean:=true;
 	signal transmit_spi_A:STD_LOGIC_VECTOR(spi_A'range);
@@ -137,7 +139,7 @@ begin
 
 	spi_do<=data_spi_do when switch_br_compare_transmit=SWITCH_BR
 		else compare_spi_do when switch_br_compare_transmit=SWITCH_COMPARE
-		else transmit_spi_do when switch_br_compare_transmit=SWITCH_TRANSMIT;
+		else transmit_spi_do when switch_br_compare_transmit=SWITCH_TRANSMIT
 		else '0';
 
 	-- permet de charger les variable BR, et les autres variables en général
@@ -290,7 +292,7 @@ begin
 	
 	-- rempli la RAM
 	transmiter:process(CLK) is
-		variable cursor:integer range 0 to BLOCK_SIZE;
+		variable cursor:integer range 0 to BLOCK_SIZE_MAXIMUM;
 		variable transmit_step:integer range 0 to 4;
 		variable data_mem:std_logic_vector(7 downto 0);
 		variable address_mem:std_logic_vector(ram_A'range);
@@ -313,33 +315,32 @@ begin
 				-- write byte
 				transmit_spi_A<=transmit_address_from+cursor;
 				transmit_ram_A<=transmit_address_to(ram_A'range)+cursor;
-				case transmit_step is
-					when 0=>
-						if not(transmit_spi_do='1') and spi_done='1' then
+				if not(transmit_spi_do='1') and spi_done='1' then
+					case transmit_step is
+						when 0=>
 							transmit_spi_do<='1';
 							transmit_step:=1;
-						end if;
-					when 1=>
-						if not(transmit_spi_do='1') and spi_done='1' then
+						when 1=>
 							data_mem:=spi_D;
 							transmit_ram_D<=data_mem;gripsou_data<=data_mem;
+--test A/D transmit_ram_D<=conv_std_logic_vector(cursor,8);
 							address_mem:=transmit_address_to(ram_A'range)+cursor;
 							gripsou_address<=address_mem;
 							transmit_ram_W<='1';gripsou_write<='1';
 							transmit_step:=2;
-						end if;
-					when 2=>
-						transmit_ram_W<='0';gripsou_write<='0';
-						transmit_step:=0;
-						cursor:=cursor+1;
-						if cursor>=transmit_length then
-							transmit_ram_D<=(others=>'Z');gripsou_data<=(others=>'Z');
-							transmit_done<=true;
-							transmit_step:=3;
-						end if;
-					when 3=>NULL; -- transmit SPI to RAM done : that's all folks
-					when 4=>NULL; -- over run
-				end case;
+						when 2=>
+							transmit_ram_W<='0';gripsou_write<='0';
+							transmit_step:=0;
+							cursor:=cursor+1;
+							if cursor>=transmit_length then
+								transmit_ram_D<=(others=>'Z');gripsou_data<=(others=>'Z');
+								transmit_done<=true;
+								transmit_step:=3;
+							end if;
+						when 3=>NULL; -- transmit SPI to RAM done : that's all folks
+						when 4=>NULL; -- over run
+					end case;
+				end if;
 			end if;
 		end if;
 	end process;
@@ -507,7 +508,7 @@ end function;
 		
 	--files_loaded(0) : dsk loaded
 	--files_loaded(1:3) : rom 1 2 3 loaded
-	variable files_loaded:std_logic_vector((1+ROM_COUNT)-1 downto 0):="0000" & DSK_OFF; -- méchant doute(DSK_OFF,others=>'0');
+	variable files_loaded:std_logic_vector((1+ROM_COUNT)-1 downto 0):="0000" & TEST_DSK_OFF; -- méchant doute(TEST_DSK_OFF,others=>'0');
 
 		
 	begin
@@ -523,7 +524,7 @@ end function;
 				compare_do<=false;
 				transmit_do<=false;
 				
-if stop='0' and not(data_do) and data_done and not(transmit_do) and transmit_done and not(compare_do) and compare_done then
+if not(data_do) and data_done and not(transmit_do) and transmit_done and not(compare_do) and compare_done then
 				
 				case step_var is
 					when 0 =>
@@ -740,6 +741,7 @@ if stop='0' and not(data_do) and data_done and not(transmit_do) and transmit_don
 					when 23=>
 						folder_sector_pointer:=getSector(folder_cluster_pointer);
 						if bc(folder_cluster_pointer) then
+							-- last FAT pointer : no more next FileEntry. (case root for me)
 							-- STOP HERE step_var:=28;
 						else
 							step_var:=8;
@@ -758,12 +760,11 @@ if stop='0' and not(data_do) and data_done and not(transmit_do) and transmit_don
 					when 14=>
 						file_size:=fix_big_endian4(data_reader4);
 						--"00 40 00 00"
---						if file_size/=x"00004000" then
---							step_var:=41;
---						else
+						if TEST_DSK_OFF='0' or file_size=x"00004000" then
+							-- test taille 16Ko (TEST_DSK_OFF à 1 pour ce test : ça vérifie la taille des ROMs...)
 							get_var2(file_cluster_pointer_H,folder_sector_pointer+(folder_DirStruct_number-1)*32+20);
 							step_var:=15;
---						end if;
+						end if;
 					when 15=>
 						file_cluster_pointer_H:=fix_big_endian2(data_reader2);
 						get_var2(file_cluster_pointer_L,folder_sector_pointer+(folder_DirStruct_number-1)*32+26);

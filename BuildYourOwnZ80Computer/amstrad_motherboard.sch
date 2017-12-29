@@ -104,6 +104,7 @@
         <signal name="CLK8(1)" />
         <signal name="CLK_PWM" />
         <signal name="audio_AB" />
+        <signal name="key_reset" />
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
@@ -125,6 +126,7 @@
         <port polarity="Output" name="palette_D(7:0)" />
         <port polarity="Input" name="CLK_PWM" />
         <port polarity="Output" name="audio_AB" />
+        <port polarity="Output" name="key_reset" />
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-64" x1="64" />
@@ -404,7 +406,7 @@
             <line x2="320" y1="-192" y2="-192" x1="384" />
         </blockdef>
         <blockdef name="joykeyb">
-            <timestamp>2017-12-29T20:20:27</timestamp>
+            <timestamp>2017-12-29T22:14:30</timestamp>
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -415,7 +417,8 @@
             <line x2="496" y1="-352" y2="-352" x1="432" />
             <rect width="64" x="432" y="-124" height="24" />
             <line x2="496" y1="-112" y2="-112" x1="432" />
-            <rect width="368" x="64" y="-384" height="448" />
+            <rect width="368" x="64" y="-384" height="312" />
+            <line x2="496" y1="-240" y2="-240" x1="432" />
         </blockdef>
         <blockdef name="please_wait">
             <timestamp>2011-5-5T16:42:16</timestamp>
@@ -675,6 +678,7 @@
             <blockpin signalname="portC(3:0)" name="PPI_portC(3:0)" />
             <blockpin signalname="JOYSTICK1(5:0)" name="joystick1(5:0)" />
             <blockpin signalname="XLXN_518(7:0)" name="PPI_portA(7:0)" />
+            <blockpin signalname="key_reset" name="key_reset" />
         </block>
         <block symbolname="and2" name="XLXI_475">
             <blockpin signalname="XLXN_824" name="I0" />
@@ -1475,5 +1479,9 @@
             <wire x2="6480" y1="4368" y2="4368" x1="6448" />
         </branch>
         <iomarker fontsize="28" x="6480" y="4368" name="audio_AB" orien="R0" />
+        <branch name="key_reset">
+            <wire x2="3968" y1="4944" y2="4944" x1="3936" />
+        </branch>
+        <iomarker fontsize="28" x="3968" y="4944" name="key_reset" orien="R0" />
     </sheet>
 </drawing>
