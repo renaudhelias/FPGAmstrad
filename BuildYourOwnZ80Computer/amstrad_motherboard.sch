@@ -79,7 +79,6 @@
         <signal name="XLXN_786" />
         <signal name="XLXN_787" />
         <signal name="JOYSTICK1(5:0)" />
-        <signal name="XLXN_798(5:0)" />
         <signal name="XLXN_802" />
         <signal name="XLXN_814" />
         <signal name="XLXN_824" />
@@ -116,7 +115,7 @@
         <port polarity="Input" name="PS2_DATA" />
         <port polarity="Output" name="crtc_A(15:0)" />
         <port polarity="Input" name="RESET_n" />
-        <port polarity="BiDirectional" name="JOYSTICK1(5:0)" />
+        <port polarity="Input" name="JOYSTICK1(5:0)" />
         <port polarity="Output" name="crtc_W" />
         <port polarity="Output" name="ram_W_n" />
         <port polarity="Output" name="crtc_D(7:0)" />
@@ -400,7 +399,7 @@
             <line x2="320" y1="-192" y2="-192" x1="384" />
         </blockdef>
         <blockdef name="joykeyb">
-            <timestamp>2017-12-27T17:28:47</timestamp>
+            <timestamp>2017-12-29T20:20:27</timestamp>
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -412,20 +411,6 @@
             <rect width="64" x="432" y="-124" height="24" />
             <line x2="496" y1="-112" y2="-112" x1="432" />
             <rect width="368" x="64" y="-384" height="448" />
-        </blockdef>
-        <blockdef name="buf">
-            <timestamp>2000-1-1T10:10:10</timestamp>
-            <line x2="64" y1="-32" y2="-32" x1="0" />
-            <line x2="128" y1="-32" y2="-32" x1="224" />
-            <line x2="128" y1="0" y2="-32" x1="64" />
-            <line x2="64" y1="-32" y2="-64" x1="128" />
-            <line x2="64" y1="-64" y2="0" x1="64" />
-        </blockdef>
-        <blockdef name="joybuf">
-            <timestamp>2017-12-26T15:37:7</timestamp>
-            <rect width="256" x="64" y="-1024" height="56" />
-            <line x2="384" y1="-992" y2="-992" x1="320" />
-            <line x2="0" y1="-992" y2="-992" x1="64" />
         </blockdef>
         <blockdef name="please_wait">
             <timestamp>2011-5-5T16:42:16</timestamp>
@@ -569,7 +554,7 @@
         </block>
         <block symbolname="inv" name="XLXI_297">
             <blockpin signalname="CLK8(2)" name="I" />
-            <blockpin signalname="XLXN_832" name="O" />
+            <blockpin signalname="XLXN_633" name="O" />
         </block>
         <block symbolname="I82C55" name="PPI">
             <blockpin signalname="A(11)" name="I_CS_L" />
@@ -577,7 +562,7 @@
             <blockpin signalname="XLXN_180" name="I_WR_L" />
             <blockpin signalname="XLXN_858" name="RESET" />
             <blockpin signalname="XLXN_303" name="ENA" />
-            <blockpin signalname="XLXN_832" name="CLK" />
+            <blockpin signalname="XLXN_633" name="CLK" />
             <blockpin signalname="A(9:8)" name="I_ADDR(1:0)" />
             <blockpin signalname="D(7:0)" name="I_DATA(7:0)" />
             <blockpin signalname="XLXN_519(7:0)" name="I_PA(7:0)" />
@@ -650,7 +635,7 @@
             <blockpin signalname="XLXN_474" name="P" />
         </block>
         <block symbolname="cb4ce" name="XLXI_399">
-            <blockpin signalname="XLXN_832" name="C" />
+            <blockpin signalname="XLXN_633" name="C" />
             <blockpin signalname="XLXN_498" name="CE" />
             <blockpin signalname="XLXN_499" name="CLR" />
             <blockpin name="CEO" />
@@ -688,12 +673,8 @@
             <blockpin signalname="PS2_DATA" name="PS2_DATA" />
             <blockpin signalname="XLXN_633" name="CLK4MHz" />
             <blockpin signalname="portC(3:0)" name="PPI_portC(3:0)" />
-            <blockpin signalname="XLXN_798(5:0)" name="joystick1(5:0)" />
+            <blockpin signalname="JOYSTICK1(5:0)" name="joystick1(5:0)" />
             <blockpin signalname="XLXN_518(7:0)" name="PPI_portA(7:0)" />
-        </block>
-        <block symbolname="buf" name="XLXI_495">
-            <blockpin signalname="XLXN_832" name="I" />
-            <blockpin signalname="XLXN_633" name="O" />
         </block>
         <block symbolname="and2" name="XLXI_475">
             <blockpin signalname="XLXN_824" name="I0" />
@@ -705,10 +686,6 @@
         </block>
         <block symbolname="gnd" name="XLXI_253">
             <blockpin signalname="zero" name="G" />
-        </block>
-        <block symbolname="joybuf" name="XLXI_566">
-            <blockpin signalname="JOYSTICK1(5:0)" name="JOY_IN(5:0)" />
-            <blockpin signalname="XLXN_798(5:0)" name="JOY_OUT(5:0)" />
         </block>
         <block symbolname="please_wait" name="XLXI_568">
             <blockpin signalname="CLK8(2)" name="CLK_n" />
@@ -1074,7 +1051,25 @@
             <wire x2="3440" y1="5088" y2="5088" x1="3232" />
         </branch>
         <branch name="XLXN_633">
+            <wire x2="1136" y1="4064" y2="4320" x1="1136" />
+            <wire x2="1232" y1="4320" y2="4320" x1="1136" />
+            <wire x2="1232" y1="4320" y2="4496" x1="1232" />
+            <wire x2="1696" y1="4496" y2="4496" x1="1232" />
+            <wire x2="2096" y1="4496" y2="4496" x1="1696" />
+            <wire x2="1696" y1="4496" y2="4544" x1="1696" />
+            <wire x2="2064" y1="4544" y2="4544" x1="1696" />
+            <wire x2="2064" y1="4544" y2="5024" x1="2064" />
+            <wire x2="3088" y1="5024" y2="5024" x1="2064" />
             <wire x2="3440" y1="5024" y2="5024" x1="3088" />
+            <wire x2="1232" y1="4064" y2="4064" x1="1136" />
+            <wire x2="2992" y1="4064" y2="4064" x1="1232" />
+            <wire x2="1232" y1="3984" y2="4064" x1="1232" />
+            <wire x2="3888" y1="3968" y2="3968" x1="2992" />
+            <wire x2="3888" y1="3968" y2="4496" x1="3888" />
+            <wire x2="5600" y1="4496" y2="4496" x1="3888" />
+            <wire x2="5600" y1="4496" y2="4928" x1="5600" />
+            <wire x2="6000" y1="4928" y2="4928" x1="5600" />
+            <wire x2="2992" y1="3968" y2="4064" x1="2992" />
         </branch>
         <branch name="XLXN_16">
             <wire x2="1184" y1="2640" y2="2816" x1="1184" />
@@ -1130,7 +1125,6 @@
         <instance x="928" y="2736" name="XLXI_307" orien="R90" />
         <instance x="3440" y="5184" name="XLXI_494" orien="R0">
         </instance>
-        <instance x="2864" y="5056" name="XLXI_495" orien="R0" />
         <instance x="2176" y="3856" name="XLXI_475" orien="R0" />
         <iomarker fontsize="28" x="6496" y="4240" name="audio" orien="R0" />
         <iomarker fontsize="28" x="2928" y="4896" name="PS2_CLK" orien="R180" />
@@ -1153,12 +1147,6 @@
         <iomarker fontsize="28" x="4448" y="2400" name="crtc_A(15:0)" orien="R270" />
         <text style="fontsize:24;fontname:Arial" x="1624" y="4708">000 1 50Hz 101 Schneider X vsync</text>
         <branch name="JOYSTICK1(5:0)">
-            <wire x2="4992" y1="5072" y2="5072" x1="4352" />
-        </branch>
-        <iomarker fontsize="28" x="4992" y="5072" name="JOYSTICK1(5:0)" orien="R0" />
-        <instance x="4352" y="4080" name="XLXI_566" orien="R180">
-        </instance>
-        <branch name="XLXN_798(5:0)">
             <wire x2="3968" y1="5072" y2="5072" x1="3936" />
         </branch>
         <branch name="CLK8(2)">
@@ -1395,26 +1383,6 @@
             <wire x2="2096" y1="2720" y2="2720" x1="2048" />
             <wire x2="2048" y1="2720" y2="2912" x1="2048" />
         </branch>
-        <branch name="XLXN_832">
-            <wire x2="1136" y1="4064" y2="4320" x1="1136" />
-            <wire x2="1232" y1="4320" y2="4320" x1="1136" />
-            <wire x2="1232" y1="4320" y2="4496" x1="1232" />
-            <wire x2="1696" y1="4496" y2="4496" x1="1232" />
-            <wire x2="2096" y1="4496" y2="4496" x1="1696" />
-            <wire x2="1696" y1="4496" y2="4544" x1="1696" />
-            <wire x2="2064" y1="4544" y2="4544" x1="1696" />
-            <wire x2="2064" y1="4544" y2="5024" x1="2064" />
-            <wire x2="2864" y1="5024" y2="5024" x1="2064" />
-            <wire x2="1232" y1="4064" y2="4064" x1="1136" />
-            <wire x2="2992" y1="4064" y2="4064" x1="1232" />
-            <wire x2="1232" y1="3984" y2="4064" x1="1232" />
-            <wire x2="3888" y1="3968" y2="3968" x1="2992" />
-            <wire x2="3888" y1="3968" y2="4496" x1="3888" />
-            <wire x2="5600" y1="4496" y2="4496" x1="3888" />
-            <wire x2="5600" y1="4496" y2="4928" x1="5600" />
-            <wire x2="6000" y1="4928" y2="4928" x1="5600" />
-            <wire x2="2992" y1="3968" y2="4064" x1="2992" />
-        </branch>
         <branch name="RESET_n">
             <wire x2="960" y1="2688" y2="2688" x1="912" />
             <wire x2="960" y1="2688" y2="2736" x1="960" />
@@ -1492,5 +1460,6 @@
             <wire x2="2480" y1="1408" y2="1408" x1="2448" />
         </branch>
         <instance x="2000" y="1728" name="XLXI_579" orien="R0" />
+        <iomarker fontsize="28" x="3968" y="5072" name="JOYSTICK1(5:0)" orien="R0" />
     </sheet>
 </drawing>

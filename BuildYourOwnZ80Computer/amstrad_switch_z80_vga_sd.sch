@@ -25,7 +25,6 @@
         <signal name="PS2_DATA" />
         <signal name="PS2_CLK" />
         <signal name="XLXN_726" />
-        <signal name="JOYSTICK1(5:0)" />
         <signal name="XLXN_731" />
         <signal name="XLXN_732(7:0)" />
         <signal name="crtc_A(14:0)" />
@@ -42,6 +41,7 @@
         <signal name="cero" />
         <signal name="DEBUG_LEDS(7:0)" />
         <signal name="DEBUG_LEDS2(7:0)" />
+        <signal name="JOYSTICK1(5:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Input" name="MISO" />
@@ -57,10 +57,10 @@
         <port polarity="BiDirectional" name="ram_A(20:0)" />
         <port polarity="Input" name="PS2_DATA" />
         <port polarity="Input" name="PS2_CLK" />
-        <port polarity="BiDirectional" name="JOYSTICK1(5:0)" />
         <port polarity="Output" name="AUDIO" />
         <port polarity="Output" name="DEBUG_LEDS(7:0)" />
         <port polarity="Output" name="DEBUG_LEDS2(7:0)" />
+        <port polarity="Input" name="JOYSTICK1(5:0)" />
         <blockdef name="gnd">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-64" y2="-96" x1="64" />
@@ -119,7 +119,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-27T23:24:55</timestamp>
+            <timestamp>2017-12-29T21:4:39</timestamp>
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
             <line x2="448" y1="336" y2="336" x1="384" />
@@ -179,8 +179,8 @@
             <blockpin signalname="PS2_CLK" name="PS2_CLK" />
             <blockpin signalname="PS2_DATA" name="PS2_DATA" />
             <blockpin signalname="RESET_n" name="RESET_n" />
-            <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="JOYSTICK1(5:0)" name="JOYSTICK1(5:0)" />
+            <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="AUDIO" name="audio" />
@@ -280,7 +280,6 @@
         </branch>
         <iomarker fontsize="28" x="1392" y="1744" name="PS2_DATA" orien="R180" />
         <iomarker fontsize="28" x="1392" y="1648" name="PS2_CLK" orien="R180" />
-        <iomarker fontsize="28" x="1904" y="1904" name="JOYSTICK1(5:0)" orien="R0" />
         <branch name="XLXN_732(7:0)">
             <wire x2="3072" y1="1520" y2="1520" x1="1872" />
             <wire x2="3072" y1="1072" y2="1520" x1="3072" />
@@ -347,10 +346,6 @@
             <wire x2="6976" y1="304" y2="384" x1="6976" />
         </branch>
         <iomarker fontsize="28" x="6976" y="304" name="DEBUG_LEDS2(7:0)" orien="R270" />
-        <branch name="JOYSTICK1(5:0)">
-            <wire x2="1888" y1="1904" y2="1904" x1="1872" />
-            <wire x2="1904" y1="1904" y2="1904" x1="1888" />
-        </branch>
         <branch name="ram_D(7:0)">
             <wire x2="2400" y1="1840" y2="1840" x1="1872" />
             <wire x2="5840" y1="1840" y2="1840" x1="2400" />
@@ -425,5 +420,9 @@
         </instance>
         <instance x="4320" y="1488" name="XLXI_511" orien="R0">
         </instance>
+        <branch name="JOYSTICK1(5:0)">
+            <wire x2="1904" y1="1904" y2="1904" x1="1872" />
+        </branch>
+        <iomarker fontsize="28" x="1904" y="1904" name="JOYSTICK1(5:0)" orien="R0" />
     </sheet>
 </drawing>
