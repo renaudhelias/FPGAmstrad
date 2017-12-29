@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="bootloader_sd">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-28T1:27:10</timestamp>
+    <timestamp>2017-12-29T21:48:15</timestamp>
     <pin polarity="Input" x="0" y="-464" name="MISO" />
     <pin polarity="Input" x="0" y="-256" name="FILE_SELECT(7:0)" />
     <pin polarity="Input" x="0" y="-32" name="CLK4MHz" />
@@ -14,7 +14,6 @@
     <pin polarity="Output" x="496" y="-32" name="SS_n" />
     <pin polarity="Output" x="496" y="32" name="is_ucpm" />
     <pin polarity="Output" x="496" y="-288" name="FILE_LOADED" />
-    <pin polarity="Output" x="496" y="-352" name="LEDS2(7:0)" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="248" y="-712" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-464" type="pin MISO" />
@@ -29,7 +28,6 @@
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-32" type="pin SS_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="32" type="pin is_ucpm" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-288" type="pin FILE_LOADED" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-352" type="pin LEDS2(7:0)" />
         <line x2="496" y1="32" y2="32" x1="432" />
         <line x2="0" y1="-464" y2="-464" x1="64" />
         <rect width="64" x="0" y="-268" height="24" />
@@ -45,8 +43,6 @@
         <rect width="64" x="432" y="-108" height="24" />
         <line x2="496" y1="-96" y2="-96" x1="432" />
         <line x2="496" y1="-32" y2="-32" x1="432" />
-        <rect width="64" x="432" y="-364" height="24" />
-        <line x2="496" y1="-352" y2="-352" x1="432" />
         <rect width="368" x="64" y="-704" height="752" />
         <line x2="0" y1="-32" y2="-32" x1="64" />
     </graph>

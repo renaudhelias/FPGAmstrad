@@ -26,7 +26,6 @@
         <signal name="is_ucpm" />
         <signal name="FILE_LOADED" />
         <signal name="zero,zero,zero,zero,zero,zero,zero,zero" />
-        <signal name="LEDS2(7:0)" />
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
         <port polarity="Input" name="FILE_SELECT(7:0)" />
@@ -39,12 +38,9 @@
         <port polarity="Input" name="CLK4MHz" />
         <port polarity="Output" name="is_ucpm" />
         <port polarity="Output" name="FILE_LOADED" />
-        <port polarity="Output" name="LEDS2(7:0)" />
         <blockdef name="SDRAM_SPIMASTER">
-            <timestamp>2017-12-28T1:26:28</timestamp>
+            <timestamp>2017-12-29T21:47:55</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
-            <rect width="64" x="320" y="20" height="24" />
-            <line x2="384" y1="32" y2="32" x1="320" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
             <line x2="0" y1="-160" y2="-160" x1="64" />
             <rect width="64" x="0" y="-44" height="24" />
@@ -106,7 +102,6 @@
             <blockpin signalname="XLXN_57" name="spi_Rdone" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
             <blockpin signalname="XLXN_52(7:0)" name="data_out(7:0)" />
-            <blockpin signalname="LEDS2(7:0)" name="leds(7:0)" />
         </block>
         <block symbolname="SDRAM_FAT32_LOADER" name="XLXI_7">
             <blockpin signalname="CLK4MHz" name="CLK" />
@@ -259,10 +254,6 @@
         </instance>
         <iomarker fontsize="28" x="208" y="640" name="CLK4MHz" orien="R180" />
         <iomarker fontsize="28" x="2752" y="992" name="FILE_LOADED" orien="R0" />
-        <branch name="LEDS2(7:0)">
-            <wire x2="1088" y1="1216" y2="1216" x1="1056" />
-        </branch>
-        <iomarker fontsize="28" x="1088" y="1216" name="LEDS2(7:0)" orien="R0" />
         <instance x="464" y="480" name="XLXI_64" orien="R0" />
     </sheet>
 </drawing>

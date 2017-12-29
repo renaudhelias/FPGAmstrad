@@ -27,6 +27,7 @@
     <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="KEYBOARD_driver.sym" xil_pn:origination="imported"/>
     <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="Keyboard.sym" xil_pn:origination="imported"/>
     <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="PALETTE_RAM.sym" xil_pn:origination="imported"/>
+    <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="PWM.sym" xil_pn:origination="imported"/>
     <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="RAM_driver.sym" xil_pn:origination="imported"/>
     <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="SDRAM_FAT32_LOADER.sym" xil_pn:origination="imported"/>
     <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="SDRAM_SPIMASTER.sym" xil_pn:origination="imported"/>
@@ -44,11 +45,6 @@
     <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="simple_GateArrayInterrupt.sym" xil_pn:origination="imported"/>
   </files>
 
-  <transforms xmlns="http://www.xilinx.com/XMLSchema">
-    <transform xil_pn:end_ts="1514581542" xil_pn:in_ck="2282522927926765207" xil_pn:name="TRAN_SubProjectAbstractToPreProxy" xil_pn:start_ts="1514581542">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-  </transforms>
+  <transforms xmlns="http://www.xilinx.com/XMLSchema"/>
 
 </generated_project>
