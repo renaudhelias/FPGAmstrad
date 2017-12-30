@@ -606,8 +606,8 @@ GAinterrupt : process(CLK4MHz,vsync,hsync)
 	variable vsync_was_0:boolean:=false;
 	variable zap_next:boolean:=false;
 	variable zap_next_next:boolean:=false;
-	variable next_sync:boolean:=false;
-	variable old_delay_feature:std_logic:='0';
+	--variable next_sync:boolean:=false;
+	--variable old_delay_feature:std_logic:='0';
 begin
 	
 --	Interrupt Generation Facility of the Amstrad Gate Array
@@ -641,10 +641,10 @@ begin
 			else
 				if D(6) = '0' then
 					-- It only applies once
-					if D(4) = '1' and old_delay_feature='0'then
+					if D(4) = '1' then --and old_delay_feature='0'then
 						compteur52:=(others=>'0');
 					end if;
-					old_delay_feature:=D(4); -- It only applies once ????
+					--old_delay_feature:=D(4); -- It only applies once ????
 				else 
 					-- rambank -- osef pour 464
 				end if;
@@ -660,6 +660,12 @@ begin
 		if hsync='0' and hsync_was_1 then
 			compteur52:=compteur52+1;
 
+			if conv_integer(compteur52)=NB_HSYNC_BY_INTERRUPT then -- asphalt ? -- 52="110100"
+				--Once this counter reaches 52, the GA raises the INT signal and resets the counter to 0.
+				compteur52:=(others=>'0');
+				int<='1';
+			end if;
+
 			if zap_next then
 				zap_next:=false;
 				zap_next_next:=true;
@@ -667,19 +673,15 @@ begin
 				zap_next_next:=false;
 				--at the completion of which the scan line
 				--count in the GA is compared to 32. 
-				if conv_integer(compteur52)<32 then
-					--If the counter is below 32, the interrupt generation is suppressed.
-					int<='0';
-				else
+				if conv_integer(compteur52)>=32 then
 					--If it is greater than or equal to 32, an interrupt is issued.
 					int<='1';
+				--else
+					--If the counter is below 32, the interrupt generation is suppressed.
+					--int<='0'; -- Circle- DEMO ? / Markus JavaCPC doesn't have this instruction
 				end if;
 				--Regardless of whether or not an interrupt is raised, the scan line counter is reset to 0.
 				compteur52:=(others=>'0');
-			elsif conv_integer(compteur52)=NB_HSYNC_BY_INTERRUPT then -- asphalt ? -- 52="110100"
-				--Once this counter reaches 52, the GA raises the INT signal and resets the counter to 0.
-				compteur52:=(others=>'0');
-				int<='1';
 			end if;
 		end if;
 		if hsync='1' then
