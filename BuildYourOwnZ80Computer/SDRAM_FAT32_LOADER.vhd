@@ -752,9 +752,15 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 						folder_sector_pointer:=getSector(folder_cluster_pointer);
 						if bc(folder_cluster_pointer) then
 							-- last FAT pointer : no more next FileEntry. (case root for me)
-							switch_transmit_gripsou<=SWITCH_NONE;
-							file_select:=(others=>'0'); -- remet la première disquette
-							step_var:=26;
+							if file_select>0 then
+								-- re-reset inserting first disk.
+								switch_transmit_gripsou<=SWITCH_NONE;
+								step_var:=0;
+								dsk_number:=(others=>'0');
+								load_done:='0';
+								files_loaded:="1111" & TEST_DSK_OFF; -- ne re-reload pas les ROMs
+								file_select:=(others=>'0'); -- remet la première disquette
+							end if;
 						else
 							step_var:=8;
 							folder_DirStruct_number:=0;
