@@ -934,8 +934,8 @@ end if;
 		--constant SECTOR_SIZE:sector_sizes_type:=(x"0080",x"0100",x"0200",x"0400",x"0800",x"1000",x"1800");
 		constant SECTOR_SIZE:std_logic_vector(15 downto 0):=x"0200";
 		variable sectSize:std_logic_vector(15 downto 0);
-		variable sector_countdown:integer range 0 to 9;
-		variable track_countdown:integer range 0 to 40*2;
+		--variable sector_countdown:integer range 0 to 9;
+		--variable track_countdown:integer range 0 to 40*2;
 		variable gripsou_ram_A_mem:std_logic_vector(gripsou_ram_A'range);
 		type sector_order_type is array(0 to 8) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
@@ -945,6 +945,13 @@ end if;
 			leds<=conv_std_logic_vector(gripsou_step,8);
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
+			if switch_transmit_gripsou/=SWITCH_GRIPSOU then
+				input_A:=(others=>'0');
+				gripsou_step:=0;
+				no_track:=0;
+				no_side:=0;
+				no_sect:=0;
+			end if;
 			if gripsou_write='1' and switch_transmit_gripsou=SWITCH_GRIPSOU then
 				data_mem:=gripsou_data;
 				case gripsou_step is
