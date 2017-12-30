@@ -211,26 +211,26 @@ begin
 								when 3 => NULL;
 							end case;
 						when 3 =>
-							case data_length is
-								when 4 => -- 4 byte
+							--case data_length is
+							--	when 4 => -- 4 byte
 									data_reader4_mem(15 downto 8):=spi_D(7 downto 0);
 									data_cursor:=3;
 									data_spi_A<=data_addr +data_cursor;
 									data_step:=4;
 									data_spi_do<='1';
-								when 1 => NULL;
-								when 2 => NULL;
-								when 3 => NULL;
-							end case;
+							--	when 1 => NULL;
+							--	when 2 => NULL;
+							--	when 3 => NULL;
+							--end case;
 						when 4 =>
-							case data_length is
-								when 4 => -- 4 byte
+							--case data_length is
+							--	when 4 => -- 4 byte
 									data_reader4_mem(7 downto 0):=spi_D(7 downto 0);
 									data_step:=5;
-								when 1 => NULL;
-								when 2 => NULL;
-								when 3 => NULL;
-							end case;
+							--	when 1 => NULL;
+							--	when 2 => NULL;
+							--	when 3 => NULL;
+							--end case;
 						when 5 => -- variable transfert completed
 							data_done<=true;
 							-- that's all folks !
