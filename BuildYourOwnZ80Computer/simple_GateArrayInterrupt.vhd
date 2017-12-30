@@ -442,12 +442,12 @@ last_etat_hsync:=etat_hsync;
 			
 			
 -- là on scan du 800x600 selon VSYNC et HSYNC, donc on peut écrire du border...
-if in_800x600 then
+--if in_800x600 then
 			
 			if palette_horizontal_counter<1+16+1 then
 					palette_horizontal_counter:=palette_horizontal_counter+1;
 			end if;
-			if vram_horizontal_counter=IS_H_MIDDLE and compteur1MHz=0 then
+			if in_800x600 and vram_horizontal_counter=IS_H_MIDDLE and compteur1MHz=0 then
 				if disp='1' then
 					palette_horizontal_counter:=0;
 				else
@@ -487,7 +487,7 @@ if in_800x600 then
 					end if;
 					palette_A_mem:=palette_A_mem+1;
 				end if;
-end if;
+--end if;
 			
 			
 			
