@@ -109,9 +109,10 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 				  
 				  VRAM_HDsp:integer:=800; --suivant les mode, le nombre de pixels affichés est constant !
 				  VRAM_VDsp:integer:=300; --600/2
-				  DEBUG_LEDS_W:integer:=32;
+				  --DEBUG_LEDS_W:integer:=32;
 				  BUG_DELAY_DATA:integer:=2;
 				  BUG_DELAY_PALETTE:integer:=1
+				  --BUG_PALETTE_COLOR:integer:=1
 		  );
     Port ( DATA : in  STD_LOGIC_VECTOR (7 downto 0); -- buffer
            ADDRESS : out  STD_LOGIC_VECTOR (14 downto 0);
@@ -122,16 +123,16 @@ entity aZRaEL_vram2vgaAmstradMiaow is
            BLUE3 : out  STD_LOGIC_VECTOR (2 downto 0);
            VSYNC : out  STD_LOGIC;
            HSYNC : out  STD_LOGIC;
-		   debug_leds:in STD_LOGIC_VECTOR(7 downto 0);
+		   --debug_leds:in STD_LOGIC_VECTOR(7 downto 0);
            CLK_25MHz : in  STD_LOGIC
 			  );
 end aZRaEL_vram2vgaAmstradMiaow;
 
 architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
-	constant DO_NOTHING_OUT : integer range 0 to 3:=0;
-	constant DO_READ : integer range 0 to 3:=1;
-	constant DO_LED_ON: integer range 0 to 3:=2;
-	constant DO_LED_OFF: integer range 0 to 3:=3;
+	constant DO_NOTHING_OUT : integer range 0 to 1:=0;
+	constant DO_READ : integer range 0 to 1:=1;
+	--constant DO_LED_ON: integer range 0 to 3:=2;
+	--constant DO_LED_OFF: integer range 0 to 3:=3;
 	
 	constant DO_NOTHING : STD_LOGIC:='0';
 	constant DO_HSYNC : STD_LOGIC:='1';
@@ -178,34 +179,27 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 		17=>"001101"
 		);
 	
-	type pen_type is array(15 downto 0) of std_logic_vector(5 downto 0);
-	signal pen:pen_type:=(
-		palette( 4),palette(12),palette(21),palette(28),
-		palette(24),palette(29),palette(12),palette( 5),
-		palette(13),palette(22),palette( 6),palette(23),
-		palette(30),palette( 0),palette(31),palette(14)
-	);
 	signal MODE_select:STD_LOGIC_VECTOR (1 downto 0):="01";
 
 	
 	signal RED_FF:std_logic_vector(1 downto 0);
 	signal GREEN_FF:std_logic_vector(1 downto 0);
 	signal BLUE_FF:std_logic_vector(1 downto 0);
-	signal debug_leds_i:std_logic_vector(7 downto 0);
+	--signal debug_leds_i:std_logic_vector(7 downto 0);
 begin
 
 RED3<= RED_FF & "1" when RED_FF>"00" else "000";
 GREEN3<= GREEN_FF & "1" when GREEN_FF>"00" else "000";
 BLUE3<= BLUE_FF & "1" when BLUE_FF>"00" else "000";
 		
-process(CLK_25MHz) is
-	variable debug_leds_mem:std_logic_vector(7 downto 0);
-begin
-	if falling_edge(CLK_25MHz) then
-		debug_leds_mem:=debug_leds;
-		debug_leds_i<=debug_leds_mem;
-	end if;
-end process;
+--process(CLK_25MHz) is
+--	variable debug_leds_mem:std_logic_vector(7 downto 0);
+--begin
+--	if falling_edge(CLK_25MHz) then
+--		debug_leds_mem:=debug_leds;
+--		debug_leds_i<=debug_leds_mem;
+--	end if;
+--end process;
 
 aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable horizontal_counter : integer range 0 to HTot:=0;
@@ -214,17 +208,23 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	--constant PALETTE_H_OFFSET:integer:=16+1; --HTot/HardHZoom-16-1;
 	--constant PALETTE_V_OFFSET:integer:=0; --VTot;
 	variable palette_action:integer range 0 to 2:=0;
+	variable palette_action_retard:integer range 0 to 2:=0;
 	constant DO_MODE:integer:=1;
 	constant DO_COLOR:integer:=2;
-	variable palette_color:integer range 0 to 16-1:=0;
+	variable palette_color:integer range 0 to 16-1;
+	variable palette_color_retard:integer range 0 to 16-1:=0;
 	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
-	variable etat_rgb : integer range 0 to 3:=DO_NOTHING_OUT;
+	variable etat_rgb : integer range 0 to 1:=DO_NOTHING_OUT;
+	variable etat_rgb_retard : integer range 0 to 1:=DO_NOTHING_OUT;
 	variable etat_hsync : STD_LOGIC:=DO_NOTHING;
+	variable etat_hsync_retard : STD_LOGIC:=DO_NOTHING;
 	variable etat_vsync : STD_LOGIC:=DO_NOTHING;
+	variable etat_vsync_retard : STD_LOGIC:=DO_NOTHING;
 	variable color : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
 	variable color_patch : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
 	variable cursor_pixel : integer range 0 to NB_PIXEL_PER_OCTET_MAX-1;
+	variable cursor_pixel_retard : integer range 0 to NB_PIXEL_PER_OCTET_MAX-1;
 	variable v:integer range 0 to 256-1;
 	variable h:integer range 0 to CHAR_WIDTH*128*8-1;
 	variable new_h:integer range 0 to 128*8-1;
@@ -233,12 +233,22 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable CA:STD_LOGIC_VECTOR(0 downto 0); -- sqrt(CHAR_WIDTH/8)-1 ?
 	variable no_char:integer range 0 to CHAR_WIDTH/8-1;
 	
-	variable debug_leds_mem_cursor:integer range 0 to 7:=0;
+	--variable debug_leds_mem_cursor:integer range 0 to 7:=0;
+	
+	type pen_type is array(15 downto 0) of std_logic_vector(5 downto 0);
+	variable pen:pen_type:=(
+		palette( 4),palette(12),palette(21),palette(28),
+		palette(24),palette(29),palette(12),palette( 5),
+		palette(13),palette(22),palette( 6),palette(23),
+		palette(30),palette( 0),palette(31),palette(14)
+	);
+
+	
 	variable pen_mem:std_logic_vector(5 downto 0);
 	
 	constant PEN_MODE_11:std_logic_vector(5 downto 0):="011101";
-	constant PEN_LED_ON:std_logic_vector(5 downto 0):="001100";
-	constant PEN_LED_OFF:std_logic_vector(5 downto 0):="110011";
+	--constant PEN_LED_ON:std_logic_vector(5 downto 0):="001100";
+	--constant PEN_LED_OFF:std_logic_vector(5 downto 0):="110011";
 	constant PEN_NONE:std_logic_vector(5 downto 0):="000000";
 	
 	variable hsync_mem:std_logic;
@@ -246,12 +256,6 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	
 begin
 	if rising_edge(CLK_25MHz) then
-		
-		if palette_action=DO_MODE then
-			MODE_select<=palette_D(1 downto 0);
-		elsif palette_action=DO_COLOR then
-			pen(palette_color)<=palette(conv_integer(palette_D));
-		end if;
 		
 		if MODE_select="00" then
 			NB_PIXEL_PER_OCTET:=2;
@@ -263,13 +267,14 @@ begin
 			NB_PIXEL_PER_OCTET:=2;
 		end if;
 
-		if etat_rgb = DO_READ then
+		cursor_pixel_retard:=cursor_pixel;
+		if etat_rgb_retard = DO_READ then
 			color:=(others=>'0');
 			for i in 2**(MODE_MAX)-1 downto 0 loop
 				if (MODE_select="00" and i<=3)
 				or (MODE_select="01" and i<=1)
 				or (MODE_select="10" and i<=0) then
-					color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel));
+					color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel_retard));
 				end if;
 			end loop;
 			if MODE_select="00" then
@@ -282,28 +287,31 @@ begin
 			else -- MODE 11
 				pen_mem:=PEN_MODE_11;
 			end if;
-		elsif etat_rgb = DO_LED_ON then
-			pen_mem:=PEN_LED_ON;
-		elsif etat_rgb = DO_LED_OFF then
-			pen_mem:=PEN_LED_OFF;
+--		elsif etat_rgb = DO_LED_ON then
+--			pen_mem:=PEN_LED_ON;
+--		elsif etat_rgb = DO_LED_OFF then
+--			pen_mem:=PEN_LED_OFF;
 		else
 			pen_mem:=PEN_NONE;
 		end if;
+		etat_rgb_retard:=etat_rgb;
 		
-		if etat_hsync = DO_HSYNC then
+		if etat_hsync_retard = DO_HSYNC then
 			--hsync<='1' xor nhsync;
 			hsync_mem:='1' xor nhsync;
 		else
 			--hsync<='0' xor nhsync;
 			hsync_mem:='0' xor nhsync;
 		end if;
-		if etat_vsync = DO_VSYNC then
+		etat_hsync_retard:=etat_hsync;
+		if etat_vsync_retard = DO_VSYNC then
 			--vsync<='1' xor nvsync;
 			vsync_mem:='1' xor nvsync;
 		else
 			--vsync<='0' xor nvsync;
 			vsync_mem:='0' xor nvsync;
 		end if;
+		etat_vsync_retard:=etat_vsync;
 
 --puis la palette c'est celle du 800x600... pas du 640x400
 -- puis c'est trop petit cet RAM, à peine de quoi afficher 60 lignes en 33o par palette et 100 lignes en 32*5bit+2bit
@@ -313,7 +321,17 @@ begin
 		
 --		MODE_select<="10"; -- para pruebas
 
+		if palette_action_retard=DO_MODE then
+			MODE_select<=palette_D(1 downto 0);
+		elsif palette_action_retard=DO_COLOR then
+			--WARNING:PhysDesignRules:367 - The signal <XLXI_511/XLXI_476/Mram_pen_RAMD_D1_O>
+			--is incomplete. The signal does not drive any load pins in the design.
 		
+			pen(palette_color_retard):=palette(conv_integer(palette_D(4 downto 0)));
+		end if;
+		palette_action_retard:=palette_action;
+		palette_color_retard:=palette_color;
+
 		
 		if horizontal_counter<HDsp and vertical_counter<VDsp then
 			v:=(vertical_counter+VDecal_negatif)/(VZoom);
@@ -398,17 +416,17 @@ begin
 		
 		
 		
-		if horizontal_counter<8*DEBUG_LEDS_W and vertical_counter<40 then
-			if horizontal_counter = 0 then
-				debug_leds_mem_cursor:=0;
-			elsif horizontal_counter mod DEBUG_LEDS_W = 0 then
-				debug_leds_mem_cursor:=debug_leds_mem_cursor+1;
-			elsif debug_leds_i(debug_leds_mem_cursor) = '1' then
-				etat_rgb:=DO_LED_ON;
-			else
-				etat_rgb:=DO_LED_OFF;
-			end if;
-		end if;
+--		if horizontal_counter<8*DEBUG_LEDS_W and vertical_counter<40 then
+--			if horizontal_counter = 0 then
+--				debug_leds_mem_cursor:=0;
+--			elsif horizontal_counter mod DEBUG_LEDS_W = 0 then
+--				debug_leds_mem_cursor:=debug_leds_mem_cursor+1;
+--			elsif debug_leds_i(debug_leds_mem_cursor) = '1' then
+--				etat_rgb:=DO_LED_ON;
+--			else
+--				etat_rgb:=DO_LED_OFF;
+--			end if;
+--		end if;
 		
 		
 		RED_FF     <=pen_mem(5 downto 4);

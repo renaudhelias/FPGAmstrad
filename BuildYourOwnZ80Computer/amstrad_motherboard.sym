@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-30T4:35:11</timestamp>
+    <timestamp>2017-12-30T14:36:37</timestamp>
     <pin polarity="Input" x="0" y="-736" name="init_A(22:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-544" name="CLK16MHz" />
-    <pin polarity="Input" x="0" y="-448" name="is_ucpm" />
     <pin polarity="Input" x="0" y="-352" name="PS2_CLK" />
     <pin polarity="Input" x="0" y="-256" name="PS2_DATA" />
     <pin polarity="Input" x="0" y="-160" name="RESET_n" />
@@ -29,7 +28,6 @@
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-736" type="pin init_A(22:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-640" type="pin init_W_n" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-544" type="pin CLK16MHz" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-448" type="pin is_ucpm" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-352" type="pin PS2_CLK" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-256" type="pin PS2_DATA" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-160" type="pin RESET_n" />
@@ -58,7 +56,6 @@
         <line x2="0" y1="-736" y2="-736" x1="64" />
         <line x2="0" y1="-640" y2="-640" x1="64" />
         <line x2="0" y1="-544" y2="-544" x1="64" />
-        <line x2="0" y1="-448" y2="-448" x1="64" />
         <line x2="0" y1="-352" y2="-352" x1="64" />
         <line x2="0" y1="-256" y2="-256" x1="64" />
         <line x2="0" y1="-160" y2="-160" x1="64" />

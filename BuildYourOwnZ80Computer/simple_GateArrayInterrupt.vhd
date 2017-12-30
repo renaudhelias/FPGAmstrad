@@ -23,8 +23,7 @@ entity simple_GateArrayInterrupt is
   VRAM_HDsp:integer:=800/16; -- des mots de 16bit, contenant plus ou moins de pixels... pensons en référence mode 2, du 800x600 mode 2
   VRAM_VDsp:integer:=600/2;
   VRAM_Hoffset:integer:=63-46-5; -- 63*16-46*16
-  VRAM_Voffset:integer:=38*8-30*8-4*8+4  +0; -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
-  BUG_Voffset:integer:=0 -- a CRTC original bug ?
+  VRAM_Voffset:integer:=38*8-30*8-4*8+4  +0 -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
 	);
     Port ( CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
            IO_REQ_W : in  STD_LOGIC;
@@ -95,7 +94,7 @@ architecture Behavioral of simple_GateArrayInterrupt is
 	signal crtc_R:STD_LOGIC:='0'; -- variable commune local
 
 	type pen_type is array(15 downto 0) of integer range 0 to 31;
-	signal pen:pen_type:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
+	signal pen:pen_type; --:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
 	
 	--signal crtc_A_i:STD_LOGIC_VECTOR (15 downto 0); -- test A/D
 begin
@@ -150,6 +149,7 @@ ctrcConfig_process:process(CLK4MHz) is
 	variable ink:STD_LOGIC_VECTOR(3 downto 0);
 	variable border_ink:STD_LOGIC;
 	variable ink_color:STD_LOGIC_VECTOR(4 downto 0);
+	variable pen_mem:pen_type;--:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
 begin
 	if rising_edge(CLK4MHz) then
 		
@@ -162,11 +162,18 @@ begin
 				else
 					ink_color:=D(4 downto 0);
 					if border_ink='0' then
-						pen(conv_integer(ink))<=conv_integer(ink_color);
+						pen_mem(conv_integer(ink)):=conv_integer(ink_color);
+						pen<=pen_mem;
 					end if;
 				end if;
 			end if;
 		end if;
+		
+		-- Test qui réduit le nombre de caractères affichés en largeur :
+		--
+		-- OUT &BC00,1
+		-- OUT &BD00,20
+		-- OUT &BD00,40
 	
 		--RVtotAdjust<="00" & potards(2 downto 0);
 		if (IO_REQ_W or IO_REQ_R)='1' and A15_A14_A9_A8(2)='0' then
@@ -276,13 +283,15 @@ simple_GateArray_process : process(CLK4MHz) is
 		variable vram_horizontal_counter:integer:=0;
 		
 		variable palette_A_mem:std_logic_vector(13 downto 0):=(others=>'0');
-		variable last_disp:std_logic:='0';
+		--variable last_disp:std_logic:='0';
+		variable disp_begin_mem:std_logic:='0';
 		variable palette_horizontal_counter:integer range 0 to 256-1:=0; --640/16
-		variable palette_color:integer range 0 to 32-1;
+		variable palette_color:integer range 0 to 16-1;
+		variable palette_D_tictac_mem:std_logic_vector(7 downto 0);
 		
-		variable line_displayed:boolean:=false;
-		variable in_800x600:boolean:=false;
-		
+		--variable line_displayed:boolean:=false;
+		--variable in_800x600:boolean:=false;
+		constant IS_H_MIDDLE :integer:=VRAM_HDsp/2-8;
 	begin
 		--if rising_edge(CLK4MHz) then
 		if falling_edge(CLK4MHz) then
@@ -310,7 +319,7 @@ hsync<='0';
 				--http://www.phenixinformatique.com/modules/newbb/viewtopic.php?topic_id=4316&forum=9
 				--Dans les spécifications originale du CRTC, il n'y a aucun controle sur la durée du VSync, de plus, les bits 4 à 7 du R3 sont inutilisés. Certains constructeurs ont donc "récupéré" ces bits libres pour y coller leurs propres "features", pour la plupart liées au VSync (un peu comme le mode entrelacé du R8, d'ou les incompatiblités d'un type de CRTC à l'autre).
 				--PPI read CRTC.isVSYnc bool
-				if vertical_counter+BUG_Voffset>=RVsyncpos*(RRmax+1) and vertical_counter+BUG_Voffset<RVsyncpos*(RRmax+1)+RVwidth then
+				if vertical_counter>=RVsyncpos*(RRmax+1) and vertical_counter<RVsyncpos*(RRmax+1)+RVwidth then
 					etat_vsync:=DO_VSYNC;
 crtc_VSYNC<='1'; -- c'est bien 1 ici car il faut qu'un interrupt pendant le vsync=1 sinon border va trop vite
 vsync<='1';
@@ -360,42 +369,60 @@ if etat_hsync=DO_HSYNC and last_etat_hsync=DO_NOTHING then
 	end if;
 	vram_horizontal_offset_counter:=0;
 	vram_horizontal_counter:=0;
-	in_800x600:=false;
-	line_displayed:=false;
+	--in_800x600:=false;
+	--line_displayed:=false;
 end if;
 
 -- là on scan du 800x600 selon VSYNC et HSYNC, donc on peut écrire du border...
 if vram_horizontal_offset_counter>VRAM_Hoffset then
 	if vram_horizontal_counter<VRAM_HDsp then
 		if vram_vertical_offset_counter>VRAM_Voffset and vram_vertical_counter<VRAM_VDsp then
-			in_800x600:=true;
-			if disp='0' then
-				--border_R<='1';
-			else
-				-- on nourri la palette
-				line_displayed:=true; -- oui mais non
-				if last_disp='0' then
+			--in_800x600:=true;
+			
+			if palette_horizontal_counter<1+16+1 then
+					palette_horizontal_counter:=palette_horizontal_counter+1;
+			end if;
+			if vram_horizontal_counter=IS_H_MIDDLE  then
+				if disp='1' then
 					palette_horizontal_counter:=0;
 				else
-					palette_horizontal_counter:=palette_horizontal_counter+1;
+					palette_A_mem:=palette_A_mem+16+1;
 				end if;
+			end if;
+
+			
+			--if palette_horizontal_counter<1+16+1 then
+				-- on nourri la palette
+				--line_displayed:=true; -- oui mais non
+				--if last_disp='0' then
+				--if vram_horizontal_counter=VRAM_HDsp/2-8 then
+				--	palette_horizontal_counter:=0;
+				--else
+				--	palette_horizontal_counter:=palette_horizontal_counter+1;
+				--end if;
 				if palette_horizontal_counter<1 then
 					palette_A<=palette_A_mem(12 downto 0);
-					palette_D<="000000" & MODE_select;
+					palette_D_tictac_mem:="000000" & MODE_select;
+					palette_D<=palette_D_tictac_mem;
 					if palette_A_mem(13)='0' then
 						palette_W<='1';
 					end if;
 					palette_A_mem:=palette_A_mem+1;
 				elsif palette_horizontal_counter<1+16 then
 					palette_A<=palette_A_mem(12 downto 0);
-					palette_color:=palette_horizontal_counter-1;
-					palette_D<=conv_std_logic_vector(pen(palette_color),8);
+					if palette_horizontal_counter = 1 then
+						palette_color:=0;
+					else
+						palette_color:=palette_color+1;
+					end if;
+					palette_D_tictac_mem:=conv_std_logic_vector(pen(palette_color),8);
+					palette_D<=palette_D_tictac_mem;
 					if palette_A_mem(13)='0' then
 						palette_W<='1';
 					end if;
 					palette_A_mem:=palette_A_mem+1;
 				end if;
-			end if;
+			--end if;
 			vram_A_mem:=conv_std_logic_vector(vram_vertical_counter*VRAM_HDsp+vram_horizontal_counter,vram_A_mem'length);
 		else
 			disp:='0';
@@ -404,18 +431,13 @@ if vram_horizontal_offset_counter>VRAM_Hoffset then
 	elsif vram_horizontal_counter=VRAM_HDsp then
 		vram_horizontal_counter:=vram_horizontal_counter+1;
 		disp:='0';
-		if in_800x600 and not (line_displayed) then
-			palette_A_mem:=palette_A_mem+16+1;
-		end if;
-	else
-		disp:='0';
 	end if;
 else
 	vram_horizontal_offset_counter:=vram_horizontal_offset_counter+1;
 	disp:='0';
 end if;
 
-last_disp:=disp;
+--last_disp:=disp;
 last_etat_vsync:=etat_vsync;
 last_etat_hsync:=etat_hsync;
 

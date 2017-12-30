@@ -18,13 +18,10 @@
         <signal name="XLXN_61" />
         <signal name="SCLK" />
         <signal name="ram_W_n" />
-        <signal name="LEDS(7:0)" />
         <signal name="SS_n" />
         <signal name="XLXN_76" />
         <signal name="CLK4MHz" />
-        <signal name="is_ucpm" />
         <signal name="FILE_LOADED" />
-        <signal name="zero,zero,zero,zero,zero,zero,zero,zero" />
         <signal name="key_reset" />
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
@@ -32,14 +29,12 @@
         <port polarity="Output" name="ram_A(22:0)" />
         <port polarity="Output" name="SCLK" />
         <port polarity="Output" name="ram_W_n" />
-        <port polarity="Output" name="LEDS(7:0)" />
         <port polarity="Output" name="SS_n" />
         <port polarity="Input" name="CLK4MHz" />
-        <port polarity="Output" name="is_ucpm" />
         <port polarity="Output" name="FILE_LOADED" />
         <port polarity="Input" name="key_reset" />
         <blockdef name="SDRAM_SPIMASTER">
-            <timestamp>2017-12-29T21:47:55</timestamp>
+            <timestamp>2017-12-30T16:55:6</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
             <line x2="0" y1="-160" y2="-160" x1="64" />
@@ -51,8 +46,6 @@
             <rect width="64" x="320" y="-44" height="24" />
             <line x2="384" y1="-32" y2="-32" x1="320" />
             <line x2="384" y1="-96" y2="-96" x1="320" />
-            <rect width="64" x="0" y="20" height="24" />
-            <line x2="0" y1="32" y2="32" x1="64" />
         </blockdef>
         <blockdef name="inv">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -64,14 +57,11 @@
             <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2017-12-29T22:27:20</timestamp>
-            <line x2="432" y1="480" y2="480" x1="368" />
+            <timestamp>2017-12-30T14:33:36</timestamp>
             <line x2="0" y1="224" y2="224" x1="64" />
             <line x2="432" y1="224" y2="224" x1="368" />
             <line x2="0" y1="96" y2="96" x1="64" />
             <line x2="432" y1="96" y2="96" x1="368" />
-            <rect width="64" x="368" y="20" height="24" />
-            <line x2="432" y1="32" y2="32" x1="368" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <rect width="64" x="0" y="-76" height="24" />
             <line x2="0" y1="-64" y2="-64" x1="64" />
@@ -82,7 +72,7 @@
             <line x2="432" y1="-96" y2="-96" x1="368" />
             <rect width="64" x="368" y="-44" height="24" />
             <line x2="432" y1="-32" y2="-32" x1="368" />
-            <rect width="304" x="64" y="-384" height="888" />
+            <rect width="304" x="64" y="-384" height="628" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
         </blockdef>
         <blockdef name="vcc">
@@ -96,7 +86,6 @@
             <blockpin signalname="MISO" name="MISO" />
             <blockpin signalname="XLXN_61" name="spi_R" />
             <blockpin signalname="XLXN_55(31:0)" name="address(31:0)" />
-            <blockpin signalname="zero,zero,zero,zero,zero,zero,zero,zero" name="data_in(7:0)" />
             <blockpin signalname="MOSI" name="MOSI" />
             <blockpin signalname="XLXN_57" name="spi_Rdone" />
             <blockpin signalname="INIT_DONE" name="spi_init_done" />
@@ -112,10 +101,8 @@
             <blockpin signalname="ram_W" name="ram_W" />
             <blockpin signalname="XLXN_61" name="spi_do" />
             <blockpin signalname="FILE_LOADED" name="load_init_done" />
-            <blockpin signalname="is_ucpm" name="is_ucpm" />
             <blockpin signalname="ram_A(22:0)" name="ram_A(22:0)" />
             <blockpin signalname="XLXN_55(31:0)" name="spi_A(31:0)" />
-            <blockpin signalname="LEDS(7:0)" name="leds(7:0)" />
         </block>
         <block symbolname="inv" name="XLXI_26">
             <blockpin signalname="ram_W" name="I" />
@@ -176,9 +163,6 @@
             <wire x2="2880" y1="496" y2="496" x1="2864" />
             <wire x2="2880" y1="448" y2="496" x1="2880" />
         </branch>
-        <branch name="LEDS(7:0)">
-            <wire x2="2736" y1="800" y2="800" x1="2592" />
-        </branch>
         <instance x="1968" y="1280" name="XLXI_40" orien="R0" />
         <branch name="SS_n">
             <wire x2="2192" y1="1248" y2="1312" x1="2192" />
@@ -196,7 +180,6 @@
         <iomarker fontsize="28" x="2704" y="608" name="ram_A(22:0)" orien="R0" />
         <iomarker fontsize="28" x="656" y="320" name="SCLK" orien="R180" />
         <iomarker fontsize="28" x="2880" y="448" name="ram_W_n" orien="R270" />
-        <iomarker fontsize="28" x="2736" y="800" name="LEDS(7:0)" orien="R0" />
         <iomarker fontsize="28" x="2192" y="1312" name="SS_n" orien="R90" />
         <branch name="CLK4MHz">
             <wire x2="400" y1="640" y2="640" x1="208" />
@@ -209,17 +192,9 @@
             <wire x2="2160" y1="416" y2="416" x1="1328" />
             <wire x2="1328" y1="416" y2="640" x1="1328" />
         </branch>
-        <branch name="is_ucpm">
-            <wire x2="2752" y1="1248" y2="1248" x1="2592" />
-        </branch>
-        <iomarker fontsize="28" x="2752" y="1248" name="is_ucpm" orien="R0" />
         <branch name="FILE_LOADED">
             <wire x2="2608" y1="992" y2="992" x1="2592" />
             <wire x2="2752" y1="992" y2="992" x1="2608" />
-        </branch>
-        <branch name="zero,zero,zero,zero,zero,zero,zero,zero">
-            <attrtext style="alignment:SOFT-RIGHT" attrname="Name" x="528" y="1216" type="branch" />
-            <wire x2="672" y1="1216" y2="1216" x1="528" />
         </branch>
         <branch name="XLXN_52(7:0)">
             <wire x2="1856" y1="1152" y2="1152" x1="1056" />

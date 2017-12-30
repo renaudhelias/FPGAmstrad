@@ -11,6 +11,8 @@
          <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_474 - VRAM32Ko_Amstrad</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_474 - VRAM32Ko_Amstrad/XLXI_6 - VRAM_Amstrad - Behavioral</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_475 - PALETTE_RAM - Behavioral</ClosedNode>
+         <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard/AmstradT80 - T80se - rtl</ClosedNode>
+         <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard/XLXI_494 - joykeyb</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_462 - bootloader_sd</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard</ClosedNode>
@@ -50,12 +52,14 @@
       <ClosedNodes>
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
-      <SelectedItems/>
-      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <SelectedItems>
+         <SelectedItem>ctrex_gatearray.vhd</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >3</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000273000000040101000100000000000000000000000064ffffffff000000810000000000000004000000d20000000100000000000000d70000000100000000000000660000000100000000000000640000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem>AmstradRAMDSK.vhd</CurrentItem>
+      <CurrentItem>data_off.vhd</CurrentItem>
    </ItemView>
    <ItemView guiview="Library" >
       <ClosedNodes>
@@ -103,13 +107,13 @@
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem/>
+         <SelectedItem></SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000000000000000001af000000010000000100000000000000000000000064ffffffff000000810000000000000001000001af0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem/>
+      <CurrentItem></CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_XCO" guiview="Process" >
       <ClosedNodes>

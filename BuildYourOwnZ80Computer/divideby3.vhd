@@ -29,45 +29,26 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity divideby3_bastard is
+entity divideby3 is
     Port ( CLK50MHz : in  STD_LOGIC;
-           CLK25MHz : out  STD_LOGIC;
-           CLK16MHz : out  STD_LOGIC
---           CLK8MHz : out  STD_LOGIC;
---           CLK4MHz : out  STD_LOGIC
+           CLK25MHz : out  STD_LOGIC; -- divide by 2
+           CLK16MHz : out  STD_LOGIC -- divide by 3
 			  );
-end divideby3_bastard;
+end divideby3;
 
-architecture Behavioral of divideby3_bastard is
+architecture Behavioral of divideby3 is
 
 begin
 	process(CLK50MHz) is
-	--variable CLK25MHz_mem:std_logic:='0';
 	variable counter3 : integer range 0 to 2:=0;
-	variable counter2_1 : std_logic:='0';
-	variable counter2_2 : std_logic:='0';
 	begin
 		if rising_edge(CLK50MHz) then
-			--CLK25MHz_mem:=not(CLK25MHz_mem);
-			--CLK25MHz<=CLK25MHz_mem;
 			counter3:=counter3+1;
 			if counter3=0 then
-				CLK16MHz<='1';
-				counter2_1:=not(counter2_1);
-			else
 				CLK16MHz<='0';
+			else
+				CLK16MHz<='1';
 			end if;
---			if counter2_1='0' then
---				CLK8MHz<='1';
---				counter2_2:=not(counter2_2);
---			else
---				CLK8MHz<='0';
---			end if;
---			if counter2_2='0' then
---				CLK4MHz<='1';
---			else
---				CLK4MHz<='0';
---			end if;
 		end if;
 	end process;
 	

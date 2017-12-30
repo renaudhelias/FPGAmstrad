@@ -19,7 +19,7 @@ entity SDRAM_SPIMASTER is
 			);
     Port (
            address : in STD_LOGIC_VECTOR (31 downto 0); -- 32bit FAT32
-			  data_in : in STD_LOGIC_VECTOR(7 downto 0):=(others=>'0');
+			  --data_in : in STD_LOGIC_VECTOR(7 downto 0):=(others=>'0');
 			  data_out : out STD_LOGIC_VECTOR(7 downto 0);
            SCLK : in  STD_LOGIC; -- 25MHz
            MOSI : out  STD_LOGIC;

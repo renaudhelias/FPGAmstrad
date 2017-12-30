@@ -20,7 +20,6 @@
         <signal name="VSYNC" />
         <signal name="XLXN_693(14:0)" />
         <signal name="XLXN_694(12:0)" />
-        <signal name="DEBUG_LEDS(7:0)" />
         <signal name="RED3(2:0)" />
         <signal name="GREEN3(2:0)" />
         <signal name="BLUE3(2:0)" />
@@ -34,7 +33,6 @@
         <port polarity="Input" name="palette_W" />
         <port polarity="Output" name="HSYNC" />
         <port polarity="Output" name="VSYNC" />
-        <port polarity="Input" name="DEBUG_LEDS(7:0)" />
         <port polarity="Output" name="RED3(2:0)" />
         <port polarity="Output" name="GREEN3(2:0)" />
         <port polarity="Output" name="BLUE3(2:0)" />
@@ -69,7 +67,7 @@
             <line x2="384" y1="-352" y2="-352" x1="320" />
         </blockdef>
         <blockdef name="aZRaEL_vram2vgaAmstradMiaow">
-            <timestamp>2017-12-27T22:11:49</timestamp>
+            <timestamp>2017-12-30T14:25:33</timestamp>
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <rect width="64" x="0" y="-236" height="24" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -81,8 +79,6 @@
             <line x2="512" y1="-288" y2="-288" x1="448" />
             <rect width="64" x="448" y="-236" height="24" />
             <line x2="512" y1="-224" y2="-224" x1="448" />
-            <rect width="64" x="0" y="-300" height="24" />
-            <line x2="0" y1="-288" y2="-288" x1="64" />
             <rect width="64" x="448" y="-172" height="24" />
             <line x2="512" y1="-160" y2="-160" x1="448" />
             <rect width="64" x="448" y="-108" height="24" />
@@ -113,7 +109,6 @@
             <blockpin signalname="CLK25MHz" name="CLK_25MHz" />
             <blockpin signalname="XLXN_340(7:0)" name="DATA(7:0)" />
             <blockpin signalname="XLXN_684(7:0)" name="PALETTE_D(7:0)" />
-            <blockpin signalname="DEBUG_LEDS(7:0)" name="debug_leds(7:0)" />
             <blockpin signalname="VSYNC" name="VSYNC" />
             <blockpin signalname="HSYNC" name="HSYNC" />
             <blockpin signalname="XLXN_693(14:0)" name="ADDRESS(14:0)" />
@@ -213,10 +208,6 @@
             <wire x2="320" y1="672" y2="672" x1="224" />
             <wire x2="320" y1="672" y2="880" x1="320" />
         </branch>
-        <branch name="DEBUG_LEDS(7:0)">
-            <wire x2="1472" y1="752" y2="752" x1="1440" />
-        </branch>
-        <iomarker fontsize="28" x="1440" y="752" name="DEBUG_LEDS(7:0)" orien="R180" />
         <branch name="RED3(2:0)">
             <wire x2="2240" y1="880" y2="880" x1="1984" />
         </branch>

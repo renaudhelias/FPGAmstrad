@@ -9,7 +9,7 @@ entity SDRAM_FAT32_LOADER is
 	Generic (
 		-- le SPI mode ne fonctionne pas avec 2048 block, c'est bizarre
 		-- windob ne formate pas en 512 block
-		ROM_COUNT:integer:=4; -- attention ya du code en dur : "if files_loaded="11111" then"
+		ROM_COUNT:integer:=3; -- attention ya du code en dur : "if files_loaded="11111" then"
 		TEST_DSK_OFF:std_logic:='0'; -- si 1 alors ne cherche pas de disquette, si 0 alors cherche une disquette
 		--BLOCK_SIZE:integer:=4096 -- bytes
 		BLOCK_SIZE_MAXIMUM:integer:=65536 --4096; -- bytes
@@ -26,14 +26,14 @@ entity SDRAM_FAT32_LOADER is
            spi_do : out  STD_LOGIC;
            spi_done : in  STD_LOGIC;
 			  spi_init_done : in STD_LOGIC;
-			  leds:out STD_LOGIC_VECTOR(7 downto 0);
+			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
-			  is_ucpm:out std_logic:='0';
+			  --is_ucpm:out std_logic:='0';
 			  key_reset:in std_logic
 			  );
-			  	attribute keep : string;
+			  	--attribute keep : string;
 				--attribute keep of file_select : signal is "TRUE";
-				attribute keep of leds : signal is "TRUE";
+				--attribute keep of leds : signal is "TRUE";
 
 			  
 end SDRAM_FAT32_LOADER;
@@ -50,8 +50,8 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 --		x"414D53444F532020524F4D"); -- AMSDOS.ROM
 		(x"4F53363132382020524F4D", -- OS6128.ROM
 		 x"4241534943312D31524F4D", -- BASIC1-1.ROM
-		x"414D53444F532020524F4D", -- AMSDOS.ROM
-		x"4D4158414D202020524F4D" -- MAXAM.ROM
+		x"414D53444F532020524F4D" -- AMSDOS.ROM
+		--x"4D4158414D202020524F4D" -- MAXAM.ROM
 		--x"53435245454E2020524F4D"  --SCREEN.ROM
 		); 
 	subtype address_type is std_logic_vector(31 downto 0);
@@ -59,8 +59,8 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 	constant file_rom_address: file_rom_address_type:=
 		(x"00000000",
 		x"00004000",
-		x"00008000",
-		x"0000C000"
+		x"00008000"
+		--x"0000C000"
 		--x"00" & "00000010" & "11000000" & x"00" -- &C000
 		);
 	
@@ -517,7 +517,7 @@ end function;
 		
 	--files_loaded(0) : dsk loaded
 	--files_loaded(1:3) : rom 1 2 3 loaded
-	variable files_loaded:std_logic_vector((1+ROM_COUNT)-1 downto 0):="0000" & TEST_DSK_OFF; -- méchant doute(TEST_DSK_OFF,others=>'0');
+	variable files_loaded:std_logic_vector((1+ROM_COUNT)-1 downto 0):="000" & TEST_DSK_OFF; -- méchant doute(TEST_DSK_OFF,others=>'0');
 
 	variable file_select:std_logic_vector(7 downto 0):=(others=>'0');
 		
@@ -733,7 +733,7 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 						--=======================
 						switch_transmit_gripsou<=SWITCH_GRIPSOU;
 						if files_loaded(0)='1' then
-							if files_loaded="11111" then
+							if files_loaded="1111" then
 								--load_done:='1';
 								switch_transmit_gripsou<=SWITCH_NONE;
 								step_var:=26; -- load done
@@ -758,7 +758,7 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 								step_var:=0;
 								dsk_number:=(others=>'0');
 								load_done:='0';
-								files_loaded:="1111" & TEST_DSK_OFF; -- ne re-reload pas les ROMs
+								files_loaded:="111" & TEST_DSK_OFF; -- ne re-reload pas les ROMs
 								file_select:=(others=>'0'); -- remet la première disquette
 							end if;
 						else
@@ -819,7 +819,7 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 					when 18=>
 						-- that's all folk
 --						step_var:=8; -- next DIRStruct
-if files_loaded="11111" then
+if files_loaded="1111" then
 	--load_done:='1';
 	switch_transmit_gripsou<=SWITCH_NONE;
 	step_var:=26; -- load done
@@ -895,7 +895,7 @@ end if;
 						step_var:=0;
 						dsk_number:=(others=>'0');
 						load_done:='0';
-						files_loaded:="0000" & TEST_DSK_OFF;
+						files_loaded:="000" & TEST_DSK_OFF;
 						file_select:=file_select+1;
 					end if;
 					
@@ -948,7 +948,7 @@ end if;
 	begin
 		--is_ucpm<=ucpm;
 		if falling_edge(CLK) then
-			leds<=conv_std_logic_vector(gripsou_step,8);
+			--leds<=conv_std_logic_vector(gripsou_step,8);
 			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
 			if switch_transmit_gripsou/=SWITCH_GRIPSOU then
@@ -1105,11 +1105,11 @@ end if;
 						--else
 							gripsou_step:=16;
 						--end if;
-						if data_mem>=x"C1" then
-							is_ucpm<='0';
-						else
-							is_ucpm<='1';
-						end if;
+--						if data_mem>=x"C1" then
+--							is_ucpm<='0';
+--						else
+--							is_ucpm<='1';
+--						end if;
 					when 16=>
 						-- N
 						sectSize:=SECTOR_SIZE; --(conv_integer(data_mem)); -- must be 2 then 512

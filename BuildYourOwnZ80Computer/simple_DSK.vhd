@@ -22,9 +22,9 @@ entity simple_DSK is
            dsk_W : out  STD_LOGIC;
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  M1_n:in STD_LOGIC;
-			  dsk_transmit : out STD_LOGIC; -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
+			  dsk_transmit : out STD_LOGIC -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
 			  --indexing: out STD_LOGIC -- z80 must wait (sur le reset du z80)
-			  is_ucpm : in std_logic
+			  --is_ucpm : in std_logic
 			  --indexing_done:out std_logic
 			  );
 end simple_DSK;
@@ -87,16 +87,16 @@ cortex:process(CLK8(0),reset)
 	-- track 0 ou +
 	-- sector 0 ou +
 	-- return [sectTrack,sectSize,sectId,sectSize]
-	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1;ucpm:std_logic) return chrn_type is
+	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1) return chrn_type is
 		variable chrn:chrn_type;
 	begin
 		--return (track_id(track),x"00",sector_ids_of_tracks(track,sector),sector_sizes_of_tracks(track,sector));
 -- "C:/Users/freemac/BuildYourOwnZ80Computer/simple_DSK.vhd" line 170: Index value(s) does not match array range, simulation mismatch.
-		if ucpm='1' then
-			chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"41",x"02");
-		else
+		--if ucpm='1' then
+		--	chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"41",x"02");
+		--else
 			chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"C1",x"02");
-		end if;
+		--end if;
 		return chrn;
 	end getCHRN;
 	-- retourne le pointeur dans memory
@@ -193,7 +193,7 @@ if do_update then
 						end if;
 						if etat=ETAT_READ then
 							--dsk_transmit<='1';
-							chrn:=getCHRN(current_track,current_sector,is_ucpm);
+							chrn:=getCHRN(current_track,current_sector);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -206,7 +206,7 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector,is_ucpm);
+								chrn:=getCHRN(current_track,current_sector);
 							end if;
 							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
@@ -230,7 +230,7 @@ if do_update then
 							exec_restant_write:=exec_restant_write-1;
 						end if;
 						if etat=ETAT_WRITE then
-							chrn:=getCHRN(current_track,current_sector,is_ucpm);
+							chrn:=getCHRN(current_track,current_sector);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -243,7 +243,7 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector,is_ucpm);
+								chrn:=getCHRN(current_track,current_sector);
 							end if;
 							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
@@ -342,7 +342,7 @@ if do_update then
 								results(0):=conv_std_logic_vector(current_track,8); -- PCN : Present Cylinder Number
 							when x"0a" => -- read id
 								command_restant:=1; -- select drive/side : osef
-								chrn:=getCHRN(current_track,current_sector,is_ucpm);
+								chrn:=getCHRN(current_track,current_sector);
 								result_restant:=7;
 								phase<=PHASE_COMMAND;
 								results(6):=ST0_SEEK_END;

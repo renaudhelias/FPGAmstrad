@@ -60,7 +60,6 @@
         <signal name="XLXN_498" />
         <signal name="XLXN_499" />
         <signal name="XLXN_551" />
-        <signal name="is_ucpm" />
         <signal name="XLXN_86" />
         <signal name="XLXN_38" />
         <signal name="PS2_CLK" />
@@ -112,7 +111,6 @@
         <port polarity="Input" name="init_W_n" />
         <port polarity="Input" name="CLK16MHz" />
         <port polarity="Output" name="audio_BC" />
-        <port polarity="Input" name="is_ucpm" />
         <port polarity="Input" name="PS2_CLK" />
         <port polarity="Input" name="PS2_DATA" />
         <port polarity="Output" name="crtc_A(15:0)" />
@@ -334,7 +332,7 @@
             <rect width="288" x="64" y="-256" height="944" />
         </blockdef>
         <blockdef name="simple_DSK">
-            <timestamp>2017-12-27T22:40:53</timestamp>
+            <timestamp>2017-12-30T14:36:11</timestamp>
             <line x2="0" y1="96" y2="96" x1="64" />
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
@@ -347,7 +345,6 @@
             <line x2="480" y1="-480" y2="-480" x1="416" />
             <rect width="64" x="416" y="-236" height="24" />
             <line x2="480" y1="-224" y2="-224" x1="416" />
-            <line x2="0" y1="32" y2="32" x1="64" />
             <line x2="0" y1="-160" y2="-160" x1="64" />
             <rect width="64" x="0" y="-172" height="24" />
             <rect width="64" x="416" y="-172" height="24" />
@@ -592,15 +589,14 @@
             <blockpin signalname="IO_RD" name="IO_RD" />
             <blockpin signalname="IO_WR" name="IO_WR" />
             <blockpin signalname="XLXN_845" name="M1_n" />
-            <blockpin signalname="is_ucpm" name="is_ucpm" />
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="A(10),A(8),A(7)" name="A10_A8_A7(2:0)" />
             <blockpin signalname="D(7:0)" name="D_command(7:0)" />
             <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="dsk_D(7:0)" />
             <blockpin signalname="XLXN_849" name="dsk_W" />
-            <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
             <blockpin signalname="XLXN_621" name="dsk_transmit" />
+            <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
         </block>
         <block symbolname="inv" name="XLXI_332">
             <blockpin signalname="XLXN_835" name="I" />
@@ -767,6 +763,9 @@
             <wire x2="3264" y1="304" y2="544" x1="3264" />
             <wire x2="3472" y1="544" y2="544" x1="3264" />
             <wire x2="2480" y1="304" y2="480" x1="2480" />
+            <wire x2="4464" y1="176" y2="176" x1="3264" />
+            <wire x2="4464" y1="176" y2="1088" x1="4464" />
+            <wire x2="3264" y1="176" y2="304" x1="3264" />
         </branch>
         <branch name="XLXN_118">
             <wire x2="2000" y1="1696" y2="1696" x1="1952" />
@@ -1026,9 +1025,6 @@
         <branch name="XLXN_499">
             <wire x2="6000" y1="5024" y2="5024" x1="5888" />
         </branch>
-        <branch name="is_ucpm">
-            <wire x2="5824" y1="3184" y2="3184" x1="5760" />
-        </branch>
         <branch name="XLXN_86">
             <wire x2="1744" y1="2848" y2="2848" x1="1664" />
         </branch>
@@ -1121,7 +1117,6 @@
         <iomarker fontsize="28" x="6496" y="4240" name="audio_BC" orien="R0" />
         <iomarker fontsize="28" x="2928" y="4896" name="PS2_CLK" orien="R180" />
         <iomarker fontsize="28" x="2944" y="4960" name="PS2_DATA" orien="R180" />
-        <iomarker fontsize="28" x="5760" y="3184" name="is_ucpm" orien="R180" />
         <branch name="zero">
             <attrtext style="alignment:SOFT-VLEFT" attrname="Name" x="1648" y="5072" type="branch" />
             <wire x2="1648" y1="5072" y2="5152" x1="1648" />
@@ -1275,8 +1270,9 @@
             <wire x2="5536" y1="960" y2="2528" x1="5536" />
         </branch>
         <branch name="A(15),A(14),A(9),A(8)">
-            <attrtext style="alignment:SOFT-RIGHT" attrname="Name" x="4768" y="1088" type="branch" />
-            <wire x2="5072" y1="1088" y2="1088" x1="4768" />
+            <attrtext style="alignment:SOFT-BCENTER" attrname="Name" x="4656" y="1088" type="branch" />
+            <wire x2="4656" y1="1088" y2="1088" x1="4560" />
+            <wire x2="5072" y1="1088" y2="1088" x1="4656" />
         </branch>
         <branch name="D(7:0)">
             <attrtext style="alignment:SOFT-VLEFT" attrname="Name" x="1856" y="3184" type="branch" />
@@ -1478,5 +1474,6 @@
             <wire x2="3968" y1="4944" y2="4944" x1="3936" />
         </branch>
         <iomarker fontsize="28" x="3968" y="4944" name="key_reset" orien="R0" />
+        <bustap x2="4560" y1="1088" y2="1088" x1="4464" />
     </sheet>
 </drawing>
