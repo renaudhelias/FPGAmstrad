@@ -290,8 +290,8 @@ simple_GateArray_process : process(CLK4MHz) is
 		variable palette_D_tictac_mem:std_logic_vector(7 downto 0);
 		
 		--variable line_displayed:boolean:=false;
-		--variable in_800x600:boolean:=false;
-		constant IS_H_MIDDLE :integer:=VRAM_HDsp/2-8;
+		variable in_800x600:boolean:=false;
+		constant IS_H_MIDDLE :integer:=VRAM_HDsp/2;
 	begin
 		--if rising_edge(CLK4MHz) then
 		if falling_edge(CLK4MHz) then
@@ -377,52 +377,7 @@ end if;
 if vram_horizontal_offset_counter>VRAM_Hoffset then
 	if vram_horizontal_counter<VRAM_HDsp then
 		if vram_vertical_offset_counter>VRAM_Voffset and vram_vertical_counter<VRAM_VDsp then
-			--in_800x600:=true;
-			
-			if palette_horizontal_counter<1+16+1 then
-					palette_horizontal_counter:=palette_horizontal_counter+1;
-			end if;
-			if vram_horizontal_counter=IS_H_MIDDLE  then
-				if disp='1' then
-					palette_horizontal_counter:=0;
-				else
-					palette_A_mem:=palette_A_mem+16+1;
-				end if;
-			end if;
-
-			
-			--if palette_horizontal_counter<1+16+1 then
-				-- on nourri la palette
-				--line_displayed:=true; -- oui mais non
-				--if last_disp='0' then
-				--if vram_horizontal_counter=VRAM_HDsp/2-8 then
-				--	palette_horizontal_counter:=0;
-				--else
-				--	palette_horizontal_counter:=palette_horizontal_counter+1;
-				--end if;
-				if palette_horizontal_counter<1 then
-					palette_A<=palette_A_mem(12 downto 0);
-					palette_D_tictac_mem:="000000" & MODE_select;
-					palette_D<=palette_D_tictac_mem;
-					if palette_A_mem(13)='0' then
-						palette_W<='1';
-					end if;
-					palette_A_mem:=palette_A_mem+1;
-				elsif palette_horizontal_counter<1+16 then
-					palette_A<=palette_A_mem(12 downto 0);
-					if palette_horizontal_counter = 1 then
-						palette_color:=0;
-					else
-						palette_color:=palette_color+1;
-					end if;
-					palette_D_tictac_mem:=conv_std_logic_vector(pen(palette_color),8);
-					palette_D<=palette_D_tictac_mem;
-					if palette_A_mem(13)='0' then
-						palette_W<='1';
-					end if;
-					palette_A_mem:=palette_A_mem+1;
-				end if;
-			--end if;
+			in_800x600:=true;
 			vram_A_mem:=conv_std_logic_vector(vram_vertical_counter*VRAM_HDsp+vram_horizontal_counter,vram_A_mem'length);
 		else
 			disp:='0';
@@ -482,6 +437,64 @@ last_etat_hsync:=etat_hsync;
 					crtc_W<='1';
 				end if;
 			end case;
+			
+			
+			
+			
+-- là on scan du 800x600 selon VSYNC et HSYNC, donc on peut écrire du border...
+if in_800x600 then
+			
+			if palette_horizontal_counter<1+16+1 then
+					palette_horizontal_counter:=palette_horizontal_counter+1;
+			end if;
+			if vram_horizontal_counter=IS_H_MIDDLE and compteur1MHz=0 then
+				if disp='1' then
+					palette_horizontal_counter:=0;
+				else
+					palette_A_mem:=palette_A_mem+16+1;
+				end if;
+			end if;
+
+			
+			--if palette_horizontal_counter<1+16+1 then
+				-- on nourri la palette
+				--line_displayed:=true; -- oui mais non
+				--if last_disp='0' then
+				--if vram_horizontal_counter=VRAM_HDsp/2-8 then
+				--	palette_horizontal_counter:=0;
+				--else
+				--	palette_horizontal_counter:=palette_horizontal_counter+1;
+				--end if;
+				if palette_horizontal_counter<1 then
+					palette_A<=palette_A_mem(12 downto 0);
+					palette_D_tictac_mem:="000000" & MODE_select;
+					palette_D<=palette_D_tictac_mem;
+					if palette_A_mem(13)='0' then
+						palette_W<='1';
+					end if;
+					palette_A_mem:=palette_A_mem+1;
+				elsif palette_horizontal_counter<1+16 then
+					palette_A<=palette_A_mem(12 downto 0);
+					if palette_horizontal_counter = 1 then
+						palette_color:=0;
+					else
+						palette_color:=palette_color+1;
+					end if;
+					palette_D_tictac_mem:=conv_std_logic_vector(pen(palette_color),8);
+					palette_D<=palette_D_tictac_mem;
+					if palette_A_mem(13)='0' then
+						palette_W<='1';
+					end if;
+					palette_A_mem:=palette_A_mem+1;
+				end if;
+end if;
+			
+			
+			
+			
+			
+			
+			
 			
 			if was_MEMWR_0 and MEM_WR='1' then
 				waiting_MEMWR:=0;

@@ -236,12 +236,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	--variable debug_leds_mem_cursor:integer range 0 to 7:=0;
 	
 	type pen_type is array(15 downto 0) of std_logic_vector(5 downto 0);
-	variable pen:pen_type:=(
-		palette( 4),palette(12),palette(21),palette(28),
-		palette(24),palette(29),palette(12),palette( 5),
-		palette(13),palette(22),palette( 6),palette(23),
-		palette(30),palette( 0),palette(31),palette(14)
-	);
+	variable pen:pen_type;
 
 	
 	variable pen_mem:std_logic_vector(5 downto 0);

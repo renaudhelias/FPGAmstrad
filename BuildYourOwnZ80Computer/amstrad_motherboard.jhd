@@ -11,8 +11,6 @@ MODULE amstrad_motherboard
 		INSTANCE XLXI_224
 	SUBMODULE T80se
 		INSTANCE AmstradT80
-	SUBMODULE I82C55
-		INSTANCE PPI
 	SUBMODULE simple_GateArrayInterrupt
 		INSTANCE GA_interrupt
 	SUBMODULE simple_DSK
@@ -25,3 +23,5 @@ MODULE amstrad_motherboard
 		INSTANCE XLXI_494
 	SUBMODULE please_wait
 		INSTANCE XLXI_568
+	SUBMODULE pio
+		INSTANCE XLXI_580

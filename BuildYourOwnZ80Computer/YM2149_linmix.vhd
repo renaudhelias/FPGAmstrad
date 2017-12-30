@@ -69,12 +69,12 @@ entity YM2149 is
   O_DA                : out std_logic_vector(7 downto 0);
   --O_DA_OE_L           : out std_logic;
   -- control
-  I_A9_L              : in  std_logic;
-  I_A8                : in  std_logic;
+  --I_A9_L              : in  std_logic;
+  --I_A8                : in  std_logic;
   I_BDIR              : in  std_logic;
   I_BC2               : in  std_logic;
   I_BC1               : in  std_logic;
-  I_SEL_L             : in  std_logic;
+  --I_SEL_L             : in  std_logic;
 
   O_AUDIO             : out std_logic_vector(7 downto 0);
   -- port a
@@ -86,7 +86,7 @@ entity YM2149 is
 --  O_IOB               : out std_logic_vector(7 downto 0);
 --  O_IOB_OE_L          : out std_logic;
 
-  ENA                 : in  std_logic; -- clock enable for higher speed operation
+  --ENA                 : in  std_logic; -- clock enable for higher speed operation
   RESET_L             : in  std_logic;
   CLK                 : in  std_logic  -- note 6 Mhz
   );
@@ -143,7 +143,7 @@ end generate;
 dont_mock:if not(MOCK) generate
 
   -- cpu i/f
-  p_busdecode            : process(I_BDIR, I_BC2, I_BC1, addr, I_A9_L, I_A8)
+  p_busdecode            : process(I_BDIR, I_BC2, I_BC1, addr)
     variable cs : std_logic;
     variable sel : std_logic_vector(2 downto 0);
   begin
@@ -161,7 +161,7 @@ dont_mock:if not(MOCK) generate
     busctrl_re <= '0';
 
     cs := '0';
-    if (I_A9_L = '0') and (I_A8 = '1') and (addr(7 downto 4) = "0000") then
+    if addr(7 downto 4) = "0000" then
       cs := '1';
     end if;
 
@@ -322,11 +322,11 @@ dont_mock:if not(MOCK) generate
   begin
     wait until rising_edge(CLK);
     -- / 8 when SEL is high and /16 when SEL is low
-    if (ENA = '1') then
+    --if (ENA = '1') then
       ena_div <= '0';
       ena_div_noise <= '0';
       if (cnt_div = "0000") then
-        cnt_div <= (not I_SEL_L) & "111";
+        cnt_div <= '0' & "111";
         ena_div <= '1';
 
         noise_div <= not noise_div;
@@ -336,7 +336,7 @@ dont_mock:if not(MOCK) generate
       else
         cnt_div <= cnt_div - "1";
       end if;
-    end if;
+    --end if;
   end process;
 
   p_noise_gen            : process
@@ -354,7 +354,7 @@ dont_mock:if not(MOCK) generate
     poly17_zero := '0';
     if (poly17 = "00000000000000000") then poly17_zero := '1'; end if;
 
-    if (ENA = '1') then
+    --if (ENA = '1') then
 
       if (ena_div_noise = '1') then -- divider ena
 
@@ -365,7 +365,7 @@ dont_mock:if not(MOCK) generate
           noise_gen_cnt <= (noise_gen_cnt + "1");
         end if;
       end if;
-    end if;
+    --end if;
   end process;
   noise_gen_op <= poly17(0);
 
@@ -388,7 +388,7 @@ dont_mock:if not(MOCK) generate
       end if;
     end loop;
 
-    if (ENA = '1') then
+    --if (ENA = '1') then
       for i in 1 to 3 loop
         if (ena_div = '1') then -- divider ena
 
@@ -400,7 +400,7 @@ dont_mock:if not(MOCK) generate
           end if;
         end if;
       end loop;
-    end if;
+   -- end if;
   end process;
 
   p_envelope_freq        : process
@@ -416,7 +416,7 @@ dont_mock:if not(MOCK) generate
       env_gen_comp := (env_gen_freq - "1");
     end if;
 
-    if (ENA = '1') then
+    --if (ENA = '1') then
       env_ena <= '0';
       if (ena_div = '1') then -- divider ena
         if (env_gen_cnt >= env_gen_comp) then
@@ -426,7 +426,7 @@ dont_mock:if not(MOCK) generate
           env_gen_cnt <= (env_gen_cnt + "1");
         end if;
       end if;
-    end if;
+    --end if;
   end process;
 
   p_envelope_shape       : process(env_reset, CLK)
@@ -473,7 +473,7 @@ dont_mock:if not(MOCK) generate
       is_top_m1 := (env_vol = "11110");
       is_top    := (env_vol = "11111");
 
-      if (ENA = '1') then
+      --if (ENA = '1') then
         if (env_ena = '1') then
           if (env_hold = '0') then
             if (env_inc = '1') then
@@ -518,7 +518,7 @@ dont_mock:if not(MOCK) generate
 
           end if;
         end if;
-      end if;
+      --end if;
     end if;
   end process;
 
@@ -546,7 +546,7 @@ dont_mock:if not(MOCK) generate
     variable chan_amp : std_logic_vector(4 downto 0);
   begin
     wait until rising_edge(CLK);
-    if (ENA = '1') then
+    --if (ENA = '1') then
 
       chan_mixed := (tone_ena_l or tone_src) and (noise_ena_l or noise_gen_op);
 
@@ -616,7 +616,7 @@ dont_mock:if not(MOCK) generate
           O_AUDIO(7 downto 0) <= x"FF";
         end if;
       end if;
-    end if;
+    --end if;
   end process;
 
 --  p_io_ports             : process(reg)

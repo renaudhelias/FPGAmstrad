@@ -131,7 +131,7 @@ data_out<=data_block_out;
 parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_block_in(3) xor data_block_in(4) xor data_block_in(5) xor data_block_in(6) xor data_block_in(7);
 	
 	native_send_cmd : process(SCLK) is
-		variable step_cmd:integer range 0 to 18:=0;
+		variable step_cmd:integer range 0 to 10:=0;
 		variable cursor:integer range 0 to 7:=0;
 		variable cursor_send:integer range 0 to buffer_send'length-1:=0;
 		variable cursor_response:integer range 0 to buffer_response'length-1:=0;
@@ -179,7 +179,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 			
 			if ram_T then
 				if not(ram_Tdone) then
-					step_cmd:=11; -- overrun
+					step_cmd:=10; -- overrun
 				else
 					step_cmd:=0;
 				end if;
@@ -298,16 +298,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 						when 8=>NULL; -- error : incertain following message
 						when 9=>NULL; -- CRC16 failed
 						
-						when 10=>NULL; -- send writen block
-
-						when 11=>NULL; -- overrun
-						when 12=>NULL;
-						when 13=>NULL;
-						when 14=>NULL;
-						when 15=> -- CRC write error
-						when 16=> -- write error
-						when 17=> -- no return
-						when 18=> -- no return 0
+						when 10=>NULL; -- overrun
 					end case;
 				end if;
 			--end if;
@@ -469,7 +460,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		variable address_loaded_safe:boolean:=false; -- address_loaded a bien été load au moins une fois...
 		
 		variable init_done:std_logic:='0';
-		variable overrun:boolean:=false;
+		--variable overrun:boolean:=false;
 		variable ccs:std_logic:='0';
 		
 		variable init_start_waiting:std_logic_vector(7 downto 0):=x"00"; -- unstable reset with bad responses (MiST-board SPI simulator)
@@ -607,13 +598,13 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 					when 18=>NULL; -- check failed
 				end case;
 				
-			elsif not(overrun) then
+			else --if not(overrun) then
 			
 --				length_crc16<=16;
 				
 				if spi_R='1' then
 					if spi_Rmem='0' then
-						overrun:=true; -- over run
+						--overrun:=true; -- over run
 						read_step:=6; -- over run
 
 					else 
@@ -638,7 +629,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 						end if;
 					end if;
 				end if;
-			if not(overrun) then
+			--if not(overrun) then
 					if spi_Rmem='0' then
 						
 						case read_step is
@@ -692,7 +683,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 						end case;
 					end if;
 				end if;
-			end if;
+			--end if;
 		end if;
 	end process sangoku;
 	

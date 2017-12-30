@@ -58,7 +58,7 @@
         <port polarity="Output" name="AUDIO_L" />
         <port polarity="Output" name="AUDIO_R" />
         <blockdef name="bootloader_sd">
-            <timestamp>2017-12-30T16:55:22</timestamp>
+            <timestamp>2017-12-30T19:24:5</timestamp>
             <line x2="0" y1="-464" y2="-464" x1="64" />
             <line x2="496" y1="-608" y2="-608" x1="432" />
             <rect width="64" x="432" y="-556" height="24" />
@@ -98,7 +98,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-30T14:36:37</timestamp>
+            <timestamp>2017-12-30T19:2:12</timestamp>
             <line x2="448" y1="496" y2="496" x1="384" />
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
