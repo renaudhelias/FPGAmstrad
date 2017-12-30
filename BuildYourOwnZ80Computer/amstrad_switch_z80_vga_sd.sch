@@ -37,7 +37,7 @@
         <signal name="XLXN_745(12:0)" />
         <signal name="XLXN_746(7:0)" />
         <signal name="DEBUG_LEDS(7:0)" />
-        <signal name="JOYSTICK1(5:0)" />
+        <signal name="JOYSTICK1(6:0)" />
         <signal name="AUDIO_L" />
         <signal name="AUDIO_R" />
         <signal name="XLXN_750" />
@@ -56,7 +56,7 @@
         <port polarity="BiDirectional" name="ram_A(20:0)" />
         <port polarity="Input" name="PS2_DATA" />
         <port polarity="Input" name="PS2_CLK" />
-        <port polarity="Input" name="JOYSTICK1(5:0)" />
+        <port polarity="Input" name="JOYSTICK1(6:0)" />
         <port polarity="Output" name="AUDIO_L" />
         <port polarity="Output" name="AUDIO_R" />
         <blockdef name="bootloader_sd">
@@ -105,7 +105,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-29T22:14:59</timestamp>
+            <timestamp>2017-12-30T4:35:11</timestamp>
             <line x2="448" y1="496" y2="496" x1="384" />
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
@@ -188,7 +188,7 @@
             <blockpin signalname="PS2_CLK" name="PS2_CLK" />
             <blockpin signalname="PS2_DATA" name="PS2_DATA" />
             <blockpin signalname="RESET_n" name="RESET_n" />
-            <blockpin signalname="JOYSTICK1(5:0)" name="JOYSTICK1(5:0)" />
+            <blockpin signalname="JOYSTICK1(6:0)" name="JOYSTICK1(6:0)" />
             <blockpin signalname="XLXN_717" name="CLK_PWM" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
@@ -378,10 +378,10 @@
         </branch>
         <instance x="4320" y="1488" name="XLXI_511" orien="R0">
         </instance>
-        <branch name="JOYSTICK1(5:0)">
+        <branch name="JOYSTICK1(6:0)">
             <wire x2="1904" y1="1904" y2="1904" x1="1872" />
         </branch>
-        <iomarker fontsize="28" x="1904" y="1904" name="JOYSTICK1(5:0)" orien="R0" />
+        <iomarker fontsize="28" x="1904" y="1904" name="JOYSTICK1(6:0)" orien="R0" />
         <branch name="AUDIO_L">
             <wire x2="1904" y1="1568" y2="1568" x1="1872" />
         </branch>

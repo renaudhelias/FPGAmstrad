@@ -1,0 +1,2 @@
+select figure at 3350 4650 8 -branches -sn=1
+update symbols amstrad_motherboard

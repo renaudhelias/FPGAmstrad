@@ -21,7 +21,7 @@ use ieee.std_logic_arith.all;
 entity Keyboard is
 port (
 	datain, clkin : in std_logic ; -- PS2 clk and data
-	fclk, rst : in std_logic ;  -- filter clock
+	fclk : in std_logic ;  -- filter clock
 	fok : out std_logic ;  -- data output enable signal
 	scancode : out std_logic_vector(7 downto 0) -- scan code signal output
 	) ;
@@ -30,8 +30,8 @@ end Keyboard ;
 architecture rtl of Keyboard is
 type state_type is (delay, start, d0, d1, d2, d3, d4, d5, d6, d7, parity, stop, badstop, finish) ;
 signal data, clk, clk1, clk2, odd, fok_internal: std_logic ;
-signal code : std_logic_vector(7 downto 0) ; 
-signal state : state_type ;
+signal code : std_logic_vector(7 downto 0) :=(others => '0') ;
+signal state : state_type:=delay;
 begin
 	clk1 <= clkin when rising_edge(fclk) ;
 	clk2 <= clk1 when rising_edge(fclk) ;
@@ -44,14 +44,9 @@ begin
 	
 	scancode <= code when fok_internal = '1' ;
 	
-	process(rst, fclk)
+	process(fclk)
 	begin
-		if rst = '1' then
-			state <= delay ;
-			code <= (others => '0') ;
-			fok <= '0' ;
-			fok_internal <= '0' ;
-		elsif rising_edge(fclk) then
+		if rising_edge(fclk) then
 			fok <= '0' ;
 			fok_internal <= '0' ;
 			case state is 

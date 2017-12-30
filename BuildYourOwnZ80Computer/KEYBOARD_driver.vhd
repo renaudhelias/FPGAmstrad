@@ -6,11 +6,11 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity KEYBOARD_driver is
     Port ( CLK : in  STD_LOGIC;
            --reset : in STD_LOGIC;
-           enable : in  STD_LOGIC;
+           --enable : in  STD_LOGIC;
 			  press : in STD_LOGIC;
 			  unpress : in STD_LOGIC;
            portC : in  STD_LOGIC_VECTOR (3 downto 0);
-			  joystick1 : in STD_LOGIC_VECTOR(5 downto 0);
+			  joystick1 : in STD_LOGIC_VECTOR(6 downto 0);
            keycode : in  STD_LOGIC_VECTOR (9 downto 0); -- e0 & e1 & scancode
            portA : out  STD_LOGIC_VECTOR (7 downto 0);
            key_reset : out std_logic:='0'
@@ -42,8 +42,8 @@ architecture Behavioral of KEYBOARD_driver is
 			);
 	type keyb_type is array(7 downto 0) of std_logic_vector(7 downto 0);
 	signal keyb:keyb_type;
-	signal joystick1_8:std_logic_vector(7 downto 0);
 
+signal portA_i:std_logic_vector(7 downto 0);
 	--signal key_reset_i:std_logic;
 begin
 
@@ -87,37 +87,32 @@ begin
 		end if;
 	end process;
 			
+
 	key_reset_scan : process(CLK)
-		variable key_reset_mem:std_logic;
+		variable key_reset_mem:std_logic:='0';
 	begin
 		if rising_edge(CLK) then
-			
 			if RESET_KEY=keycode(7 downto 0) then
-				--if unpress='1' then
-				--	key_reset_mem:='0';
-				--els
-				if press='1' then
-					key_reset_mem:='1';
-				else
+				if unpress='1' then
 					key_reset_mem:='0';
+				elsif press='1' then
+					key_reset_mem:='1';
 				end if;
-			else
-				key_reset_mem:='0';
 			end if;
 			key_reset<=key_reset_mem;
 		end if;
 	end process;
 
-	process(CLK)
-		variable joystick1_8mem:std_logic_vector(7 downto 0):=(others=>'0');
-	begin
-		if rising_edge(CLK) then
-			joystick1_8mem(5 downto 0):=joystick1(5) & joystick1(4) & joystick1(0) & joystick1(1) & joystick1(2) & joystick1(3);
-			joystick1_8<=joystick1_8mem;
-		end if;
-	end process;
-
-
+portA(3 downto 0)<=joystick1(3 downto 0) when conv_integer(portC)=9 else portA_i(3 downto 0);
+-- My X button seems broken, so I plug it into Z button...
+--portA(4)<='0' when conv_integer(portC)=9 and joystick1(4)='1' else portA_i(4);
+portA(4)<='0' when conv_integer(portC)=9 and joystick1(5)='1' else portA_i(4);
+--portA(4)<=portA_i(4);
+--portA(5)<='0' when conv_integer(portC)=9 and joystick1(5)='1' else portA_i(5);
+portA(5)<=portA_i(5);
+--portA(6)<='0' when conv_integer(portC)=9 and joystick1(6)='1' else portA_i(6);
+portA(6)<=portA_i(6);
+portA(7)<=portA_i(7);
 	process(CLK)
 		variable scancode_mem:STD_LOGIC_VECTOR (7 downto 0);
 		
@@ -131,24 +126,23 @@ begin
 		
 	begin
 			if falling_edge(CLK) then
-				portA<=(others=>'1');
-				if enable='1' then
+				portA_i<=(others=>'1');
+				--if enable='1' then
 					for i in 7 downto 0 loop
-						portA(i)<='1';
+						--portA(i)<='1';
 						--joystick
-						if conv_integer(portC)=9 then
-							if joystick1_8(i)='1' then
-								portA(i)<='0';
-
-							end if;
-						end if;
+						
 						for j in 7 downto 0 loop
 							if keyb(j)=amstrad_decode(conv_integer(portC) mod 16,i) then
-								portA(i)<='0';
+								portA_i(i)<='0';
 							end if;
 						end loop;
 					end loop;
-				end if;
+					
+					--if conv_integer(portC)=9 then
+					--	portA(5 downto 0)<=joystick1_8(5 downto 0);
+					--end if;
+				--end if;
 			end if;
 	end process;
 end Behavioral;
