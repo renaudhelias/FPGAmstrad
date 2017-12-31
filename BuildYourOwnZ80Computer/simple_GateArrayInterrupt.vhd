@@ -595,29 +595,30 @@ last_etat_hsync:=etat_hsync;
 
 
 
-Markus_interrupt_process: process(reset,CLK4MHz) is
+Markus_interrupt_process: process(CLK4MHz) is
 		variable InterruptLineCount : std_logic_vector(5 downto 0):=(others=>'0'); -- a 6-bit counter, reset state is 0
 		variable InterruptSyncCount:integer range 0 to 2:=2;
 		variable etat_hsync_old : STD_LOGIC:='0';
 		variable etat_vsync_old : STD_LOGIC:='0';
 		--variable IO_ACK_old : STD_LOGIC:='0';
 	begin
-		if reset='1' then
-			InterruptLineCount:=(others=>'0');
-			InterruptSyncCount:=2;
-			--IO_ACK_old:='0';
-			etat_hsync_old:=DO_NOTHING;
-			etat_vsync_old:=DO_NOTHING;
-			int<='0';
-			--crtc_VSYNC<=DO_NOTHING;
-			
-			--etat_hsync:=DO_NOTHING;
-			--etat_monitor_hsync:=(others=>DO_NOTHING);
-			--etat_vsync:=DO_NOTHING;
-			--etat_monitor_vsync:=(others=>DO_NOTHING);
-			
-		--it's Z80 time !
-		elsif rising_edge(CLK4MHz) then
+--		if reset='1' then
+--			InterruptLineCount:=(others=>'0');
+--			InterruptSyncCount:=2;
+--			--IO_ACK_old:='0';
+--			etat_hsync_old:=DO_NOTHING;
+--			etat_vsync_old:=DO_NOTHING;
+--			int<='0';
+--			--crtc_VSYNC<=DO_NOTHING;
+--			
+--			--etat_hsync:=DO_NOTHING;
+--			--etat_monitor_hsync:=(others=>DO_NOTHING);
+--			--etat_vsync:=DO_NOTHING;
+--			--etat_monitor_vsync:=(others=>DO_NOTHING);
+--			
+--		--it's Z80 time !
+--		els
+		if rising_edge(CLK4MHz) then
 
 		-- no IO_ACK_old => CPCTEST ok
 		if IO_ACK='1' then --and IO_ACK_old='0' then
