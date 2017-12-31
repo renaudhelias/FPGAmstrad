@@ -5,8 +5,6 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity KEYBOARD_driver is
     Port ( CLK : in  STD_LOGIC;
-           --reset : in STD_LOGIC;
-           --enable : in  STD_LOGIC;
 			  press : in STD_LOGIC;
 			  unpress : in STD_LOGIC;
            portC : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -44,7 +42,6 @@ architecture Behavioral of KEYBOARD_driver is
 	signal keyb:keyb_type;
 
 signal portA_i:std_logic_vector(7 downto 0);
-	--signal key_reset_i:std_logic;
 begin
 
 	keybscan : process(CLK)
@@ -103,23 +100,22 @@ begin
 		end if;
 	end process;
 
+-- My X button seems broken...
+-- UCF does PULLUP, so an unplugged joystick shall do nothing.
+-- Harmonisation : il faut des when partout !
 portA(3 downto 0)<=joystick1(3 downto 0) when conv_integer(portC)=9 else portA_i(3 downto 0);
--- My X button seems broken, so I plug it into Z button...
---portA(4)<='0' when conv_integer(portC)=9 and joystick1(4)='1' else portA_i(4);
-portA(4)<='0' when conv_integer(portC)=9 and joystick1(5)='1' else portA_i(4);
---portA(4)<=portA_i(4);
---portA(5)<='0' when conv_integer(portC)=9 and joystick1(5)='1' else portA_i(5);
-portA(5)<=portA_i(5);
---portA(6)<='0' when conv_integer(portC)=9 and joystick1(6)='1' else portA_i(6);
-portA(6)<=portA_i(6);
-portA(7)<=portA_i(7);
+portA(4)<=joystick1(4) when conv_integer(portC)=9 else portA_i(4);
+--portA(4)<=portA_i(4) when conv_integer(portC)=9 else portA_i(4);
+portA(5)<=joystick1(5) when conv_integer(portC)=9 else portA_i(5);
+--portA(5)<=portA_i(5) when conv_integer(portC)=9 else portA_i(5);
+portA(6)<=joystick1(6) when conv_integer(portC)=9 else portA_i(6);
+--portA(6)<=portA_i(6) when conv_integer(portC)=9 else portA_i(6);
+portA(7)<=portA_i(7) when conv_integer(portC)=9 else portA_i(7);
+
+
 	process(CLK)
 		variable scancode_mem:STD_LOGIC_VECTOR (7 downto 0);
 		
-		--variable scanL:integer range 0 to 15;
-		--variable scanH:integer range 0 to 15;
-		--variable inputL:integer range 0 to 15;
-	
 		-- mauvais CLK pour rafraichir keyboard102_pressing, il faudrait du pseudo PS2_CLK
 	--	variable keyboard102_pressing:STD_LOGIC_VECTOR(0 to 128-1); -- 9:0 combinaisons 6:0 finalement
 		--http://www.beyondlogic.org/keyboard/keybrd.htm
@@ -127,22 +123,13 @@ portA(7)<=portA_i(7);
 	begin
 			if falling_edge(CLK) then
 				portA_i<=(others=>'1');
-				--if enable='1' then
-					for i in 7 downto 0 loop
-						--portA(i)<='1';
-						--joystick
-						
-						for j in 7 downto 0 loop
-							if keyb(j)=amstrad_decode(conv_integer(portC) mod 16,i) then
-								portA_i(i)<='0';
-							end if;
-						end loop;
+				for i in 7 downto 0 loop
+					for j in 7 downto 0 loop
+						if keyb(j)=amstrad_decode(conv_integer(portC) mod 16,i) then
+							portA_i(i)<='0';
+						end if;
 					end loop;
-					
-					--if conv_integer(portC)=9 then
-					--	portA(5 downto 0)<=joystick1_8(5 downto 0);
-					--end if;
-				--end if;
+				end loop;
 			end if;
 	end process;
 end Behavioral;
