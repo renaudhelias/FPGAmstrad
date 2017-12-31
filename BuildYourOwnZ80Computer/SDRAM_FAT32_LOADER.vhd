@@ -895,7 +895,7 @@ end if;
 						step_var:=0;
 						dsk_number:=(others=>'0');
 						load_done:='0';
-						files_loaded:="000" & TEST_DSK_OFF;
+						files_loaded:="111" & TEST_DSK_OFF;
 						file_select:=file_select+1;
 					end if;
 					
