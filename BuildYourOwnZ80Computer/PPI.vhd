@@ -61,18 +61,18 @@ entity I82C55 is
 
     I_PA              : in    std_logic_vector(7 downto 0);
     O_PA              : out   std_logic_vector(7 downto 0);
-    --O_PA_OE_L         : out   std_logic_vector(7 downto 0);
+    O_PA_OE_L         : out   std_logic_vector(7 downto 0);
 
     I_PB              : in    std_logic_vector(7 downto 0);
-    --O_PB              : out   std_logic_vector(7 downto 0);
-    --O_PB_OE_L         : out   std_logic_vector(7 downto 0);
+    O_PB              : out   std_logic_vector(7 downto 0);
+    O_PB_OE_L         : out   std_logic_vector(7 downto 0);
 
-   -- I_PC              : in    std_logic_vector(7 downto 0);
+    I_PC              : in    std_logic_vector(7 downto 0);
     O_PC              : out   std_logic_vector(7 downto 0);
-    --O_PC_OE_L         : out   std_logic_vector(7 downto 0);
+    O_PC_OE_L         : out   std_logic_vector(7 downto 0);
 
     RESET             : in    std_logic;
-    --ENA               : in    std_logic; -- (CPU) clk enable
+    ENA               : in    std_logic; -- (CPU) clk enable
     CLK               : in    std_logic
     );
 end;
@@ -220,7 +220,7 @@ end process;
         r_portc_setclr(i) := bit_mask(i) and I_DATA(0);
       end loop;
 
-      --if (ENA = '1') then
+      if (ENA = '1') then
         mode_clear <= '0';
         if (I_CS_L = '0') and (I_WR_L = '0') then
           case I_ADDR is
@@ -240,7 +240,7 @@ end process;
             when others => null;
           end case;
         end if;
-      --end if;
+      end if;
     end if;
   end process;
 
@@ -295,7 +295,7 @@ end process;
   p_rw_control_reg : process
   begin
     wait until rising_edge(CLK);
-    --if (ENA = '1') then
+    if (ENA = '1') then
       porta_we_t1 <= porta_we;
       portb_we_t1 <= portb_we;
       porta_re_t1 <= porta_re;
@@ -305,7 +305,7 @@ end process;
       a_ack_l_t1 <= a_ack_l;
       b_stb_l_t1 <= b_stb_l;
       b_ack_l_t1 <= b_ack_l;
-    --end if;
+    end if;
   end process;
 
   porta_we_rising <= (porta_we = '0') and (porta_we_t1 = '1'); -- falling as inverted
@@ -394,7 +394,7 @@ end process;
     elsif rising_edge(CLK) then
       we := (I_CS_L = '0') and (I_WR_L = '0') and (I_ADDR = "11") and (I_DATA(7) = '0');
 
-      --if (ENA = '1') then
+      if (ENA = '1') then
         if (mode_clear = '1') then
           a_obf_l <= '1';
           a_inte1 <= '0';
@@ -499,7 +499,7 @@ end process;
           end if;
 
         end if;
-      --end if;
+      end if;
     end if;
   end process;
 
@@ -507,25 +507,25 @@ end process;
   begin
     -- D4    GROUPA porta         1 = input, 0 = output
     O_PA       <= x"FF"; -- if not driven, float high
-    --O_PA_OE_L  <= x"FF";
+    O_PA_OE_L  <= x"FF";
     porta_read <= x"00";
 
     if    (groupa_mode = "00") then -- simple io
       if (r_control(4) = '0') then -- output
         O_PA       <= r_porta;
-        --O_PA_OE_L  <= x"00";
+        O_PA_OE_L  <= x"00";
       end if;
       porta_read <= I_PA;
     elsif (groupa_mode = "01") then -- strobed
       if (r_control(4) = '0') then -- output
         O_PA       <= r_porta;
-        --O_PA_OE_L  <= x"00";
+        O_PA_OE_L  <= x"00";
       end if;
       porta_read <= porta_ipreg;
     else -- if (groupa_mode(1) = '1') then -- bi dir
       if (a_ack_l = '0') then -- output enable
         O_PA       <= r_porta;
-        --O_PA_OE_L  <= x"00";
+        O_PA_OE_L  <= x"00";
       end if;
       porta_read <= porta_ipreg; -- latched data
     end if;
@@ -534,21 +534,21 @@ end process;
 
   p_portb : process(r_portb, r_control, groupb_mode, r_portb, I_PB, portb_ipreg)
   begin
-    --O_PB       <= x"FF"; -- if not driven, float high
-    --O_PB_OE_L  <= x"FF";
+    O_PB       <= x"FF"; -- if not driven, float high
+    O_PB_OE_L  <= x"FF";
     portb_read <= x"00";
 
     if (groupb_mode = '0') then -- simple io
-      --if (r_control(1) = '0') then -- output
-        --O_PB       <= r_portb;
-        --O_PB_OE_L  <= x"00";
-      --end if;
+      if (r_control(1) = '0') then -- output
+        O_PB       <= r_portb;
+        O_PB_OE_L  <= x"00";
+      end if;
       portb_read <= I_PB;
     else -- strobed mode
-      --if (r_control(1) = '0') then -- output
-        --O_PB       <= r_portb;
-        --O_PB_OE_L  <= x"00";
-      --end if;
+      if (r_control(1) = '0') then -- output
+        O_PB       <= r_portb;
+        O_PB_OE_L  <= x"00";
+      end if;
       portb_read <= portb_ipreg;
     end if;
   end process;
@@ -557,40 +557,40 @@ end process;
                         a_obf_l, a_ibf, a_intr,b_obf_l, b_ibf, b_intr)
   begin
     O_PC       <= x"FF"; -- if not driven, float high
-    --O_PC_OE_L  <= x"FF";
+    O_PC_OE_L  <= x"FF";
 
     -- bits 7..4
     if    (groupa_mode = "00") then -- simple io
       if (r_control(3) = '0') then -- output
         O_PC     (7 downto 4)  <= r_portc(7 downto 4);
-        --O_PC_OE_L(7 downto 4)  <= x"0";
+        O_PC_OE_L(7 downto 4)  <= x"0";
       end if;
     elsif (groupa_mode = "01") then -- mode1
 
       if (r_control(4) = '0') then -- port a output
         O_PC     (7) <= a_obf_l;
-        --O_PC_OE_L(7) <= '0';
+        O_PC_OE_L(7) <= '0';
         -- 6 is ack_l input
         if (r_control(3) = '0') then -- port c output
           O_PC     (5 downto 4) <= r_portc(5 downto 4);
-          --O_PC_OE_L(5 downto 4) <= "00";
+          O_PC_OE_L(5 downto 4) <= "00";
         end if;
       else -- port a input
         if (r_control(3) = '0') then -- port c output
           O_PC     (7 downto 6) <= r_portc(7 downto 6);
-          --O_PC_OE_L(7 downto 6) <= "00";
+          O_PC_OE_L(7 downto 6) <= "00";
         end if;
         O_PC     (5) <= a_ibf;
-        --O_PC_OE_L(5) <= '0';
+        O_PC_OE_L(5) <= '0';
         -- 4 is stb_l input
       end if;
 
     else -- if (groupa_mode(1) = '1') then -- mode2
       O_PC     (7) <= a_obf_l;
-      --O_PC_OE_L(7) <= '0';
+      O_PC_OE_L(7) <= '0';
       -- 6 is ack_l input
       O_PC     (5) <= a_ibf;
-      --O_PC_OE_L(5) <= '0';
+      O_PC_OE_L(5) <= '0';
       -- 4 is stb_l input
     end if;
 
@@ -599,36 +599,36 @@ end process;
       --if (groupb_mode = '0') then -- we will let bit 3 be driven, data sheet is a bit confused about this
         if (r_control(0) = '0') then -- ouput (note, groupb control bit)
           O_PC     (3) <= r_portc(3);
-          --O_PC_OE_L(3) <= '0';
+          O_PC_OE_L(3) <= '0';
         end if;
       --
     else -- stolen
       O_PC     (3) <= a_intr;
-     -- O_PC_OE_L(3) <= '0';
+      O_PC_OE_L(3) <= '0';
     end if;
 
     -- bits 2..0
     if    (groupb_mode = '0') then -- simple io
       if (r_control(0) = '0') then -- output
         O_PC     (2 downto 0)  <= r_portc(2 downto 0);
-        --O_PC_OE_L(2 downto 0)  <= "000";
+        O_PC_OE_L(2 downto 0)  <= "000";
       end if;
     else
       -- mode 1
       -- 2 is input
       if (r_control(1) = '0') then -- output
         O_PC     (1) <= b_obf_l;
-        --O_PC_OE_L(1) <= '0';
+        O_PC_OE_L(1) <= '0';
       else -- input
         O_PC     (1) <= b_ibf;
-        --O_PC_OE_L(1) <= '0';
+        O_PC_OE_L(1) <= '0';
       end if;
       O_PC     (0) <= b_intr;
-      --O_PC_OE_L(0) <= '0';
+      O_PC_OE_L(0) <= '0';
     end if;
   end process;
 
-  p_portc_in : process(r_portc, r_control, groupa_mode, groupb_mode, a_ibf, b_obf_l,
+  p_portc_in : process(r_portc, I_PC, r_control, groupa_mode, groupb_mode, a_ibf, b_obf_l,
                        a_obf_l, a_inte1, a_inte2, a_intr, b_inte, b_ibf, b_intr)
   begin
     portc_read <= x"00";
@@ -640,37 +640,37 @@ end process;
 
     if    (groupa_mode = "01") then -- mode1 or 2
       if (r_control(4) = '0') then -- port a output
-        a_ack_l <= '0';
+        a_ack_l <= I_PC(6);
       else -- port a input
-        a_stb_l <= '0';
+        a_stb_l <= I_PC(4);
       end if;
     elsif (groupa_mode(1) = '1') then -- mode 2
-      a_ack_l <= '0';
-      a_stb_l <= '0';
+      a_ack_l <= I_PC(6);
+      a_stb_l <= I_PC(4);
     end if;
 
     if (groupb_mode = '1') then
       if (r_control(1) = '0') then -- output
-        b_ack_l <= '0';
+        b_ack_l <= I_PC(2);
       else -- input
-        b_stb_l <= '0';
+        b_stb_l <= I_PC(2);
       end if;
     end if;
 
     if    (groupa_mode = "00") then -- simple io
-      portc_read(7 downto 3) <= "00000";
+      portc_read(7 downto 3) <= I_PC(7 downto 3);
     elsif (groupa_mode = "01") then
       if (r_control(4) = '0') then -- port a output
-        portc_read(7 downto 3) <= a_obf_l & a_inte1 & "00" & a_intr;
+        portc_read(7 downto 3) <= a_obf_l & a_inte1 & I_PC(5 downto 4) & a_intr;
       else -- input
-        portc_read(7 downto 3) <= "00" & a_ibf & a_inte2 & a_intr;
+        portc_read(7 downto 3) <= I_PC(7 downto 6) & a_ibf & a_inte2 & a_intr;
       end if;
     else -- mode 2
       portc_read(7 downto 3) <= a_obf_l & a_inte1 & a_ibf & a_inte2 & a_intr;
     end if;
 
     if    (groupb_mode = '0') then -- simple io
-      portc_read(2 downto 0) <= "000";
+      portc_read(2 downto 0) <= I_PC(2 downto 0);
     else
       if (r_control(1) = '0') then -- output
         portc_read(2 downto 0) <= b_inte & b_obf_l & b_intr;
@@ -686,7 +686,7 @@ end process;
     --   pc4 input  a_stb_l
     --   pc2 input  b_stb_l
 
-    --if (ENA = '1') then
+    if (ENA = '1') then
       if (a_stb_l = '0') then
         porta_ipreg <= I_PA;
       end if;
@@ -696,7 +696,7 @@ end process;
       elsif (b_stb_l = '0') then
         portb_ipreg <= I_PB;
       end if;
-    --end if;
+    end if;
   end process;
 
 end architecture RTL;

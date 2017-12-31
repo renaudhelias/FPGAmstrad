@@ -41,7 +41,7 @@ end SDRAM_FAT32_LOADER;
 architecture Behavioral of SDRAM_FAT32_LOADER is
 	constant ATTR_ARCHIVE:std_logic_vector(7 downto 0):=x"20";
 	constant file_dsk_extention:std_logic_vector((4)*8-1 downto 0):=x"44534B" & ATTR_ARCHIVE; -- DSK & ATTR_ARCHIVE
-	constant file_dsk_address:std_logic_vector(ram_A'range):="000" & x"40000";
+	constant file_dsk_address:std_logic_vector(31 downto 0):=x"00040000";
 	subtype name_type is std_logic_vector(11*8-1 downto 0);
 	type file_rom_name_type is array(ROM_COUNT-1 downto 0) of name_type;
 	constant file_rom_name: file_rom_name_type:=
@@ -54,12 +54,12 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 		--x"4D4158414D202020524F4D" -- MAXAM.ROM
 		--x"53435245454E2020524F4D"  --SCREEN.ROM
 		); 
-	subtype address_type is std_logic_vector(ram_A'range);
+	subtype address_type is std_logic_vector(31 downto 0);
 	type file_rom_address_type is array(ROM_COUNT-1 downto 0) of address_type;
 	constant file_rom_address: file_rom_address_type:=
-		("000" & x"00000",
-		"000" & x"04000",
-		"000" & x"08000"
+		(x"00000000",
+		x"00004000",
+		x"00008000"
 		--x"0000C000"
 		--x"00" & "00000010" & "11000000" & x"00" -- &C000
 		);
@@ -98,7 +98,7 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 	signal compare_spi_do:std_logic:='0';
 
 	signal transmit_address_from:STD_LOGIC_VECTOR(31 downto 0);
-	signal transmit_address_to:STD_LOGIC_VECTOR(ram_A'range);
+	signal transmit_address_to:STD_LOGIC_VECTOR(31 downto 0);
 	signal transmit_length:integer range 0 to BLOCK_SIZE_MAXIMUM;
 	signal transmit_do:boolean:=false;
 	signal transmit_done:boolean:=true;
@@ -121,7 +121,7 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 	signal gripsou_ram_A:std_logic_vector(ram_A'range):=(others=>'0');
 	signal gripsou_ram_D:std_logic_vector(ram_D'range):=(others=>'Z');
 	signal gripsou_ram_W:std_logic:='0';
-	--signal gripsou_address:std_logic_vector(ram_A'range):=(others=>'0');
+	signal gripsou_address:std_logic_vector(ram_A'range):=(others=>'0');
 	signal gripsou_data:std_logic_vector(ram_D'range):=(others=>'Z');
 	signal gripsou_write:std_logic:='0';
 	
@@ -211,26 +211,26 @@ begin
 								when 3 => NULL;
 							end case;
 						when 3 =>
-							--case data_length is
-							--	when 4 => -- 4 byte
+							case data_length is
+								when 4 => -- 4 byte
 									data_reader4_mem(15 downto 8):=spi_D(7 downto 0);
 									data_cursor:=3;
 									data_spi_A<=data_addr +data_cursor;
 									data_step:=4;
 									data_spi_do<='1';
-							--	when 1 => NULL;
-							--	when 2 => NULL;
-							--	when 3 => NULL;
-							--end case;
+								when 1 => NULL;
+								when 2 => NULL;
+								when 3 => NULL;
+							end case;
 						when 4 =>
-							--case data_length is
-							--	when 4 => -- 4 byte
+							case data_length is
+								when 4 => -- 4 byte
 									data_reader4_mem(7 downto 0):=spi_D(7 downto 0);
 									data_step:=5;
-							--	when 1 => NULL;
-							--	when 2 => NULL;
-							--	when 3 => NULL;
-							--end case;
+								when 1 => NULL;
+								when 2 => NULL;
+								when 3 => NULL;
+							end case;
 						when 5 => -- variable transfert completed
 							data_done<=true;
 							-- that's all folks !
@@ -295,7 +295,7 @@ begin
 		variable cursor:integer range 0 to BLOCK_SIZE_MAXIMUM;
 		variable transmit_step:integer range 0 to 4;
 		variable data_mem:std_logic_vector(7 downto 0);
-		--variable address_mem:std_logic_vector(ram_A'range);
+		variable address_mem:std_logic_vector(ram_A'range);
 	begin
 		if rising_edge(CLK) then
 			--leds<=conv_std_logic_vector(transmit_step,8);
@@ -324,8 +324,8 @@ begin
 							data_mem:=spi_D;
 							transmit_ram_D<=data_mem;gripsou_data<=data_mem;
 --test A/D transmit_ram_D<=conv_std_logic_vector(cursor,8);
-							--address_mem:=transmit_address_to(ram_A'range)+cursor;
-							--gripsou_address<=address_mem;
+							address_mem:=transmit_address_to(ram_A'range)+cursor;
+							gripsou_address<=address_mem;
 							transmit_ram_W<='1';gripsou_write<='1';
 							transmit_step:=2;
 						when 2=>
@@ -428,7 +428,7 @@ begin
 	switch_br_compare_transmit<=SWITCH_COMPARE;
 end procedure;
 
-procedure fillRAM(address_from:std_logic_vector(31 downto 0);address_to:std_logic_vector(ram_A'range);size:integer) is
+procedure fillRAM(address_from:std_logic_vector(31 downto 0);address_to:std_logic_vector(31 downto 0);size:integer) is
 begin
 	transmit_address_from<=address_from;
 	transmit_address_to<=address_to;
@@ -510,7 +510,7 @@ end function;
 		variable rom_number:integer range 0 to ROM_COUNT:=0;
 		variable dsk_number:std_logic_vector(7 downto 0):=(others=>'0');
 		
-		variable file_address:std_logic_vector(ram_A'range);
+		variable file_address:std_logic_vector(31 downto 0);
 		variable folder_DirStruct_number:integer;
 		
 		variable file_size:std_logic_vector(31 downto 0);
@@ -841,7 +841,7 @@ end if;
 						step_var:=22;
 					when 22=>
 						file_sector_pointer:=getSector(file_cluster_pointer);
-						file_address:=file_address+conv_std_logic_vector(conv_integer(BPB_SecPerClus)*conv_integer(BPB_BytsPerSec),23);
+						file_address:=file_address+conv_std_logic_vector(conv_integer(BPB_SecPerClus)*conv_integer(BPB_BytsPerSec),32);
 						if bc(file_cluster_pointer) then
 							step_var:=18; -- that's all folk
 						else
