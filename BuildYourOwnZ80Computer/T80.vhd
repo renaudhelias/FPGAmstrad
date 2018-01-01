@@ -83,8 +83,7 @@ entity T80 is
 		Flag_H : integer := 4;
 		Flag_Y : integer := 5;
 		Flag_Z : integer := 6;
-		Flag_S : integer := 7;
-		USE_FALLING_EDGE_INTN : boolean:=false
+		Flag_S : integer := 7
 	);
 	port(
 		RESET_n		: in std_logic;
@@ -960,9 +959,6 @@ begin
 --
 -------------------------------------------------------------------------
 	process (RESET_n, CLK_n)
-		variable wasINT_s_0:boolean:=false;
-		variable just_rising_INT_s:boolean:=false;
-		variable thats_rock:boolean:=false;
 	begin
 		if RESET_n = '0' then
 			MCycle <= "001";
@@ -979,15 +975,6 @@ begin
 			Auto_Wait_t2 <= '0';
 			M1_n <= '1';
 		elsif rising_edge(CLK_n) then
-		
-			if INT_s = '1' and wasINT_s_0 then
-				just_rising_INT_s:=true;
-			end if;
-			if INT_s = '0' then
-				wasINT_s_0:=true;
-			else
-				wasINT_s_0:=false;
-			end if;
 			if CEN = '1' then
 			if T_Res = '1' then
 				Auto_Wait_t1 <= '0';
@@ -1045,30 +1032,17 @@ begin
 							(MCycle = "010" and I_DJNZ = '1' and IncDecZ = '1') then
 							M1_n <= '0';
 							MCycle <= "001";
-							if not(thats_rock) then
-								IntCycle <= '0';
-							end if;
+							IntCycle <= '0';
 							NMICycle <= '0';
 							if NMI_s = '1' and Prefix = "00" then
 								NMICycle <= '1';
 								IntE_FF1 <= '0';
-							elsif (IntE_FF1 = '1' and ((USE_FALLING_EDGE_INTN and just_rising_INT_s) or (not(USE_FALLING_EDGE_INTN) and INT_s='1') )) and Prefix = "00" and SetEI = '0' then
-								if USE_FALLING_EDGE_INTN then
-									thats_rock:=true;
-								else
-									IntE_FF1 <= '0';
-									IntE_FF2 <= '0';
-								end if;
-								IntCycle <= '1';
-								
-							end if;
-						elsif MCycle="010" then
-							if thats_rock then
-								thats_rock:=false;
-								just_rising_INT_s:=false;
+							elsif (IntE_FF1 = '1' and  INT_s='1') and Prefix = "00" and SetEI = '0' then
 								IntE_FF1 <= '0';
 								IntE_FF2 <= '0';
+								IntCycle <= '1';
 							end if;
+						elsif MCycle="010" then
 							MCycle <= std_logic_vector(unsigned(MCycle) + 1);
 						else
 							MCycle <= std_logic_vector(unsigned(MCycle) + 1);

@@ -11,7 +11,7 @@
          <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_474 - VRAM32Ko_Amstrad</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_474 - VRAM32Ko_Amstrad/XLXI_6 - VRAM_Amstrad - Behavioral</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video/XLXI_475 - PALETTE_RAM - Behavioral</ClosedNode>
-         <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard/AmstradT80 - T80se - rtl</ClosedNode>
+         <ClosedNode>/amstrad_switch_z80_vga_sd C:|Users|Joe|Desktop|mist-git|FPGAmstrad|FPGAmstrad|BuildYourOwnZ80Computer|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard/AmstradT80 - T80se - rtl/u0 - T80 - rtl</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_462 - bootloader_sd</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_511 - amstrad_video</ClosedNode>
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard</ClosedNode>
