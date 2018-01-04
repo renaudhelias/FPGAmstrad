@@ -109,10 +109,10 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 				  
 				  VRAM_HDsp:integer:=800; --suivant les mode, le nombre de pixels affichés est constant !
 				  VRAM_VDsp:integer:=300; --600/2
-				  --DEBUG_LEDS_W:integer:=32;
+				  --DEBUG_LEDS_W:integer:=32
+				  BUG_DELAY_ADDRESS:integer:=8+8;
 				  BUG_DELAY_DATA:integer:=2;
 				  BUG_DELAY_PALETTE:integer:=1
-				  --BUG_PALETTE_COLOR:integer:=1
 		  );
     Port ( DATA : in  STD_LOGIC_VECTOR (7 downto 0); -- buffer
            ADDRESS : out  STD_LOGIC_VECTOR (14 downto 0);
@@ -138,7 +138,7 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 	constant DO_HSYNC : STD_LOGIC:='1';
 	constant DO_VSYNC : STD_LOGIC:='1';
 
-	constant VDecal_negatif:integer:=(600/2-480/2)/2;
+	constant VDecal_negatif:integer:=(600-480)/2;
 	constant HDecal_negatif:integer:=(800-640)/2;
 	
 	type palette_type is array(31 downto 0) of std_logic_vector(5 downto 0); -- RRVVBB
@@ -246,7 +246,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	
 	variable pen_mem:std_logic_vector(5 downto 0);
 	
-	constant PEN_MODE_11:std_logic_vector(5 downto 0):="011101";
+	--constant PEN_MODE_11:std_logic_vector(5 downto 0):="011101";
 	--constant PEN_LED_ON:std_logic_vector(5 downto 0):="001100";
 	--constant PEN_LED_OFF:std_logic_vector(5 downto 0):="110011";
 	constant PEN_NONE:std_logic_vector(5 downto 0):="000000";
@@ -255,6 +255,13 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable vsync_mem:std_logic;
 	
 begin
+
+	RED_FF     <=pen_mem(5 downto 4);
+	GREEN_FF   <=pen_mem(3 downto 2);
+	BLUE_FF    <=pen_mem(1 downto 0);
+	hsync      <= hsync_mem;
+	vsync      <= vsync_mem;
+
 	if rising_edge(CLK_25MHz) then
 		
 		if MODE_select="00" then
@@ -268,30 +275,31 @@ begin
 		end if;
 
 		cursor_pixel_retard:=cursor_pixel;
-		if etat_rgb_retard = DO_READ then
-			color:=(others=>'0');
-			for i in 2**(MODE_MAX)-1 downto 0 loop
-				if (MODE_select="00" and i<=3)
-				or (MODE_select="01" and i<=1)
-				or (MODE_select="10" and i<=0) then
-					color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel_retard));
-				end if;
-			end loop;
-			if MODE_select="00" then
-				color_patch:=color(3) & color(1) & color(2) & color(0); -- pas relou xD
-				pen_mem:=pen(conv_integer(color_patch));
-			elsif MODE_select="01" then
-				pen_mem:=pen(conv_integer(color(3 downto 2)));
-			elsif MODE_select="10" then
-				pen_mem:=pen(conv_integer(color(3)));
-			else -- MODE 11
-				pen_mem:=PEN_MODE_11;
+		color:=(others=>'0');
+		for i in 2**(MODE_MAX)-1 downto 0 loop
+			if (MODE_select="00" and i<=3)
+			or (MODE_select="01" and i<=1)
+			or (MODE_select="10" and i<=0) then
+				color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel_retard));
 			end if;
+		end loop;
+		if MODE_select="00" then
+			color_patch:=color(3) & color(1) & color(2) & color(0); -- pas relou xD
+			pen_mem:=pen(conv_integer(color_patch));
+		elsif MODE_select="01" then
+			color_patch:="00" & color(3 downto 2);
+			pen_mem:=pen(conv_integer(color_patch));
+		else --if MODE_select="10" then
+			color_patch:="000" & color(3);
+			pen_mem:=pen(conv_integer(color_patch));
+		--else -- MODE 11
+		--	pen_mem:=PEN_MODE_11;
+		end if;
 --		elsif etat_rgb = DO_LED_ON then
 --			pen_mem:=PEN_LED_ON;
 --		elsif etat_rgb = DO_LED_OFF then
 --			pen_mem:=PEN_LED_OFF;
-		else
+		if etat_rgb_retard /= DO_READ then
 			pen_mem:=PEN_NONE;
 		end if;
 		etat_rgb_retard:=etat_rgb;
@@ -335,7 +343,7 @@ begin
 		
 		if horizontal_counter<HDsp and vertical_counter<VDsp then
 			v:=(vertical_counter+VDecal_negatif)/(VZoom);
-			h:=horizontal_counter+HDecal_negatif;
+			h:=horizontal_counter+HDecal_negatif-BUG_DELAY_ADDRESS;
 			no_char:=(h / 8) mod (CHAR_WIDTH/8);
 			-- 640×200 pixels with 2 colours ("Mode 2", 80 text columns) donc bien 8 pixels physique par octets
 			if NB_PIXEL_PER_OCTET=2 then
@@ -429,11 +437,6 @@ begin
 --		end if;
 		
 		
-		RED_FF     <=pen_mem(5 downto 4);
-		GREEN_FF   <=pen_mem(3 downto 2);
-		BLUE_FF    <=pen_mem(1 downto 0);
-		hsync      <= hsync_mem;
-		vsync      <= vsync_mem;
 		
 	end if;
 end process aZRaEL_vram2vgaAmstrad_process;

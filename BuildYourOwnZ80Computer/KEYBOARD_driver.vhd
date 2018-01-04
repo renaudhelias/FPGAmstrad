@@ -88,6 +88,7 @@ begin
 	key_reset_scan : process(CLK)
 		variable key_reset_mem:std_logic:='0';
 	begin
+		key_reset<=key_reset_mem;
 		if rising_edge(CLK) then
 			if RESET_KEY=keycode(7 downto 0) then
 				if unpress='1' then
@@ -96,7 +97,6 @@ begin
 					key_reset_mem:='1';
 				end if;
 			end if;
-			key_reset<=key_reset_mem;
 		end if;
 	end process;
 

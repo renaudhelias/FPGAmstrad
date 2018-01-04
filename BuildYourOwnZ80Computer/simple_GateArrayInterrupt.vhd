@@ -15,15 +15,15 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 -- speed ink 1,1
 entity simple_GateArrayInterrupt is
 	Generic (LATENCE_MEM_WR:integer:=1;
-	NB_HSYNC_BY_INTERRUPT:integer:=52; --52; -- 52 normalement 52
+	--NB_HSYNC_BY_INTERRUPT:integer:=52; --52; -- 52 normalement 52
 	NB_LINEH_BY_VSYNC:integer:=24+1; --4--5-- VSYNC normalement 4 HSYNC
 	-- continuer sur cette voie, fixer le moment de l'interruption exactement à la fin de la HSYNC
 	--j'ai HDISP donc je peut déterminer les chronos exacte et faire un générateur fixe.
 	-- 39*8=312   /40=7.8 /52=6 /32=9.75
   VRAM_HDsp:integer:=800/16; -- des mots de 16bit, contenant plus ou moins de pixels... pensons en référence mode 2, du 800x600 mode 2
   VRAM_VDsp:integer:=600/2;
-  VRAM_Hoffset:integer:=63-46-5; -- 63*16-46*16
-  VRAM_Voffset:integer:=38*8-30*8-4*8+4  +0 -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
+  VRAM_Hoffset:integer:=12; -- 63*16-46*16
+  VRAM_Voffset:integer:=14 -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
 	);
     Port ( CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
            IO_REQ_W : in  STD_LOGIC;
@@ -72,8 +72,8 @@ architecture Behavioral of simple_GateArrayInterrupt is
 	signal RHtot:std_logic_vector(7 downto 0):="00111111";
 	signal RHdisp:std_logic_vector(7 downto 0):="00101000";
 	signal RHsyncpos:std_logic_vector(7 downto 0):="00101110";
-	signal RHwidth:std_logic_vector(3 downto 0):="1101";-- moins un "1110";
-	signal RVwidth:std_logic_vector(4 downto 0):="00100";-- shift 5 "01000";
+	signal RHwidth:std_logic_vector(3 downto 0):="1110";
+	signal RVwidth:std_logic_vector(3 downto 0):="1000";
 	signal RVtot:std_logic_vector(6 downto 0):="0100110";
 	signal RVtotAdjust:std_logic_vector(4 downto 0):="00000";
 	signal RVdisp:std_logic_vector(6 downto 0):="0011001";
@@ -193,10 +193,10 @@ begin
 							RHsyncpos<=registres(2);
 						when 3=>
 	-- selon datasheet et Arnold (Arnold dit qu'il y a une table de conversion HSYNC crtc.c.GA_HSyncWidth)
-							RHwidth<=registres(3)(3 downto 0); -- datasheet
-							RVwidth<=conv_std_logic_vector(NB_LINEH_BY_VSYNC,5);-- (24+1) selon Arnold  ctrct.c.MONITOR_VSYNC_COUNT "01111"; -- arkanoid utilise largeur VSYNC lorsqu'on touvche un monstre ou si on tire avec le bonus
+							RHwidth<=registres(3)(3 downto 0); -- DataSheet
+							RVwidth<=registres(3)(7 downto 4); -- CRTC0
 						when 4=>
-							RVtot<=registres(4)(RVtot'range);
+							RVtot<=registres(4)(RVtot'range) ;
 						when 5=>
 							RVtotAdjust<=registres(5)(RVtotAdjust'range);
 						when 6=>
@@ -231,9 +231,9 @@ begin
 				-- A9_READ
 				Dout<=(others=>'1');
 			end if;
-		elsif IO_ACK='1' then
-			-- IO_ACK DATA_BUS
-			Dout<=(others=>'0'); -- value to check... cpcwiki seem done at the moment I write this sentence :P
+--		elsif IO_ACK='1' then
+--			-- IO_ACK DATA_BUS
+--			Dout<=(others=>'0'); -- value to check... cpcwiki seem done at the moment I write this sentence :P
 		else
 			Dout<=(others=>'Z');
 		end if;
@@ -245,30 +245,27 @@ simple_GateArray_process : process(CLK4MHz) is
  
  variable compteur1MHz : integer range 0 to 3:=0;
 	variable disp:std_logic:='0';
+	variable dispV:std_logic:='0';
+	variable dispH:std_logic:='0';
 	-- selon Quazar 300 fois par seconde
 	-- selon une trace dans google de www.cepece.info/amstrad/docs/garray.html j'ai
 	-- "In the CPC the Gate Array generates maskable interrupts, to do this it uses the HSYNC and VSYNC signals from CRTC, a 6-bit internal counter and monitors..."
 -- à lire aussi peut etre : http://www.cpcwiki.eu/index.php/Synchronising_with_the_CRTC_and_display 
 		-- selon http://cpcrulez.fr/coding_amslive04-z80.htm
-		variable horizontal_counter : integer range 0 to 256-1:=0; --640/16
-		variable vertical_counter : integer range 0 to 128*8-1:=0; --600
-		variable vertical_counter_line : integer range 0 to 128-1:=0;
+		variable horizontal_counter : std_logic_vector(7 downto 0):=(others=>'0'); --640/16
+		variable line_counter : std_logic_vector(7 downto 0):=(others=>'0');
+		variable raster_counter:std_logic_vector(7 downto 0):=(others=>'0');
 		variable etat_rgb : STD_LOGIC:=DO_NOTHING;
 		variable etat_hsync : STD_LOGIC:=DO_NOTHING;
+		variable etat_monitor_hsync : STD_LOGIC_VECTOR(3 downto 0):=(others=>DO_NOTHING);
 		variable etat_vsync : STD_LOGIC:=DO_NOTHING;
-		variable last_etat_hsync : STD_LOGIC:=DO_NOTHING;
-		variable last_etat_vsync : STD_LOGIC:=DO_NOTHING;
-		variable ligne_carac_v:integer range 0 to 32-1:=0; -- buggy boy a RRmax=5
-		variable MA:STD_LOGIC_VECTOR(13 downto 0):=(others=>'0');
-		variable RA:STD_LOGIC_VECTOR(4 downto 0):=(others=>'0');
-		variable ADRESSE_CONSTANT_mem:integer range 0 to 16*1024-1;
-		variable ADRESSE_INC_mem:integer range 0 to 16*1024-1;
-		variable ADRESSE_VAR_mem:integer range 0 to 16*1024-1;
+		variable etat_monitor_vsync : STD_LOGIC_VECTOR(3 downto 0):=(others=>DO_NOTHING);
+		variable etat_monitor_vhsync : STD_LOGIC_VECTOR(3 downto 0):=(others=>DO_NOTHING);
+
+		variable ADRESSE_maStore_mem:STD_LOGIC_VECTOR(13 downto 0):=(others=>'0');
+		variable ADRESSE_MAcurrent_mem:STD_LOGIC_VECTOR(13 downto 0):=(others=>'0');
 		variable crtc_A_mem:std_logic_vector(14 downto 0):=(others=>'0'); --memoire 16bit
 		variable vram_A_mem:std_logic_vector(14 downto 0):=(others=>'0'); --memoire 16bit
-		variable MA_1514_begin:std_logic_vector(1 downto 0):=(others=>'0');
-
-		variable crtc_VSYNC_counter:std_logic_vector(7 downto 0):=(others=>'0');
 
 		variable was_M1_1:boolean:=false;
 		variable waiting:boolean:=false;
@@ -280,17 +277,23 @@ simple_GateArray_process : process(CLK4MHz) is
 
 		variable vram_vertical_offset_counter:integer:=0;
 		variable vram_vertical_counter:integer:=0;
+		variable in_800x600:boolean:=false;
 		variable vram_horizontal_offset_counter:integer:=0;
 		variable vram_horizontal_counter:integer:=0;
-		
+		constant IS_H_MIDDLE :integer:=VRAM_HDsp/2;
+
 		variable palette_A_mem:std_logic_vector(13 downto 0):=(others=>'0');
+		variable palette_D_mem:std_logic_vector(7 downto 0);
 		variable disp_begin_mem:std_logic:='0';
 		variable palette_horizontal_counter:integer range 0 to 1+16+1:=1+16+1; --640/16
 		variable palette_color:integer range 0 to 16-1;
-		variable palette_D_tictac_mem:std_logic_vector(7 downto 0);
-		
-		variable in_800x600:boolean:=false;
-		constant IS_H_MIDDLE :integer:=VRAM_HDsp/2;
+
+		variable RVtotAdjust_mem:std_logic_vector(7 downto 0):=(others=>'0');
+		variable RVtotAdjust_do:boolean:=false;
+
+		variable hSyncCount:std_logic_vector(3 downto 0):=(others=>'0');
+		variable vSyncCount:std_logic_vector(3 downto 0):=(others=>'0');
+
 	begin
 		if falling_edge(CLK4MHz) then
 		
@@ -306,40 +309,72 @@ palette_W<='0';
 			-- z80 mode 1 : the byte need no be sent, as the z80 restarts at logical address x38 regardless(z80 datasheet)
 			case compteur1MHz is
 			when 0=>
-				if horizontal_counter>=RHsyncpos and horizontal_counter<RHsyncpos+RHwidth then
+				-- CRTC0
+				etat_monitor_hsync:=etat_monitor_hsync(2 downto 0) & etat_monitor_hsync(0);
+				if horizontal_counter=RHsyncpos and RHwidth/=x"0" then
+					hSyncCount:= x"0";
 					etat_hsync:=DO_HSYNC;
+					etat_monitor_hsync(0):=DO_HSYNC;
 hsync<='1'; -- selon javacpc,grimware et arnold
-				else
-					etat_hsync:=DO_NOTHING;
+				elsif etat_hsync=DO_HSYNC then
+					hSyncCount:=hSyncCount+1;
+					if hSyncCount=RHwidth then
+						etat_hsync:=DO_NOTHING;
 hsync<='0';
+					elsif hSyncCount=1+4 then
+						etat_monitor_hsync:="0000";
+					end if;
 				end if;
 
 				--http://www.phenixinformatique.com/modules/newbb/viewtopic.php?topic_id=4316&forum=9
 				--Dans les spécifications originale du CRTC, il n'y a aucun controle sur la durée du VSync, de plus, les bits 4 à 7 du R3 sont inutilisés. Certains constructeurs ont donc "récupéré" ces bits libres pour y coller leurs propres "features", pour la plupart liées au VSync (un peu comme le mode entrelacé du R8, d'ou les incompatiblités d'un type de CRTC à l'autre).
 				--PPI read CRTC.isVSYnc bool
-				if vertical_counter>=RVsyncpos*(RRmax+1) and vertical_counter<RVsyncpos*(RRmax+1)+RVwidth then
-					etat_vsync:=DO_VSYNC;
+				if horizontal_counter = 0 then
+					etat_monitor_vsync:=etat_monitor_vsync(2 downto 0) & etat_monitor_vsync(0);
+					if raster_counter=0 and line_counter=RVsyncpos then
+						vSyncCount:= x"0";
+						etat_vsync:=DO_VSYNC;
+						etat_monitor_vsync(0):=DO_VSYNC;
 crtc_VSYNC<='1'; -- c'est bien 1 ici car il faut qu'un interrupt pendant le vsync=1 sinon border va trop vite
 vsync<='1';
-				else -- selon Grim (forum) and 
-					etat_vsync:=DO_NOTHING;
+					elsif etat_vsync=DO_VSYNC then
+						vSyncCount:=vSyncCount+1;
+						if vSyncCount=RVwidth then
+							etat_vsync:=DO_NOTHING;
+							etat_monitor_vsync:="0000";
 crtc_VSYNC<='0';
 vsync<='0';
+						elsif vSyncCount=2+2 then
+							etat_monitor_vsync:="0000";
+						end if;
+					end if;
 				end if;
+				etat_monitor_vhsync:=etat_monitor_vhsync(2 downto 0) & etat_monitor_vsync(2);
 
-				if not(zap_scan) and horizontal_counter<RHdisp and vertical_counter<RVDisp*(RRmax+1) then
-					disp:='1';
+				if zap_scan then
+					dispH:='0';
+				elsif horizontal_counter = 0 then
+					dispH:='1';
+				elsif horizontal_counter=RHdisp then
+					dispH:='0';
+					if raster_counter=RRMax then
+						ADRESSE_maStore_mem:=ADRESSE_maStore_mem + RHDisp;
+					end if;
+				end if;
+				if line_counter=0 then
+					dispV:='1';
+				elsif line_counter=RVDisp and raster_counter=0 then
+					dispV:='0';
+				end if;
+				disp:=dispH and dispV;
+
+				if disp='1' then
 					-- http://quasar.cpcscene.com/doku.php?id=assem:crtc
-					-- il faut respecter les ruptures ADRESSE_CONSTANT_mem:=conv_integer(OFFSET(13 downto 0)) mod (16*1024);
-					ADRESSE_INC_mem:=(vertical_counter_line*conv_integer(RHdisp)) mod (16*1024);
-					ADRESSE_VAR_mem:=(horizontal_counter) mod (16*1024);
-					MA:=conv_std_logic_vector(ADRESSE_CONSTANT_mem+ADRESSE_INC_mem+ADRESSE_VAR_mem,14);
-					RA:=conv_std_logic_vector(ligne_carac_v,5);
-					crtc_A_mem(14 downto 0):=MA(13 downto 12) & RA(2 downto 0) & MA(9 downto 0);
+					crtc_A_mem(14 downto 0):=ADRESSE_MAcurrent_mem(13 downto 12) & raster_counter(2 downto 0) & ADRESSE_MAcurrent_mem(9 downto 0);
+
 					--http://cpcrulez.fr/coding_amslive02-balayage_video.htm dit :
 					--MA(13 downto 12) & RA(2 downto 0) & MA(9 downto 0) & CCLK
 				else
-					disp:='0';
 					crtc_A_mem:=(others=>'0');
 				end if;
 				crtc_A(15 downto 0)<=crtc_A_mem(14 downto 0) & '0';
@@ -351,75 +386,88 @@ vsync<='0';
 
 -- VRAM_HDsp VRAM_VDsp
 -- on va y aller tout dou
-if etat_vsync=DO_VSYNC and last_etat_vsync=DO_NOTHING then
+if etat_monitor_vsync(2)=DO_VSYNC and etat_monitor_vsync(3)=DO_NOTHING then
 	vram_vertical_offset_counter:=0;
-	vram_vertical_counter:=0;
 end if;
-if etat_hsync=DO_HSYNC and last_etat_hsync=DO_NOTHING then
-	if vram_vertical_offset_counter<=VRAM_Voffset then
-		vram_vertical_offset_counter:=vram_vertical_offset_counter+1;
-		if vram_vertical_offset_counter>VRAM_Voffset then
-			palette_A_mem:=(others=>'0');
-		end if;
-	else
+if etat_monitor_hsync(2)=DO_HSYNC and etat_monitor_hsync(3)=DO_NOTHING then
+	if vram_vertical_counter<VRAM_VDsp then
 		vram_vertical_counter:=vram_vertical_counter+1;
 	end if;
+	if vram_vertical_offset_counter<VRAM_Voffset then
+		vram_vertical_offset_counter:=vram_vertical_offset_counter+1;
+	elsif vram_vertical_offset_counter=VRAM_Voffset then
+		vram_vertical_offset_counter:=vram_vertical_offset_counter+1;
+		vram_vertical_counter:=0;
+	end if;
 	vram_horizontal_offset_counter:=0;
-	vram_horizontal_counter:=0;
 end if;
 
 -- là on scan du 800x600 selon VSYNC et HSYNC, donc on peut écrire du border...
-in_800x600:=false;
-if vram_horizontal_offset_counter>VRAM_Hoffset then
-	if vram_horizontal_counter<VRAM_HDsp then
-		if vram_vertical_offset_counter>VRAM_Voffset and vram_vertical_counter<VRAM_VDsp then
-			in_800x600:=true;
-			vram_A_mem:=conv_std_logic_vector(vram_vertical_counter*VRAM_HDsp+vram_horizontal_counter,vram_A_mem'length);
-		else
-			disp:='0';
-		end if;
-		vram_horizontal_counter:=vram_horizontal_counter+1;
-	elsif vram_horizontal_counter=VRAM_HDsp then
-		vram_horizontal_counter:=vram_horizontal_counter+1;
-		disp:='0';
-	end if;
-else
+if vram_horizontal_counter<VRAM_HDsp then
+	vram_horizontal_counter:=vram_horizontal_counter+1;
+end if;
+if vram_horizontal_offset_counter<VRAM_Hoffset then
 	vram_horizontal_offset_counter:=vram_horizontal_offset_counter+1;
-	disp:='0';
+elsif vram_horizontal_offset_counter=VRAM_Hoffset then
+	vram_horizontal_offset_counter:=vram_horizontal_offset_counter+1;
+	vram_horizontal_counter:=0;
 end if;
 
-last_etat_vsync:=etat_vsync;
-last_etat_hsync:=etat_hsync;
+
+if vram_vertical_counter<VRAM_VDsp and vram_horizontal_counter<VRAM_HDsp then
+	in_800x600:=true;
+	if vram_horizontal_counter=0 and vram_vertical_counter= 0 then
+		palette_A_mem:=(others=>'0');
+	end if;
+	vram_A_mem:=conv_std_logic_vector(vram_vertical_counter*VRAM_HDsp+vram_horizontal_counter,vram_A_mem'length);
+else
+	-- do kill disp
+	disp:='0';
+	in_800x600:=false;
+end if;
+
 
 				-- le CRTC est séparé de la gatearray donc il y a un temps de retard ?
 				-- pas sûr car c'est du gate array (une table de vérité barbare) sur état (et non sur front !)
-				if horizontal_counter=RHtot then -- tot-1 ok
-					horizontal_counter:=0;
-					if vertical_counter=(RVtot)*(RRmax+1)+RRmax + RVtotAdjust then
-						vertical_counter:=0;
-						vertical_counter_line:=0;
-						ligne_carac_v:=0;
-						zap_scan:=false;
-						ADRESSE_CONSTANT_mem:=conv_integer(OFFSET(13 downto 0)) mod (16*1024);
-					else
-						vertical_counter:=vertical_counter+1;
-						
-						
-						if ligne_carac_v=RRmax then
-							ligne_carac_v:=0;
-							vertical_counter_line:=vertical_counter_line+1;
-						else
-							ligne_carac_v:=ligne_carac_v+1;
+				if horizontal_counter=RHtot and RHtot/=0 then
+					horizontal_counter:=(others=>'0');
+					if (raster_counter=RRMax and line_counter=RVTot and RVtotAdjust=0 and not(RVtotAdjust_do))
+						or (RVtotAdjust_do and RVtotAdjust_mem=RVtotAdjust) then
+							RVtotAdjust_do:=false;
+							raster_counter:=(others=>'0');
+							zap_scan:=false;
+							ADRESSE_maStore_mem:=OFFSET(13 downto 0);
+							line_counter:=(others=>'0');
+							ADRESSE_MAcurrent_mem:=ADRESSE_maStore_mem;
+					elsif raster_counter=RRMax then
+						raster_counter:=(others=>'0');
+						if line_counter=RVTot and not(RVtotAdjust_do) then
+							RVtotAdjust_mem:=x"01";
+							RVtotAdjust_do:=true;
+						elsif RVtotAdjust_do then
+							RVtotAdjust_mem:=RVtotAdjust_mem+1;
 						end if;
+						ADRESSE_MAcurrent_mem:=ADRESSE_maStore_mem;
+						line_counter:=(line_counter+1) and x"7F";
+					else
+						raster_counter:=(raster_counter + 1) and x"1F";
+						if RVtotAdjust_do then
+							RVtotAdjust_mem:=RVtotAdjust_mem+1;
+						end if;
+						ADRESSE_MAcurrent_mem:=ADRESSE_maStore_mem;
 					end if;
 				else
-					horizontal_counter:=horizontal_counter+1;
+					horizontal_counter:=(horizontal_counter+1) and x"7F";
+					ADRESSE_MAcurrent_mem:=ADRESSE_maStore_mem+horizontal_counter;
 				end if;
+
+
 			when 1=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '0';
 				if disp='1' then
 					crtc_W<='1';
 				end if;
+
 			when 2=>
 				crtc_A(15 downto 0)<=crtc_A_mem(14 downto 0) & '1';
 				crtc_R<='1';
@@ -436,18 +484,18 @@ last_etat_hsync:=etat_hsync;
 -- là on scan du 800x600 selon VSYNC et HSYNC, donc on peut écrire du border...
 			if palette_horizontal_counter<1+16+1 then
 					palette_horizontal_counter:=palette_horizontal_counter+1;
-			elsif in_800x600 and vram_horizontal_counter=IS_H_MIDDLE then
-				--if disp='1' then
+			elsif in_800x600 and vram_horizontal_counter=IS_H_MIDDLE and compteur1MHz=0 then
+				if disp='1' then
 					palette_horizontal_counter:=0;
-				--else
-				--	palette_A_mem:=palette_A_mem+16+1;
-				--end if;
+				else
+					palette_A_mem:=palette_A_mem+16+1;
+				end if;
 			end if;
 			-- on nourri la palette
 			if palette_horizontal_counter<1 then
 				palette_A<=palette_A_mem(12 downto 0);
-				palette_D_tictac_mem:="000000" & MODE_select;
-				palette_D<=palette_D_tictac_mem;
+				palette_D_mem:="000000" & MODE_select;
+				palette_D<=palette_D_mem;
 				if palette_A_mem(13)='0' then
 					palette_W<='1';
 				end if;
@@ -459,8 +507,8 @@ last_etat_hsync:=etat_hsync;
 				else
 					palette_color:=palette_color+1;
 				end if;
-				palette_D_tictac_mem:=conv_std_logic_vector(pen(palette_color),8);
-				palette_D<=palette_D_tictac_mem;
+				palette_D_mem:=conv_std_logic_vector(pen(palette_color),8);
+				palette_D<=palette_D_mem;
 				if palette_A_mem(13)='0' then
 					palette_W<='1';
 				end if;

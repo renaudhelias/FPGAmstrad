@@ -21,7 +21,7 @@ entity simple_DSK is
            dsk_A : out  STD_LOGIC_VECTOR (19 downto 0);
            dsk_W : out  STD_LOGIC;
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
-			  M1_n:in STD_LOGIC;
+			  --M1_n:in STD_LOGIC;
 			  dsk_transmit : out STD_LOGIC -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
 			  --indexing: out STD_LOGIC -- z80 must wait (sur le reset du z80)
 			  --is_ucpm : in std_logic

@@ -74,7 +74,7 @@
             <line x2="0" y1="-288" y2="-288" x1="64" />
         </blockdef>
         <blockdef name="amstrad_video">
-            <timestamp>2017-12-30T14:25:57</timestamp>
+            <timestamp>2018-1-4T21:5:33</timestamp>
             <rect width="64" x="0" y="20" height="24" />
             <line x2="0" y1="32" y2="32" x1="64" />
             <rect width="64" x="0" y="84" height="24" />
@@ -98,7 +98,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2017-12-31T20:14:27</timestamp>
+            <timestamp>2018-1-4T19:41:50</timestamp>
             <line x2="448" y1="496" y2="496" x1="384" />
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />

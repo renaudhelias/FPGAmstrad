@@ -121,7 +121,7 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 	signal gripsou_ram_A:std_logic_vector(ram_A'range):=(others=>'0');
 	signal gripsou_ram_D:std_logic_vector(ram_D'range):=(others=>'Z');
 	signal gripsou_ram_W:std_logic:='0';
-	signal gripsou_address:std_logic_vector(ram_A'range):=(others=>'0');
+	--signal gripsou_address:std_logic_vector(ram_A'range):=(others=>'0');
 	signal gripsou_data:std_logic_vector(ram_D'range):=(others=>'Z');
 	signal gripsou_write:std_logic:='0';
 	
@@ -325,7 +325,7 @@ begin
 							transmit_ram_D<=data_mem;gripsou_data<=data_mem;
 --test A/D transmit_ram_D<=conv_std_logic_vector(cursor,8);
 							address_mem:=transmit_address_to(ram_A'range)+cursor;
-							gripsou_address<=address_mem;
+							--gripsou_address<=address_mem;
 							transmit_ram_W<='1';gripsou_write<='1';
 							transmit_step:=2;
 						when 2=>
@@ -950,7 +950,7 @@ end if;
 		--variable sector_countdown:integer range 0 to 9;
 		--variable track_countdown:integer range 0 to 40*2;
 		variable gripsou_ram_A_mem:std_logic_vector(gripsou_ram_A'range);
-		type sector_order_type is array(0 to 8) of integer range 0 to 8;
+		type sector_order_type is array(0 to 14) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
 	begin
 		--is_ucpm<=ucpm;

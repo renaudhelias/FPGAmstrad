@@ -139,8 +139,8 @@ begin
 					state <= delay ;
 					fok <= '1' ;
 					fok_internal <='1';
-				when others =>
-					state <= delay ;
+--				when others =>
+--					state <= delay ;
 			end case ; 
 		end if ;
 	end process ;

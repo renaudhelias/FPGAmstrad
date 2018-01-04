@@ -34,7 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity AmstradRAMROM is
     Port ( A : in STD_LOGIC_VECTOR (15 downto 0);
            wr_z80 : in STD_LOGIC;
-			  wr_io_z80 : in STD_LOGIC;
+			  --wr_io_z80 : in STD_LOGIC;
            lowerROMen : in  STD_LOGIC;
            upperROMen : in  STD_LOGIC;
            ram_A : out  STD_LOGIC_VECTOR (17 downto 0);

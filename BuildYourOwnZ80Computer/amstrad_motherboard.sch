@@ -167,7 +167,7 @@
             <line x2="64" y1="-48" y2="-144" x1="64" />
         </blockdef>
         <blockdef name="AmstradRAMROM">
-            <timestamp>2011-4-18T15:7:12</timestamp>
+            <timestamp>2018-1-4T19:40:4</timestamp>
             <rect width="64" x="0" y="116" height="24" />
             <line x2="0" y1="128" y2="128" x1="64" />
             <rect width="64" x="0" y="180" height="24" />
@@ -179,7 +179,6 @@
             <rect width="64" x="320" y="-44" height="24" />
             <line x2="384" y1="-32" y2="-32" x1="320" />
             <line x2="0" y1="0" y2="0" x1="64" />
-            <line x2="0" y1="64" y2="64" x1="64" />
             <rect width="256" x="64" y="-320" height="568" />
         </blockdef>
         <blockdef name="gnd">
@@ -332,8 +331,7 @@
             <rect width="288" x="64" y="-256" height="944" />
         </blockdef>
         <blockdef name="simple_DSK">
-            <timestamp>2017-12-30T14:36:11</timestamp>
-            <line x2="0" y1="96" y2="96" x1="64" />
+            <timestamp>2018-1-4T19:40:14</timestamp>
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
@@ -417,9 +415,7 @@
             <line x2="496" y1="-240" y2="-240" x1="432" />
         </blockdef>
         <blockdef name="please_wait">
-            <timestamp>2011-5-5T16:42:16</timestamp>
-            <rect width="64" x="0" y="20" height="24" />
-            <line x2="0" y1="32" y2="32" x1="64" />
+            <timestamp>2018-1-4T19:40:21</timestamp>
             <line x2="0" y1="-96" y2="-96" x1="64" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
             <line x2="384" y1="-96" y2="-96" x1="320" />
@@ -448,7 +444,6 @@
         </block>
         <block symbolname="AmstradRAMROM" name="XLXI_173">
             <blockpin signalname="MEM_WR" name="wr_z80" />
-            <blockpin signalname="IO_WR" name="wr_io_z80" />
             <blockpin signalname="LED1" name="lowerROMen" />
             <blockpin signalname="LED2" name="upperROMen" />
             <blockpin signalname="A(15:0)" name="A(15:0)" />
@@ -588,7 +583,6 @@
             <blockpin signalname="A(0)" name="A0" />
             <blockpin signalname="IO_RD" name="IO_RD" />
             <blockpin signalname="IO_WR" name="IO_WR" />
-            <blockpin signalname="XLXN_845" name="M1_n" />
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="A(10),A(8),A(7)" name="A10_A8_A7(2:0)" />
             <blockpin signalname="D(7:0)" name="D_command(7:0)" />
@@ -689,7 +683,6 @@
             <blockpin signalname="CLK8(2)" name="CLK_n" />
             <blockpin signalname="XLXN_830" name="WAIT_n" />
             <blockpin signalname="XLXN_802" name="CLK_WAIT_n" />
-            <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
         </block>
         <block symbolname="and2" name="XLXI_570">
             <blockpin signalname="XLXN_807" name="I0" />
@@ -1193,9 +1186,6 @@
             <wire x2="5520" y1="704" y2="704" x1="5504" />
         </branch>
         <branch name="CLK8(2:0)">
-            <wire x2="2576" y1="2480" y2="2480" x1="352" />
-            <wire x2="352" y1="2480" y2="2896" x1="352" />
-            <wire x2="448" y1="2896" y2="2896" x1="352" />
             <wire x2="2576" y1="1296" y2="1344" x1="2576" />
             <wire x2="2576" y1="1344" y2="1408" x1="2576" />
             <wire x2="2576" y1="1408" y2="1472" x1="2576" />
@@ -1206,7 +1196,6 @@
             <wire x2="4960" y1="2592" y2="2592" x1="4864" />
             <wire x2="4960" y1="2592" y2="2992" x1="4960" />
             <wire x2="5824" y1="2992" y2="2992" x1="4960" />
-            <wire x2="2576" y1="1552" y2="2480" x1="2576" />
             <wire x2="3056" y1="1376" y2="1376" x1="2784" />
             <wire x2="2784" y1="1376" y2="1552" x1="2784" />
             <wire x2="5072" y1="576" y2="576" x1="4864" />
@@ -1230,7 +1219,6 @@
             <wire x2="2768" y1="608" y2="608" x1="2704" />
             <wire x2="2704" y1="608" y2="800" x1="2704" />
             <wire x2="2896" y1="800" y2="800" x1="2704" />
-            <wire x2="3408" y1="800" y2="800" x1="2896" />
             <wire x2="2896" y1="800" y2="2672" x1="2896" />
             <wire x2="3216" y1="2672" y2="2672" x1="2896" />
             <wire x2="3216" y1="2672" y2="2704" x1="3216" />
@@ -1244,8 +1232,6 @@
             <wire x2="2496" y1="2752" y2="2752" x1="2464" />
             <wire x2="2464" y1="2672" y2="2752" x1="2464" />
             <wire x2="2896" y1="2672" y2="2672" x1="2464" />
-            <wire x2="3472" y1="704" y2="704" x1="3408" />
-            <wire x2="3408" y1="704" y2="800" x1="3408" />
             <wire x2="5072" y1="1216" y2="1216" x1="5040" />
             <wire x2="5040" y1="1216" y2="2704" x1="5040" />
         </branch>
@@ -1302,10 +1288,8 @@
             <wire x2="1712" y1="3408" y2="3792" x1="1712" />
             <wire x2="1920" y1="3792" y2="3792" x1="1712" />
             <wire x2="5008" y1="3408" y2="3408" x1="1712" />
-            <wire x2="5824" y1="3408" y2="3408" x1="5008" />
             <wire x2="5072" y1="928" y2="928" x1="5008" />
             <wire x2="5008" y1="928" y2="3408" x1="5008" />
-            <wire x2="5824" y1="3248" y2="3408" x1="5824" />
         </branch>
         <branch name="MEM_WR">
             <wire x2="3792" y1="2880" y2="2880" x1="2352" />
