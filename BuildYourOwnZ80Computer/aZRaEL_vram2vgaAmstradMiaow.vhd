@@ -129,8 +129,9 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 end aZRaEL_vram2vgaAmstradMiaow;
 
 architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
-	constant DO_NOTHING_OUT : integer range 0 to 1:=0;
-	constant DO_READ : integer range 0 to 1:=1;
+	constant DO_NOTHING_OUT : integer range 0 to 2:=0;
+	constant DO_READ : integer range 0 to 2:=1;
+	constant DO_BORDER : integer range 0 to 2:=2;
 	--constant DO_LED_ON: integer range 0 to 3:=2;
 	--constant DO_LED_OFF: integer range 0 to 3:=3;
 	
@@ -215,8 +216,8 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable palette_color_retard:integer range 0 to 16-1:=0;
 	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
-	variable etat_rgb : integer range 0 to 1:=DO_NOTHING_OUT;
-	variable etat_rgb_retard : integer range 0 to 1:=DO_NOTHING_OUT;
+	variable etat_rgb : integer range 0 to 2:=DO_NOTHING_OUT;
+	variable etat_rgb_retard : integer range 0 to 2:=DO_NOTHING_OUT;
 	variable etat_hsync : STD_LOGIC:=DO_NOTHING;
 	variable etat_hsync_retard : STD_LOGIC:=DO_NOTHING;
 	variable etat_vsync : STD_LOGIC:=DO_NOTHING;
@@ -245,6 +246,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 
 	
 	variable pen_mem:std_logic_vector(5 downto 0);
+	variable border_mem:std_logic_vector(5 downto 0);
 	
 	--constant PEN_MODE_11:std_logic_vector(5 downto 0):="011101";
 	--constant PEN_LED_ON:std_logic_vector(5 downto 0):="001100";
@@ -254,6 +256,7 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable hsync_mem:std_logic;
 	variable vsync_mem:std_logic;
 	
+	variable is_full_vertical_BORDER:boolean:=false;
 begin
 
 	RED_FF     <=pen_mem(5 downto 4);
@@ -299,7 +302,9 @@ begin
 --			pen_mem:=PEN_LED_ON;
 --		elsif etat_rgb = DO_LED_OFF then
 --			pen_mem:=PEN_LED_OFF;
-		if etat_rgb_retard /= DO_READ then
+		if etat_rgb_retard = DO_BORDER then
+			pen_mem:=border_mem;
+		elsif etat_rgb_retard /= DO_READ then
 			pen_mem:=PEN_NONE;
 		end if;
 		etat_rgb_retard:=etat_rgb;
@@ -331,6 +336,12 @@ begin
 
 		if palette_action_retard=DO_MODE then
 			MODE_select<=palette_D(1 downto 0);
+			border_mem:=palette(conv_integer(palette_D(7 downto 3)));
+			if palette_D(2)='1' then
+				is_full_vertical_BORDER:=true;
+			else
+				is_full_vertical_BORDER:=false;
+			end if;
 		elsif palette_action_retard=DO_COLOR then
 			--WARNING:PhysDesignRules:367 - The signal <XLXI_511/XLXI_476/Mram_pen_RAMD_D1_O>
 			--is incomplete. The signal does not drive any load pins in the design.
@@ -357,7 +368,11 @@ begin
 				--cursor_pixel:=((h mod 8) / 1) mod 8;
 			end if;
 			new_h:=h/CHAR_WIDTH; -- véritablement un octet représente physique 8 pixels, 
-			etat_rgb:=DO_READ;
+			if is_full_vertical_BORDER then
+				etat_rgb:=DO_BORDER;
+			else
+				etat_rgb:=DO_READ;
+			end if;
 
 			MA:=conv_std_logic_vector(v*(VRAM_HDsp/CHAR_WIDTH),14);
 			MA:=new_h+MA;

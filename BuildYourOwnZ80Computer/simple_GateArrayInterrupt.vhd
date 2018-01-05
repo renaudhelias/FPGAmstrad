@@ -95,7 +95,7 @@ architecture Behavioral of simple_GateArrayInterrupt is
 
 	type pen_type is array(15 downto 0) of integer range 0 to 31;
 	signal pen:pen_type; --:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
-	
+	signal border:integer range 0 to 31;
 	--signal crtc_A_i:STD_LOGIC_VECTOR (15 downto 0); -- test A/D
 begin
 
@@ -149,6 +149,7 @@ ctrcConfig_process:process(CLK4MHz,reset) is
 	variable border_ink:STD_LOGIC;
 	variable ink_color:STD_LOGIC_VECTOR(4 downto 0);
 	variable pen_mem:pen_type;--:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
+	variable border_mem:integer range 0 to 31;
 begin
 	pen<=pen_mem;
 	if reset='1' then
@@ -165,6 +166,10 @@ begin
 					ink_color:=D(4 downto 0);
 					if border_ink='0' then
 						pen_mem(conv_integer(ink)):=conv_integer(ink_color);
+						pen<=pen_mem;
+					else
+						border_mem:=conv_integer(ink_color);
+						border<=border_mem;
 					end if;
 				end if;
 			end if;
@@ -484,16 +489,16 @@ end if;
 			if palette_horizontal_counter<1+16+1 then
 					palette_horizontal_counter:=palette_horizontal_counter+1;
 			elsif in_800x600 and vram_horizontal_counter=IS_H_MIDDLE and compteur1MHz=0 then
-				if disp='1' then
-					palette_horizontal_counter:=0;
-				else
-					palette_A_mem:=palette_A_mem+16+1;
-				end if;
+				palette_horizontal_counter:=0;
 			end if;
 			-- on nourri la palette
 			if palette_horizontal_counter<1 then
 				palette_A<=palette_A_mem(12 downto 0);
-				palette_D_mem:="000000" & MODE_select;
+				if disp='1' then
+					palette_D_mem:="000000" & MODE_select;
+				else
+					palette_D_mem:=conv_std_logic_vector(border,5) & "1" & MODE_select;
+				end if;
 				palette_D<=palette_D_mem;
 				if palette_A_mem(13)='0' then
 					palette_W<='1';
