@@ -149,12 +149,14 @@ begin
 		variable data_reader1_mem:std_logic_vector(7 downto 0):=(others=>'0');
 		variable data_reader2_mem:std_logic_vector(15 downto 0):=(others=>'0');
 		variable data_reader4_mem:std_logic_vector(31 downto 0):=(others=>'0');
+		variable address_mem:std_logic_vector(31 downto 0);
 	begin
 		--leds<=leds_mem;
+		data_reader1<=data_reader1_mem;
+		data_reader2<=data_reader2_mem;
+		data_reader4<=data_reader4_mem;
+		data_spi_A<=address_mem;
 		if rising_edge(CLK) then
-			data_reader1<=data_reader1_mem;
-			data_reader2<=data_reader2_mem;
-			data_reader4<=data_reader4_mem;
 			
 			--leds<=conv_std_logic_vector(data_step,8);
 			
@@ -173,7 +175,7 @@ begin
 					case data_step is
 						when 0=>
 							data_cursor:=0;
-							data_spi_A<=data_addr +data_cursor;
+							address_mem:=data_addr +data_cursor;
 							data_step:=1;
 							data_spi_do<='1';
 						when 1=>
@@ -184,13 +186,13 @@ begin
 								when 2 => -- 2 byte
 									data_reader2_mem(15 downto 8):=spi_D(7 downto 0);
 									data_cursor:=1;
-									data_spi_A<=data_addr +data_cursor;
+									address_mem:=data_addr +data_cursor;
 									data_step:=2;
 									data_spi_do<='1';
 								when 4 => -- 4 byte
 									data_reader4_mem(31 downto 24):=spi_D(7 downto 0);
 									data_cursor:=1;
-									data_spi_A<=data_addr +data_cursor;
+									address_mem:=data_addr +data_cursor;
 									data_step:=2;
 									data_spi_do<='1';
 								when 03 =>
@@ -204,7 +206,7 @@ begin
 								when 4 => -- 4 byte
 									data_reader4_mem(23 downto 16):=spi_D(7 downto 0);
 									data_cursor:=2;
-									data_spi_A<=data_addr +data_cursor;
+									address_mem:=data_addr +data_cursor;
 									data_step:=3;
 									data_spi_do<='1';
 								when 1 => NULL;
@@ -215,7 +217,7 @@ begin
 								when 4 => -- 4 byte
 									data_reader4_mem(15 downto 8):=spi_D(7 downto 0);
 									data_cursor:=3;
-									data_spi_A<=data_addr +data_cursor;
+									address_mem:=data_addr +data_cursor;
 									data_step:=4;
 									data_spi_do<='1';
 								when 1 => NULL;
@@ -245,7 +247,9 @@ begin
 	comparator:process(CLK) is
 		variable compare_step:integer range 0 to 3:=0;
 		variable cursor:integer range 0 to 12:=0;
+		variable address_mem:std_logic_vector(31 downto 0);
 	begin
+		compare_spi_A<=address_mem;
 		if rising_edge(CLK) then
 			compare_spi_do<='0';
 			--leds<=conv_std_logic_vector(compare_step,8);
@@ -258,13 +262,13 @@ begin
 				end if;
 			end if;
 			if not compare_done then
-				compare_spi_A<=compare_address+cursor;
+				--address_mem:=compare_address+cursor;
 				if not(compare_spi_do='1') and spi_done='1' then
 					case compare_step is
 						when 0=>
 							cursor:=0;
 							compare_spi_do<='1';
-							compare_spi_A<=compare_address+cursor;
+							address_mem:=compare_address+cursor;
 							compare_step:=1;
 						when 1=>
 							if compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_D then
@@ -279,7 +283,7 @@ begin
 									compare_step:=3;
 								else
 									compare_spi_do<='1';
-									compare_spi_A<=compare_address+cursor;
+									address_mem:=compare_address+cursor;
 								end if;
 							end if;
 						when 2=>NULL; -- over run
@@ -295,8 +299,13 @@ begin
 		variable cursor:integer range 0 to BLOCK_SIZE_MAXIMUM;
 		variable transmit_step:integer range 0 to 4;
 		variable data_mem:std_logic_vector(7 downto 0);
-		variable address_mem:std_logic_vector(ram_A'range);
+		variable address_from_mem:std_logic_vector(31 downto 0);
+		variable address_to_mem:std_logic_vector(ram_A'range);
 	begin
+		transmit_ram_D<=data_mem;
+		gripsou_data<=data_mem;
+		transmit_spi_A<=address_from_mem;
+		transmit_ram_A<=address_to_mem;
 		if rising_edge(CLK) then
 			--leds<=conv_std_logic_vector(transmit_step,8);
 			if transmit_do then
@@ -313,8 +322,8 @@ begin
 			if not transmit_done then
 				-- read byte
 				-- write byte
-				transmit_spi_A<=transmit_address_from+cursor;
-				transmit_ram_A<=transmit_address_to(ram_A'range)+cursor;
+				address_from_mem:=transmit_address_from+cursor;
+				address_to_mem:=transmit_address_to(ram_A'range)+cursor;
 				if not(transmit_spi_do='1') and spi_done='1' then
 					case transmit_step is
 						when 0=>
@@ -322,9 +331,9 @@ begin
 							transmit_step:=1;
 						when 1=>
 							data_mem:=spi_D;
-							transmit_ram_D<=data_mem;gripsou_data<=data_mem;
+							
 --test A/D transmit_ram_D<=conv_std_logic_vector(cursor,8);
-							address_mem:=transmit_address_to(ram_A'range)+cursor;
+							--address_to_mem:=transmit_address_to(ram_A'range)+cursor;
 							--gripsou_address<=address_mem;
 							transmit_ram_W<='1';gripsou_write<='1';
 							transmit_step:=2;
@@ -333,7 +342,7 @@ begin
 							transmit_step:=0;
 							cursor:=cursor+1;
 							if cursor>=transmit_length then
-								transmit_ram_D<=(others=>'Z');gripsou_data<=(others=>'Z');
+								--transmit_ram_D<=(others=>'Z');gripsou_data<=(others=>'Z');
 								transmit_done<=true;
 								transmit_step:=3;
 							end if;
@@ -752,15 +761,16 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 						folder_sector_pointer:=getSector(folder_cluster_pointer);
 						if bc(folder_cluster_pointer) then
 							-- last FAT pointer : no more next FileEntry. (case root for me)
-							if file_select>0 then
+							--if file_select>0 then
 								-- re-reset inserting first disk.
 								switch_transmit_gripsou<=SWITCH_NONE;
 								step_var:=0;
 								dsk_number:=(others=>'0');
-								load_done:='0';
+								--load_done:='0';
 								files_loaded:="111" & TEST_DSK_OFF; -- ne re-reload pas les ROMs
+								--files_loaded:="000" & TEST_DSK_OFF;
 								file_select:=(others=>'0'); -- remet la première disquette
-							end if;
+							--end if;
 						else
 							step_var:=8;
 							folder_DirStruct_number:=0;
@@ -794,7 +804,7 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 					when 24=>
 						file_sector_pointer:=getSector(file_cluster_pointer);
 						if bc(file_cluster_pointer) then
-							step_var:=29;
+							step_var:=27;
 						else
 							step_var:=17;
 						end if;
@@ -850,6 +860,17 @@ end if;
 					when 21=> -- search DSK
 						if compare_result then
 							-- nom et extention de fichier identique
+							-- premier caractere : si E5 alors fichier effacé
+							get_var1(data_reader1,folder_sector_pointer+(folder_DirStruct_number-1)*32);
+							step_var:=29;
+						else
+							step_var:=8;
+						end if;
+					when 29=>
+						if data_reader1=x"E5" then
+							-- fichier effacé
+							step_var:=8;
+						else
 							if dsk_number>=file_select then
 								files_loaded(0):='1';
 								get_var4(file_size,folder_sector_pointer+(folder_DirStruct_number-1)*32+28);
@@ -858,11 +879,7 @@ end if;
 								dsk_number:=dsk_number+1;
 								step_var:=8;
 							end if;
-						else
-							step_var:=8;
 						end if;
-						
-						
 
 --when 24=>NULL;
 --when 25=>NULL;
@@ -906,19 +923,7 @@ end if;
 						load_done:='1';
 					end if;
 					
-					when 27=>NULL; -- bad root folder cluster
-					--when 28=>NULL; -- bad next folder cluster
-					when 29=>NULL; -- bad file cluster
-					--when 32=>NULL; -- bad root cluster pointer debug
-					--when 33=>NULL; -- bad firstaddress debug
-					--when 34=>NULL; -- bad 4 debug
-					--when 35=>NULL; -- bad 512 debug
-					--when 36=>NULL; -- bad offset debug
-					--when 37=>NULL; -- bad root address pointer debug
-					--when 38=>NULL; -- bad root address pointer debug
-					--when 40=>NULL; -- yeah !
-					--when 41=>NULL; -- oh no !
-					--when 42=>NULL; -- first rom name failed
+					when 27=>NULL; -- bad root folder cluster or bad file cluster
 				end case;
 end if;
 			end if;

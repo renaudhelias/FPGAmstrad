@@ -104,7 +104,7 @@ begin
 		variable D2:STD_LOGIC_VECTOR (7 downto 0):=(others=>'0');
 		variable crtc_R_do:boolean:=false;-- test A/D
 	begin
-		
+		crtc_D<=D2;
 		if reset='1' then
 			crtc_transmit<='0'; -- relax
 			ram_D<=(others=>'Z'); -- relax
@@ -132,7 +132,6 @@ begin
 				else
 					-- z80 working
 				end if;
-				crtc_D<=D2;
 			end if;
 		end if;
 	end process;
@@ -151,6 +150,7 @@ ctrcConfig_process:process(CLK4MHz,reset) is
 	variable ink_color:STD_LOGIC_VECTOR(4 downto 0);
 	variable pen_mem:pen_type;--:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
 begin
+	pen<=pen_mem;
 	if reset='1' then
 		Dout<=(others=>'Z'); -- relax
 	elsif rising_edge(CLK4MHz) then
@@ -165,7 +165,6 @@ begin
 					ink_color:=D(4 downto 0);
 					if border_ink='0' then
 						pen_mem(conv_integer(ink)):=conv_integer(ink_color);
-						pen<=pen_mem;
 					end if;
 				end if;
 			end if;

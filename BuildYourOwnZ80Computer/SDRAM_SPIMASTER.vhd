@@ -28,10 +28,10 @@ entity SDRAM_SPIMASTER is
 --			  CD_n : in  STD_LOGIC; -- useless here, just for plug
 			  --SDCS : out STD_LOGIC; -- actif 1, après on on a un not SS_n SS_n=0 tout le temps donne le même effet
            spi_R:in STD_LOGIC;
-			  spi_Rdone:out STD_LOGIC:='1';
+			  spi_Rdone:out STD_LOGIC;
 --			  spi_W:in STD_LOGIC:='0';
 --			  spi_Wdone:out STD_LOGIC:='1';
-			  spi_init_done:out std_logic:='0'
+			  spi_init_done:out std_logic
 --			  special_W:in STD_LOGIC:='0';
 			  --leds:out std_logic_vector(7 downto 0):=(others=>'0')
 			  );
@@ -91,7 +91,11 @@ architecture Behavioral of SDRAM_SPIMASTER is
 	    write    : in std_ulogic); 
 	end component;
 
+	signal spi_Rdone_i:std_logic:='1';
+
 begin
+
+spi_Rdone<=spi_Rdone_i;
 
 ---- mode
 --if mode=0 generate
@@ -455,7 +459,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		variable write_step: integer range 0 to 3:=0;
 		variable address_loaded:STD_LOGIC_VECTOR(32-BLOCK_SQRT-1 downto 0):=(others=>'1'); -- à multiplier par 8 du coup ?
 		variable wanted_address:STD_LOGIC_VECTOR(31 downto 0);
-		variable spi_Rmem:std_logic:='1';
+		--variable spi_Rmem:std_logic:='1';
 		variable address_loaded_safe:boolean:=false; -- address_loaded a bien été load au moins une fois...
 		
 		variable init_done:std_logic:='0';
@@ -463,19 +467,19 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		
 		variable init_start_waiting:std_logic_vector(7 downto 0):=x"00"; -- unstable reset with bad responses (MiST-board SPI simulator)
 	begin
-		if falling_edge(SCLK) then
-		spi_Rdone<=spi_Rmem;
-		
 		spi_init_done<=init_done;
+
+		if falling_edge(SCLK) then
 		
 		--leds<=conv_std_logic_vector(init_step,8);
 		
-			ram_T<=false;
-			if not(init_done='1') then
-				length_data_block<=0;
-				case init_step is
-					when 0 =>
-						if not(ram_T) and ram_Tdone then
+			ram_T<=false; -- do
+			if not(ram_T) and ram_Tdone then
+				if not(init_done='1') then
+					length_data_block<=0;
+					case init_step is
+						when 0 =>
+						
 							--init_step:=2;
 							-- debug
 							-- perhaps some reset,not(reset),reset does insert bad return responses
@@ -485,14 +489,10 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 							else
 								init_start_waiting:=init_start_waiting+1;
 							end if;
-						end if;
-					when 1 =>
-						if not(ram_T) and ram_Tdone then
-							init_step:=2;
-							send_cmd(GO_IDLE_STATE,(others=>'0'));
-						end if;
-					when 2 =>
-						if not(ram_T) and ram_Tdone then
+						when 1 =>
+								init_step:=2;
+								send_cmd(GO_IDLE_STATE,(others=>'0'));
+						when 2 =>
 							-- osef buffer_receive(
 							if check_ok then
 								init_step:=3;
@@ -501,9 +501,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 							else
 								init_step:=10;
 							end if;
-						end if;
-					when 3 =>
-						if not(ram_T) and ram_Tdone then
+						when 3 =>
 							-- osef error
 							if check_ok then
 								init_step:=4;
@@ -512,29 +510,23 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 								-- crc error : osef !
 								init_step:=11;
 							end if;
-						end if;
-					when 4 =>
-						if not(ram_T) and ram_Tdone then
+						when 4 =>
 							send_cmd(APP_CMD,(others=>'0'));
 							init_step:=5;
-						end if;
-					when 5=>
-						if not(ram_T) and ram_Tdone then
+						when 5=>
 							-- osef error
 							init_step:=6;
 							send_cmd(SD_SEND_OP_COND,'0' & HCS & "000000" & x"000000");
-						end if;
-					when 6 =>
-						-- être en repos c'est normal je pense donc in_idle_state='1' c'est que c'est pas busy je pense
-						if not(ram_T) and ram_Tdone and buffer_response(R1_in_idle_state)='1' then
-							init_step:=4; -- retry
-						elsif not(ram_T) and ram_Tdone then
-							-- osef error
-							init_step:=7;
-							send_cmd(READ_OCR,(others=>'0'));
-						end if;
-					when 7 =>
-						if not(ram_T) and ram_Tdone then
+						when 6 =>
+							-- être en repos c'est normal je pense donc in_idle_state='1' c'est que c'est pas busy je pense
+							if buffer_response(R1_in_idle_state)='1' then
+								init_step:=4; -- retry
+							else
+								-- osef error
+								init_step:=7;
+								send_cmd(READ_OCR,(others=>'0'));
+							end if;
+						when 7 =>
 							if check_ok then
 								if buffer_response(R3_OCR_BUSY)='0' then
 									-- card power up not finished
@@ -554,24 +546,20 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 							else
 								init_step:=12;
 							end if;
-						end if;
-					when 8 => -- CCS 0 - addresses by byte
-						if not(ram_T) and ram_Tdone then
+						when 8 => -- CCS 0 - addresses by byte
 							if check_ok then
 								init_step:=15;
 								send_cmd(CRC_ON_OFF,x"00000001");
 							else
 								init_step:=14;
 							end if;
-						end if;
-					when 9 =>NULL; -- CCS 1 - addresses by block512
-					when 10=>NULL; -- check failed
-					when 11=>NULL; -- check failed
-					when 12=>NULL; -- check failed
-					when 13=>NULL; -- CCS 0 - BLOCKLEN=512 addresses by bytes
-					when 14=>NULL; -- check failed
-					when 15=> -- CRC on
-						if not(ram_T) and ram_Tdone then
+						when 9 =>NULL; -- CCS 1 - addresses by block512
+						when 10=>NULL; -- check failed
+						when 11=>NULL; -- check failed
+						when 12=>NULL; -- check failed
+						when 13=>NULL; -- CCS 0 - BLOCKLEN=512 addresses by bytes
+						when 14=>NULL; -- check failed
+						when 15=> -- CRC on
 							if check_ok then
 								init_done:='1';
 								if ccs='0' then
@@ -582,17 +570,14 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 							else
 								init_step:=16;
 							end if;
-						end if;
-					when 16=>NULL; -- check failed
-					when 17=> -- set block len force
-						if not(ram_T) and ram_Tdone then
+						when 16=>NULL; -- check failed
+						when 17=> -- set block len force
 							if check_ok then
 								send_cmd(CRC_ON_OFF,x"00000001");
 								init_step:=15;
 							else
 								init_step:=18;
 							end if;
-						end if;
 					when 18=>NULL; -- check failed
 				end case;
 				
@@ -601,9 +586,6 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 --				length_crc16<=16;
 				
 				if spi_R='1' then
-					if spi_Rmem='0' then
-						read_step:=6; -- over run
-					else 
 		--==============================================
 		--==============================================
 		--==============================================
@@ -615,59 +597,58 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		-- étape 2 : write BLOCK
 						--end if;
 
-						if address_loaded_safe and address_loaded=address(31 downto BLOCK_SQRT) then
-							-- its perfect do nothing
-						else
-							-- reset
-							read_step:=0;
-							spi_Rmem:='0';
-							wanted_address:=address(31 downto BLOCK_SQRT) & "0" & "00000000"; -- block de 512    *8 = &"00000000"
-						end if;
+					if address_loaded_safe and address_loaded=address(31 downto BLOCK_SQRT) then
+						-- its perfect do nothing
+						spi_Rdone_i<='1';
+					else
+						-- reset
+						read_step:=0;
+						spi_Rdone_i<='0';
+						wanted_address:=address(31 downto BLOCK_SQRT) & "0" & "00000000"; -- block de 512    *8 = &"00000000"
+					end if;
+					if spi_Rdone_i='0' then
+						read_step:=6; -- over run
 					end if;
 				end if;
-					if spi_Rmem='0' then
+					if spi_Rdone_i='0' then
 						
 						case read_step is
 							when 0 =>
-								if not (ram_T) and ram_Tdone then
-									read_step:=1;
-									-- CCS=0 use byte unit and CCS=1 use block unit
-									if ccs='0' then --if ccs='0' then
-										-- Address 32bit/Data 1Byte... so here we are limited to 4GB
-										send_cmd(SINGLE_BLOCK_READ,wanted_address);
-									else
-										--send_cmd(SINGLE_BLOCK_READ,wanted_address+x"00002000");
-										--send_cmd(SINGLE_BLOCK_READ,x"00002001"); -- 4096
-										-- x"00000001" retourne que des FF
-										-- x"00001000" retourne que des FF
-										-- x"00000200" retourne que des FF
-										-- x"00000000" contient parfois autre chose que des FF
-										-- x"01000000" il est pas content, il reste bloqué, même pas de error token !
-										
-										-- x"00020000" correspond sous HxD au secteur numéro 122880 (x"1E000")
-										-- x"00400000" correspond sous HxD au secteur numéro 4186112 (x"3FE000")
-										-- x"00002000" sector 0 -- cad qu'on a un simple offset de 2000h
-										-- x"00002200" retourne que des FF
-										-- x"00002001" sector 1 -- cad qu'une incrémentation nous fait avancer d'un block 512
-										
-										
-										send_cmd(SINGLE_BLOCK_READ,x"00" & "0" & wanted_address(31 downto BLOCK_SQRT)); --  + x"00002000"
-									end if;
+								read_step:=1;
+								-- CCS=0 use byte unit and CCS=1 use block unit
+								if ccs='0' then --if ccs='0' then
+									-- Address 32bit/Data 1Byte... so here we are limited to 4GB
+									send_cmd(SINGLE_BLOCK_READ,wanted_address);
+								else
+									--send_cmd(SINGLE_BLOCK_READ,wanted_address+x"00002000");
+									--send_cmd(SINGLE_BLOCK_READ,x"00002001"); -- 4096
+									-- x"00000001" retourne que des FF
+									-- x"00001000" retourne que des FF
+									-- x"00000200" retourne que des FF
+									-- x"00000000" contient parfois autre chose que des FF
+									-- x"01000000" il est pas content, il reste bloqué, même pas de error token !
+									
+									-- x"00020000" correspond sous HxD au secteur numéro 122880 (x"1E000")
+									-- x"00400000" correspond sous HxD au secteur numéro 4186112 (x"3FE000")
+									-- x"00002000" sector 0 -- cad qu'on a un simple offset de 2000h
+									-- x"00002200" retourne que des FF
+									-- x"00002001" sector 1 -- cad qu'une incrémentation nous fait avancer d'un block 512
+									
+									
+									send_cmd(SINGLE_BLOCK_READ,x"00" & "0" & wanted_address(31 downto BLOCK_SQRT)); --  + x"00002000"
 								end if;
 							when 1 =>
-								if not (ram_T) and ram_Tdone then
-									if check_ok then
-										if check_crc16 then
-											address_loaded:=wanted_address(31 downto BLOCK_SQRT);
-											spi_Rmem:='1';
-											read_step:=3;
-											address_loaded_safe:=true;
-										else
-											read_step:=5; -- retry
-										end if;
+								if check_ok then
+									if check_crc16 then
+										address_loaded:=wanted_address(31 downto BLOCK_SQRT);
+										spi_Rdone_i<='1';
+										read_step:=3;
+										address_loaded_safe:=true;
 									else
-										read_step:=2;
+										read_step:=5; -- retry
 									end if;
+								else
+									read_step:=2;
 								end if;
 							when 2=>NULL; -- check read failed
 							when 3=>NULL; -- read done ok
@@ -676,6 +657,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 							when 6=>NULL; -- over run (on a demandé trop tôt un run)
 								
 						end case;
+					end if;
 				end if;
 			end if;
 		end if;
