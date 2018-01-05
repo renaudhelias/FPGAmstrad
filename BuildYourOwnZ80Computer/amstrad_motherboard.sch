@@ -102,8 +102,10 @@
         <signal name="XLXN_858" />
         <signal name="CLK8(1)" />
         <signal name="CLK_PWM" />
-        <signal name="audio_AB" />
         <signal name="key_reset" />
+        <signal name="audio_AB" />
+        <signal name="XLXN_861(7:0)" />
+        <signal name="XLXN_862" />
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
@@ -123,8 +125,8 @@
         <port polarity="Output" name="palette_A(12:0)" />
         <port polarity="Output" name="palette_D(7:0)" />
         <port polarity="Input" name="CLK_PWM" />
-        <port polarity="Output" name="audio_AB" />
         <port polarity="Output" name="key_reset" />
+        <port polarity="Output" name="audio_AB" />
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-64" x1="64" />
@@ -353,7 +355,7 @@
             <line x2="480" y1="-352" y2="-352" x1="416" />
         </blockdef>
         <blockdef name="YM2149">
-            <timestamp>2017-12-29T21:37:41</timestamp>
+            <timestamp>2018-1-5T20:10:34</timestamp>
             <line x2="0" y1="-736" y2="-736" x1="64" />
             <line x2="0" y1="-672" y2="-672" x1="64" />
             <line x2="0" y1="-608" y2="-608" x1="64" />
@@ -369,19 +371,20 @@
             <line x2="0" y1="-96" y2="-96" x1="64" />
             <rect width="64" x="320" y="-412" height="24" />
             <line x2="384" y1="-400" y2="-400" x1="320" />
-            <rect width="256" x="64" y="-768" height="696" />
-            <rect width="64" x="320" y="-140" height="24" />
-            <line x2="384" y1="-128" y2="-128" x1="320" />
+            <rect width="256" x="64" y="-768" height="704" />
+            <rect width="64" x="320" y="-268" height="24" />
+            <line x2="384" y1="-256" y2="-256" x1="320" />
+            <rect width="64" x="320" y="-204" height="24" />
+            <line x2="384" y1="-192" y2="-192" x1="320" />
         </blockdef>
         <blockdef name="PWM">
-            <timestamp>2017-12-29T21:38:55</timestamp>
+            <timestamp>2018-1-5T20:11:7</timestamp>
             <line x2="0" y1="32" y2="32" x1="64" />
             <line x2="0" y1="-96" y2="-96" x1="64" />
             <rect width="64" x="0" y="-44" height="24" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
             <line x2="384" y1="-96" y2="-96" x1="320" />
             <rect width="256" x="64" y="-128" height="180" />
-            <line x2="384" y1="32" y2="32" x1="320" />
         </blockdef>
         <blockdef name="cb4ce">
             <timestamp>2000-1-1T10:10:10</timestamp>
@@ -605,11 +608,12 @@
             <blockpin signalname="XLXN_474" name="I_SEL_L" />
             <blockpin signalname="XLXN_473" name="ENA" />
             <blockpin signalname="RESET_n" name="RESET_L" />
-            <blockpin signalname="XLXN_551" name="CLK" />
+            <blockpin signalname="XLXN_862" name="CLK" />
             <blockpin signalname="XLXN_462(7:0)" name="I_DA(7:0)" />
             <blockpin signalname="XLXN_518(7:0)" name="I_IOA(7:0)" />
             <blockpin signalname="XLXN_519(7:0)" name="O_DA(7:0)" />
-            <blockpin signalname="XLXN_486(7:0)" name="O_AUDIO(7:0)" />
+            <blockpin signalname="XLXN_861(7:0)" name="O_AUDIO_AB(7:0)" />
+            <blockpin signalname="XLXN_486(7:0)" name="O_AUDIO_BC(7:0)" />
         </block>
         <block symbolname="vcc" name="XLXI_350">
             <blockpin signalname="XLXN_464" name="P" />
@@ -632,7 +636,7 @@
             <blockpin signalname="XLXN_499" name="CLR" />
             <blockpin name="CEO" />
             <blockpin name="Q0" />
-            <blockpin signalname="XLXN_551" name="Q1" />
+            <blockpin signalname="XLXN_862" name="Q1" />
             <blockpin name="Q2" />
             <blockpin name="Q3" />
             <blockpin name="TC" />
@@ -741,10 +745,15 @@
         </block>
         <block symbolname="PWM" name="XLXI_367">
             <blockpin signalname="CLK_PWM" name="clk" />
-            <blockpin signalname="XLXN_551" name="clk_ref" />
+            <blockpin signalname="XLXN_862" name="clk_ref" />
             <blockpin signalname="XLXN_486(7:0)" name="PWM_in(7:0)" />
             <blockpin signalname="audio_BC" name="PWM_out" />
-            <blockpin signalname="audio_AB" name="PWM_out2" />
+        </block>
+        <block symbolname="PWM" name="XLXI_580">
+            <blockpin signalname="CLK_PWM" name="clk" />
+            <blockpin signalname="XLXN_862" name="clk_ref" />
+            <blockpin signalname="XLXN_861(7:0)" name="PWM_in(7:0)" />
+            <blockpin signalname="audio_AB" name="PWM_out" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="7040" height="5440">
@@ -993,7 +1002,9 @@
             <wire x2="2096" y1="4816" y2="4816" x1="2000" />
         </branch>
         <branch name="XLXN_486(7:0)">
-            <wire x2="6064" y1="4304" y2="4304" x1="5440" />
+            <wire x2="5744" y1="4240" y2="4240" x1="5440" />
+            <wire x2="5744" y1="4240" y2="4304" x1="5744" />
+            <wire x2="6064" y1="4304" y2="4304" x1="5744" />
         </branch>
         <branch name="audio_BC">
             <wire x2="6496" y1="4240" y2="4240" x1="6448" />
@@ -1407,8 +1418,7 @@
             <wire x2="960" y1="2960" y2="3296" x1="960" />
             <wire x2="2048" y1="3296" y2="3296" x1="960" />
             <wire x2="3008" y1="3296" y2="3296" x1="2048" />
-            <wire x2="2048" y1="3296" y2="3984" x1="2048" />
-            <wire x2="2048" y1="3984" y2="4368" x1="2048" />
+            <wire x2="2048" y1="3296" y2="4368" x1="2048" />
             <wire x2="2096" y1="4368" y2="4368" x1="2048" />
             <wire x2="3056" y1="1568" y2="1568" x1="2832" />
             <wire x2="2832" y1="1568" y2="2736" x1="2832" />
@@ -1434,30 +1444,41 @@
         </instance>
         <branch name="CLK_PWM">
             <wire x2="5888" y1="3856" y2="3856" x1="5840" />
-            <wire x2="5888" y1="3856" y2="4240" x1="5888" />
+            <wire x2="5888" y1="3856" y2="3936" x1="5888" />
+            <wire x2="5888" y1="3936" y2="4240" x1="5888" />
             <wire x2="6064" y1="4240" y2="4240" x1="5888" />
+            <wire x2="6064" y1="3936" y2="3936" x1="5888" />
         </branch>
         <iomarker fontsize="28" x="5840" y="3856" name="CLK_PWM" orien="R180" />
-        <branch name="XLXN_551">
-            <wire x2="5056" y1="4208" y2="4208" x1="4864" />
-            <wire x2="4864" y1="4208" y2="4432" x1="4864" />
-            <wire x2="5728" y1="4432" y2="4432" x1="4864" />
-            <wire x2="6448" y1="4432" y2="4432" x1="5728" />
-            <wire x2="6448" y1="4432" y2="4800" x1="6448" />
-            <wire x2="6064" y1="4368" y2="4368" x1="5728" />
-            <wire x2="5728" y1="4368" y2="4432" x1="5728" />
-            <wire x2="6416" y1="4672" y2="4672" x1="6384" />
-            <wire x2="6416" y1="4672" y2="4800" x1="6416" />
-            <wire x2="6448" y1="4800" y2="4800" x1="6416" />
-        </branch>
-        <branch name="audio_AB">
-            <wire x2="6480" y1="4368" y2="4368" x1="6448" />
-        </branch>
-        <iomarker fontsize="28" x="6480" y="4368" name="audio_AB" orien="R0" />
         <branch name="key_reset">
             <wire x2="3968" y1="4944" y2="4944" x1="3936" />
         </branch>
         <iomarker fontsize="28" x="3968" y="4944" name="key_reset" orien="R0" />
         <bustap x2="4560" y1="1088" y2="1088" x1="4464" />
+        <instance x="6064" y="4032" name="XLXI_580" orien="R0">
+        </instance>
+        <branch name="audio_AB">
+            <wire x2="6496" y1="3936" y2="3936" x1="6448" />
+        </branch>
+        <iomarker fontsize="28" x="6496" y="3936" name="audio_AB" orien="R0" />
+        <branch name="XLXN_861(7:0)">
+            <wire x2="5744" y1="4176" y2="4176" x1="5440" />
+            <wire x2="5744" y1="4000" y2="4176" x1="5744" />
+            <wire x2="6064" y1="4000" y2="4000" x1="5744" />
+        </branch>
+        <branch name="XLXN_862">
+            <wire x2="5056" y1="4208" y2="4208" x1="4864" />
+            <wire x2="4864" y1="4208" y2="4432" x1="4864" />
+            <wire x2="5808" y1="4432" y2="4432" x1="4864" />
+            <wire x2="6448" y1="4432" y2="4432" x1="5808" />
+            <wire x2="6448" y1="4432" y2="4800" x1="6448" />
+            <wire x2="6064" y1="4064" y2="4064" x1="5808" />
+            <wire x2="5808" y1="4064" y2="4368" x1="5808" />
+            <wire x2="6064" y1="4368" y2="4368" x1="5808" />
+            <wire x2="5808" y1="4368" y2="4432" x1="5808" />
+            <wire x2="6416" y1="4672" y2="4672" x1="6384" />
+            <wire x2="6416" y1="4672" y2="4800" x1="6416" />
+            <wire x2="6448" y1="4800" y2="4800" x1="6416" />
+        </branch>
     </sheet>
 </drawing>

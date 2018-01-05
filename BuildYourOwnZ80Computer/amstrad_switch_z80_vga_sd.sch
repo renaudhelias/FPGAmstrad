@@ -98,7 +98,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2018-1-4T19:41:50</timestamp>
+            <timestamp>2018-1-5T20:12:16</timestamp>
             <line x2="448" y1="496" y2="496" x1="384" />
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
@@ -184,8 +184,8 @@
             <blockpin signalname="XLXN_744" name="palette_W" />
             <blockpin signalname="XLXN_745(12:0)" name="palette_A(12:0)" />
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
-            <blockpin signalname="AUDIO_L" name="audio_AB" />
             <blockpin signalname="XLXN_750" name="key_reset" />
+            <blockpin signalname="AUDIO_L" name="audio_AB" />
         </block>
         <block symbolname="divideby3" name="XLXI_514">
             <blockpin signalname="CLK50MHz" name="CLK50MHz" />
