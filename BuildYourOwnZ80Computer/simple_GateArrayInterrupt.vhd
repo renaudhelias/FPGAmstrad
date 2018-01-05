@@ -139,6 +139,7 @@ begin
 	CLK4MHz<=not(CLK8(2)); -- cad l'inverse de l'horloge du z80
 
 ctrcConfig_process:process(CLK4MHz,reset) is
+	variable reg_select32 : std_logic_vector(7 downto 0);
 	variable reg_select : integer range 0 to 17;
 	type registres_type is array(0 to 17) of std_logic_vector(7 downto 0);
 	variable registres:registres_type;
@@ -185,7 +186,12 @@ begin
 			if A15_A14_A9_A8(1)=A9_WRITE then
 				Dout<=(others=>'Z');
 				if A15_A14_A9_A8(0)='0' then
-					reg_select:=conv_integer(D and x"1F");
+					reg_select32:=D and x"1F";
+					if reg_select32<=x"11" then -- < 17
+						reg_select:=conv_integer(reg_select32);
+					else
+						reg_select:=17; -- out of range :p
+					end if;
 				else
 					registres(reg_select):=D;
 					case reg_select is
@@ -234,6 +240,37 @@ begin
 			else
 				-- A9_READ
 				Dout<=(others=>'1');
+				if A15_A14_A9_A8(0)='1' then
+					if reg_select32 = x"0A" then -- R10
+						Dout<=registres(10) and x"7f"; -- applying the write mask here
+					elsif reg_select32 = x"0B" then -- R11
+						Dout<=registres(11) and x"1f"; -- applying the write mask here
+					elsif reg_select32 = x"0C" then -- R12
+						--CRTC0 HD6845S/MC6845: Start Address Registers (R12 and R13) can be read.
+						Dout<=registres(12) and x"3f";  -- applying the write mask here
+					elsif reg_select32 = x"0D" then -- R13
+						Dout<=registres(13); -- type 0
+						--CRTC0 HD6845S/MC6845: Start Address Registers (R12 and R13) can be read.
+					elsif reg_select32 = x"0E" then -- R14
+						Dout<=registres(14) and x"3f"; -- applying the write mask here
+					elsif reg_select32 = x"0F" then -- R15	
+						Dout<=registres(15);-- all types
+					elsif reg_select32 = x"10" then -- R16
+						--	Light Pen Address (read only, don't dependant on write !!!) - "Emulator Sucks"
+						Dout<=x"00"; --registres(16) and x"3f";-- all types
+					elsif reg_select32 = x"11" then -- R17
+						--	Light Pen Address (read only, don't dependant on write !!!) - "Emulator Sucks"
+						Dout<=x"00"; --registres(17);-- all types
+					elsif reg_select32 = x"FF" then
+						-- registers 18-30 read as 0 on type1, register 31 reads as 0x0ff.
+						Dout<=x"FF";
+					else
+						-- 1. On type 0 and 1, if a Write Only register is read from, "0" is returned.
+						-- registers 18-31 read as 0, on type 0 and 2.
+						-- registers 18-30 read as 0 on type1
+						Dout<=x"00";
+					end if;
+				end if;
 			end if;
 --		elsif IO_ACK='1' then
 --			-- IO_ACK DATA_BUS
