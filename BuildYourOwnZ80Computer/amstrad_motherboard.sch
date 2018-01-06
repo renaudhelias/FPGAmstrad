@@ -59,7 +59,6 @@
         <signal name="XLXN_519(7:0)" />
         <signal name="XLXN_498" />
         <signal name="XLXN_499" />
-        <signal name="XLXN_551" />
         <signal name="XLXN_86" />
         <signal name="XLXN_38" />
         <signal name="PS2_CLK" />
@@ -296,7 +295,7 @@
             <rect width="336" x="64" y="-704" height="768" />
         </blockdef>
         <blockdef name="simple_GateArrayInterrupt">
-            <timestamp>2017-12-27T17:28:4</timestamp>
+            <timestamp>2018-1-6T21:44:29</timestamp>
             <rect width="64" x="0" y="660" height="24" />
             <line x2="0" y1="672" y2="672" x1="64" />
             <line x2="416" y1="528" y2="528" x1="352" />

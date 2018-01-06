@@ -1,8 +1,0 @@
-INTSTYLE=ise
-INFILE=C:\Users\Joe\Desktop\mist-git\FPGAmstrad\FPGAmstrad\BuildYourOwnZ80Computer\amstrad_switch_z80_vga_sd.ncd
-OUTFILE=C:\Users\Joe\Desktop\mist-git\FPGAmstrad\FPGAmstrad\BuildYourOwnZ80Computer\amstrad_switch_z80_vga_sd.bit
-FAMILY=Spartan6
-PART=xc6slx9-3tqg144
-WORKINGDIR=C:\Users\Joe\Desktop\mist-git\FPGAmstrad\FPGAmstrad\BuildYourOwnZ80Computer
-LICENSE=WebPack
-USER_INFO=211444802_0_0_573

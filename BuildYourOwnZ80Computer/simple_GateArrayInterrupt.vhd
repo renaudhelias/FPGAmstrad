@@ -23,8 +23,8 @@ entity simple_GateArrayInterrupt is
   VRAM_HDsp:integer:=800/16; -- des mots de 16bit, contenant plus ou moins de pixels... pensons en référence mode 2, du 800x600 mode 2
   VRAM_VDsp:integer:=600/2;
   VRAM_Hoffset:integer:=12; -- 63*16-46*16
-  VRAM_Voffset:integer:=14; -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
-  VDecal_negatif:integer:=(600-480)/2
+  VRAM_Voffset:integer:=14+(600/2-480/2)/2 -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
+  --VDecal_negatif:integer:=(600-480)/2
 	);
     Port ( CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
            IO_REQ_W : in  STD_LOGIC;
@@ -287,7 +287,7 @@ simple_GateArray_process : process(CLK4MHz) is
 	variable dispV:std_logic:='0';
 	variable dispH:std_logic:='0';
 	variable disp_VRAM:std_logic:='0';
-	variable bug_has_top_disp:boolean:=false;
+	--variable bug_has_top_disp:boolean:=false;
 	-- selon Quazar 300 fois par seconde
 	-- selon une trace dans google de www.cepece.info/amstrad/docs/garray.html j'ai
 	-- "In the CPC the Gate Array generates maskable interrupts, to do this it uses the HSYNC and VSYNC signals from CRTC, a 6-bit internal counter and monitors..."
@@ -455,13 +455,13 @@ end if;
 
 
 if vram_vertical_counter<VRAM_VDsp and vram_horizontal_counter<VRAM_HDsp then
-	if vram_vertical_counter<VDecal_negatif/2 then
-		in_800x600:=false;
-		disp_VRAM:='0';
-	else
+	--if vram_vertical_counter<VDecal_negatif/2 then
+	--	in_800x600:=false;
+	--	disp_VRAM:='0';
+	--else
 		in_800x600:=true;
 		disp_VRAM:='1';
-	end if;
+	--end if;
 	if vram_horizontal_counter=0 and vram_vertical_counter= 0 then
 		palette_A_mem:=(others=>'0');
 	end if;
@@ -532,17 +532,17 @@ end if;
 					palette_horizontal_counter:=palette_horizontal_counter+1;
 			elsif in_800x600 and vram_horizontal_counter=IS_H_MIDDLE and compteur1MHz=0 then
 				palette_horizontal_counter:=0;
-				if vram_vertical_counter=VDecal_negatif/2 then
+				--if vram_vertical_counter=VDecal_negatif/2 then
 					-- Arkanoid and -Ecole has strange bottom border :/
-					bug_has_top_disp:=(dispH='1' and dispV='1');
-				end if;
+				--	bug_has_top_disp:=(dispH='1' and dispV='1');
+				--end if;
 			end if;
 			-- on nourri la palette
 			if palette_horizontal_counter<1 then
 				palette_A<=palette_A_mem(12 downto 0);
-				if bug_has_top_disp then
-					palette_D_mem:="000000" & MODE_select;
-				elsif dispH='1' and dispV='1' then
+				--if bug_has_top_disp then
+				--	palette_D_mem:="000000" & MODE_select;
+				if dispH='1' and dispV='1' then
 					palette_D_mem:="000000" & MODE_select;
 				else
 					palette_D_mem:=conv_std_logic_vector(border,5) & "1" & MODE_select;

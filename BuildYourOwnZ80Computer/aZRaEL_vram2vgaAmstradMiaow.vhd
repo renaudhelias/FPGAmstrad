@@ -139,7 +139,7 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 	constant DO_HSYNC : STD_LOGIC:='1';
 	constant DO_VSYNC : STD_LOGIC:='1';
 
-	constant VDecal_negatif:integer:=(600-480)/2;
+	--constant VDecal_negatif:integer:=(600-480)/2;
 	constant HDecal_negatif:integer:=(800-640)/2;
 	
 	type palette_type is array(31 downto 0) of std_logic_vector(5 downto 0); -- RRVVBB
@@ -353,7 +353,8 @@ begin
 
 		
 		if horizontal_counter<HDsp and vertical_counter<VDsp then
-			v:=(vertical_counter+VDecal_negatif)/(VZoom);
+			--v:=(vertical_counter+VDecal_negatif)/(VZoom);
+			v:=vertical_counter/VZoom;
 			h:=horizontal_counter+HDecal_negatif-BUG_DELAY_ADDRESS;
 			no_char:=(h / 8) mod (CHAR_WIDTH/8);
 			-- 640×200 pixels with 2 colours ("Mode 2", 80 text columns) donc bien 8 pixels physique par octets
