@@ -44,10 +44,10 @@ begin
 	process(CLK) is
 		variable ROMbank_mem: STD_LOGIC_VECTOR (3 downto 0);
 	begin
+		init_ROMbank<=ROMbank_mem;
 		if rising_edge(CLK) then
 			if IO_WR='1' and A13='0' then
 				ROMbank_mem(3 downto 0):=D(3 downto 0);
-				init_ROMbank<=ROMbank_mem;
 			end if;
 		end if;
 	end process;

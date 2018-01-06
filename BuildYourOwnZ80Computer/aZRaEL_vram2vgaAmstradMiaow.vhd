@@ -409,8 +409,8 @@ begin
 		
 		if vertical_counter mod 2 = 0 then
 			if horizontal_counter=HTot-20-2 then
-				if vertical_counter=VTot-1 then
-					palette_A_mem:=conv_std_logic_vector((VDecal_negatif/VZoom)*(1+16)+BUG_DELAY_PALETTE,13);
+				if vertical_counter=0 then
+					palette_A_mem:=conv_std_logic_vector(BUG_DELAY_PALETTE,13);
 				else
 					palette_A_mem:=palette_A_mem+1;
 				end if;

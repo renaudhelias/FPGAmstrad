@@ -23,7 +23,8 @@ entity simple_GateArrayInterrupt is
   VRAM_HDsp:integer:=800/16; -- des mots de 16bit, contenant plus ou moins de pixels... pensons en référence mode 2, du 800x600 mode 2
   VRAM_VDsp:integer:=600/2;
   VRAM_Hoffset:integer:=12; -- 63*16-46*16
-  VRAM_Voffset:integer:=14 -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
+  VRAM_Voffset:integer:=14; -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
+  VDecal_negatif:integer:=(600-480)/2
 	);
     Port ( CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
            IO_REQ_W : in  STD_LOGIC;
@@ -456,7 +457,11 @@ end if;
 
 
 if vram_vertical_counter<VRAM_VDsp and vram_horizontal_counter<VRAM_HDsp then
-	in_800x600:=true;
+	if vram_vertical_counter<VDecal_negatif/2 then
+		in_800x600:=false;
+	else
+		in_800x600:=true;
+	end if;
 	if vram_horizontal_counter=0 and vram_vertical_counter= 0 then
 		palette_A_mem:=(others=>'0');
 	end if;
