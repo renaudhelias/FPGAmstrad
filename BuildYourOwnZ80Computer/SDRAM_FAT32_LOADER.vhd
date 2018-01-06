@@ -18,8 +18,8 @@ entity SDRAM_FAT32_LOADER is
 	);
     Port ( CLK:in STD_LOGIC;
            --file_select:in std_logic_vector(7 downto 0);
-           ram_A : out  STD_LOGIC_VECTOR (22 downto 0):=(others=>'0');
-           ram_D : inout  STD_LOGIC_VECTOR (7 downto 0):=(others=>'Z'); -- for sim
+           ram_A : out  STD_LOGIC_VECTOR (22 downto 0);
+           ram_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- for sim
            ram_W : out  STD_LOGIC:='0';
            spi_A : out  STD_LOGIC_VECTOR (31 downto 0);
            spi_D : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -87,7 +87,6 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 	signal data_spi_do:std_logic:='0';
 	
 	signal compare_to12:STD_LOGIC_VECTOR(8*12-1 downto 0);
-	--signal compare_to3:STD_LOGIC_VECTOR(8*3-1 downto 0);
 	
 	signal compare_length : integer range 3 to 12:=3;
 	signal compare_result :boolean;
@@ -115,14 +114,13 @@ architecture Behavioral of SDRAM_FAT32_LOADER is
 	constant SWITCH_GRIPSOU:integer:=2;
 	signal switch_transmit_gripsou:integer range 0 to 2:=SWITCH_NONE;
 
-	signal transmit_ram_A:std_logic_vector(ram_A'range):=(others=>'0');
-	signal transmit_ram_D:std_logic_vector(ram_D'range):=(others=>'Z');
+	signal transmit_ram_A:std_logic_vector(ram_A'range);
+	signal transmit_ram_D:std_logic_vector(ram_D'range);
 	signal transmit_ram_W:std_logic:='0';
-	signal gripsou_ram_A:std_logic_vector(ram_A'range):=(others=>'0');
-	signal gripsou_ram_D:std_logic_vector(ram_D'range):=(others=>'Z');
+	signal gripsou_ram_A:std_logic_vector(ram_A'range);
+	signal gripsou_ram_D:std_logic_vector(ram_D'range);
 	signal gripsou_ram_W:std_logic:='0';
-	--signal gripsou_address:std_logic_vector(ram_A'range):=(others=>'0');
-	signal gripsou_data:std_logic_vector(ram_D'range):=(others=>'Z');
+	signal gripsou_data:std_logic_vector(ram_D'range);
 	signal gripsou_write:std_logic:='0';
 	
 	signal key_reset_i:std_logic;
@@ -251,9 +249,9 @@ begin
 	begin
 		compare_spi_A<=address_mem;
 		if rising_edge(CLK) then
-			compare_spi_do<='0';
 			--leds<=conv_std_logic_vector(compare_step,8);
 			if compare_do then
+				cursor:=0;
 				compare_done<=false;
 				if not compare_done then
 					compare_step:=2;-- over run
@@ -261,14 +259,13 @@ begin
 					compare_step:=0;
 				end if;
 			end if;
+			compare_spi_do<='0';
 			if not compare_done then
-				--address_mem:=compare_address+cursor;
+				address_mem:=compare_address+cursor;
 				if not(compare_spi_do='1') and spi_done='1' then
 					case compare_step is
 						when 0=>
-							cursor:=0;
 							compare_spi_do<='1';
-							address_mem:=compare_address+cursor;
 							compare_step:=1;
 						when 1=>
 							if compare_to12((12-cursor)*8-1 downto (12-cursor-1)*8) /= spi_D then
@@ -282,8 +279,7 @@ begin
 									compare_done<=true;
 									compare_step:=3;
 								else
-									compare_spi_do<='1';
-									address_mem:=compare_address+cursor;
+									compare_step:=0;
 								end if;
 							end if;
 						when 2=>NULL; -- over run
@@ -959,9 +955,11 @@ end if;
 		variable sector_order:sector_order_type;
 	begin
 		--is_ucpm<=ucpm;
+		gripsou_ram_A<=gripsou_ram_A_mem;
+		gripsou_ram_D<=data_mem;
+
 		if falling_edge(CLK) then
 			--leds<=conv_std_logic_vector(gripsou_step,8);
-			gripsou_ram_D<=(others=>'Z');
 			gripsou_ram_W<='0';
 			if switch_transmit_gripsou/=SWITCH_GRIPSOU then
 				input_A:=(others=>'0');
@@ -1164,11 +1162,9 @@ end if;
 						end if;
 					when 18=> -- data transmit
 						gripsou_ram_A_mem:="00" & "1" & conv_std_logic_vector(no_track,6) & conv_std_logic_vector(no_side,1) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
-						gripsou_ram_A<=gripsou_ram_A_mem;
 						--if no_track<32 then -- 2^5=32 donc de 0 à 31, donc moins de 40 !
 							gripsou_ram_W<='1';
 						--end if;
-						gripsou_ram_D<=data_mem;
 						
 						--if no_track=0 and no_sect=0 and input_A=1 and data_mem/=x"47" then
 						--	gripsou_step:=32;

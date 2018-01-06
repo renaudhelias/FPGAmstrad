@@ -216,16 +216,17 @@ begin
 							RVsyncpos<=registres(7)(RVsyncpos'range);
 						when 8=>NULL;
 							-- interlace & skew
-						when 9=> -- max raster adress
+						when 9=>
+							-- max raster adress
 							RRmax<=registres(9)(RRmax'range);
 						when 10=>NULL;
 							-- cursor start raster 
 						when 11=>NULL;
 							-- cursor end raster
-						when 12=> --NULL;
+						when 12=>
 							-- start adress H
 							OFFSET<=registres(12)(5 downto 0) & registres(13);
-						when 13=> --NULL;
+						when 13=>
 							-- start adress L
 							OFFSET<=registres(12)(5 downto 0) & registres(13);
 						when 14=>NULL;
@@ -273,9 +274,6 @@ begin
 					end if;
 				end if;
 			end if;
---		elsif IO_ACK='1' then
---			-- IO_ACK DATA_BUS
---			Dout<=(others=>'0'); -- value to check... cpcwiki seem done at the moment I write this sentence :P
 		else
 			Dout<=(others=>'Z');
 		end if;
@@ -286,9 +284,10 @@ end process ctrcConfig_process;
 simple_GateArray_process : process(CLK4MHz) is
  
  variable compteur1MHz : integer range 0 to 3:=0;
-	variable disp:std_logic:='0';
 	variable dispV:std_logic:='0';
 	variable dispH:std_logic:='0';
+	variable disp_VRAM:std_logic:='0';
+	variable bug_has_top_disp:boolean:=false;
 	-- selon Quazar 300 fois par seconde
 	-- selon une trace dans google de www.cepece.info/amstrad/docs/garray.html j'ai
 	-- "In the CPC the Gate Array generates maskable interrupts, to do this it uses the HSYNC and VSYNC signals from CRTC, a 6-bit internal counter and monitors..."
@@ -326,7 +325,7 @@ simple_GateArray_process : process(CLK4MHz) is
 
 		variable palette_A_mem:std_logic_vector(13 downto 0):=(others=>'0');
 		variable palette_D_mem:std_logic_vector(7 downto 0);
-		variable disp_begin_mem:std_logic:='0';
+		--variable disp_begin_mem:std_logic:='0';
 		variable palette_horizontal_counter:integer range 0 to 1+16+1:=1+16+1; --640/16
 		variable palette_color:integer range 0 to 16-1;
 
@@ -408,9 +407,8 @@ vsync<='0';
 				elsif line_counter=RVDisp and raster_counter=0 then
 					dispV:='0';
 				end if;
-				disp:=dispH and dispV;
 
-				if disp='1' then
+				if dispH='1' and dispV='1' then
 					-- http://quasar.cpcscene.com/doku.php?id=assem:crtc
 					crtc_A_mem(14 downto 0):=ADRESSE_MAcurrent_mem(13 downto 12) & raster_counter(2 downto 0) & ADRESSE_MAcurrent_mem(9 downto 0);
 
@@ -459,8 +457,10 @@ end if;
 if vram_vertical_counter<VRAM_VDsp and vram_horizontal_counter<VRAM_HDsp then
 	if vram_vertical_counter<VDecal_negatif/2 then
 		in_800x600:=false;
+		disp_VRAM:='0';
 	else
 		in_800x600:=true;
+		disp_VRAM:='1';
 	end if;
 	if vram_horizontal_counter=0 and vram_vertical_counter= 0 then
 		palette_A_mem:=(others=>'0');
@@ -468,7 +468,7 @@ if vram_vertical_counter<VRAM_VDsp and vram_horizontal_counter<VRAM_HDsp then
 	vram_A_mem:=conv_std_logic_vector(vram_vertical_counter*VRAM_HDsp+vram_horizontal_counter,vram_A_mem'length);
 else
 	-- do kill disp
-	disp:='0';
+	disp_VRAM:='0';
 	in_800x600:=false;
 end if;
 
@@ -510,7 +510,7 @@ end if;
 
 			when 1=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '0';
-				if disp='1' then
+				if dispH='1' and dispV='1' and disp_VRAM='1' then
 					crtc_W<='1';
 				end if;
 
@@ -519,7 +519,7 @@ end if;
 				crtc_R<='1';
 			when 3=>
 				crtc_A(15 downto 0)<=vram_A_mem(14 downto 0) & '1';
-				if disp='1' then
+				if dispH='1' and dispV='1' and disp_VRAM='1' then
 					crtc_W<='1';
 				end if;
 			end case;
@@ -532,11 +532,17 @@ end if;
 					palette_horizontal_counter:=palette_horizontal_counter+1;
 			elsif in_800x600 and vram_horizontal_counter=IS_H_MIDDLE and compteur1MHz=0 then
 				palette_horizontal_counter:=0;
+				if vram_vertical_counter=VDecal_negatif/2 then
+					-- Arkanoid and -Ecole has strange bottom border :/
+					bug_has_top_disp:=(dispH='1' and dispV='1');
+				end if;
 			end if;
 			-- on nourri la palette
 			if palette_horizontal_counter<1 then
 				palette_A<=palette_A_mem(12 downto 0);
-				if disp='1' then
+				if bug_has_top_disp then
+					palette_D_mem:="000000" & MODE_select;
+				elsif dispH='1' and dispV='1' then
 					palette_D_mem:="000000" & MODE_select;
 				else
 					palette_D_mem:=conv_std_logic_vector(border,5) & "1" & MODE_select;
