@@ -686,8 +686,15 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 						--=========================
 						if bc(folder_cluster_pointer) then
 							-- that's all sucks
-							load_done:='0';
-							switch_transmit_gripsou<=SWITCH_NONE;
+							--load_done:='0';
+							--switch_transmit_gripsou<=SWITCH_NONE;
+								switch_transmit_gripsou<=SWITCH_NONE;
+								step_var:=0;
+								dsk_number:=(others=>'0');
+								--load_done:='0';
+								--files_loaded:="111" & TEST_DSK_OFF; -- ne re-reload pas les ROMs
+								files_loaded:="000" & TEST_DSK_OFF;
+								file_select:=(others=>'0'); -- remet la première disquette
 						else
 							get_var4(folder_cluster_pointer,getFAT(folder_cluster_pointer));
 							step_var:=12;
@@ -765,8 +772,8 @@ if not(data_do) and data_done and not(transmit_do) and transmit_done and not(com
 								step_var:=0;
 								dsk_number:=(others=>'0');
 								--load_done:='0';
-								files_loaded:="111" & TEST_DSK_OFF; -- ne re-reload pas les ROMs
-								--files_loaded:="000" & TEST_DSK_OFF;
+								--files_loaded:="111" & TEST_DSK_OFF; -- ne re-reload pas les ROMs
+								files_loaded:="000" & TEST_DSK_OFF;
 								file_select:=(others=>'0'); -- remet la première disquette
 							--end if;
 						else
