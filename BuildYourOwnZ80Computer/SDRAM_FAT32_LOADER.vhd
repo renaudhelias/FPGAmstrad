@@ -916,13 +916,13 @@ end if;
 						step_var:=0;
 						dsk_number:=(others=>'0');
 						load_done:='0';
-						if load_done='0' then
-							-- quick re-reset (dsk only)
-							files_loaded:="000" & TEST_DSK_OFF;
-						else
+						--if load_done='0' then
+						--	-- quick re-reset (dsk only)
+						--	files_loaded:="000" & TEST_DSK_OFF;
+						--else
 							-- reset all (ROMs+dsk)
-							files_loaded:="000" & TEST_DSK_OFF;
-						end if;
+						files_loaded:="000" & TEST_DSK_OFF;
+						--end if;
 						file_select:=file_select+1;
 					else
 						load_done:='1';
