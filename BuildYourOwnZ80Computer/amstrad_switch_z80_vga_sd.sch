@@ -58,7 +58,7 @@
         <port polarity="Output" name="AUDIO_L" />
         <port polarity="Output" name="AUDIO_R" />
         <blockdef name="bootloader_sd">
-            <timestamp>2017-12-30T16:55:22</timestamp>
+            <timestamp>2018-1-7T20:25:43</timestamp>
             <line x2="0" y1="-464" y2="-464" x1="64" />
             <line x2="496" y1="-608" y2="-608" x1="432" />
             <rect width="64" x="432" y="-556" height="24" />

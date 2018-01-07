@@ -34,8 +34,10 @@ entity SDRAM_FAT32_LOADER is
 			  	--attribute keep : string;
 				--attribute keep of file_select : signal is "TRUE";
 				--attribute keep of leds : signal is "TRUE";
-
-			  
+			  	attribute keep : string;
+				attribute keep of key_reset : signal is "TRUE";
+				attribute clock_signal : string;
+				attribute clock_signal of key_reset : signal is "NO";
 end SDRAM_FAT32_LOADER;
 
 architecture Behavioral of SDRAM_FAT32_LOADER is

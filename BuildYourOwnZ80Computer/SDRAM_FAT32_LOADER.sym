@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="SDRAM_FAT32_LOADER">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2017-12-30T14:33:36</timestamp>
+    <timestamp>2018-1-7T20:25:28</timestamp>
     <pin polarity="Input" x="0" y="-352" name="CLK" />
     <pin polarity="Input" x="0" y="96" name="spi_done" />
     <pin polarity="Input" x="0" y="224" name="spi_init_done" />
