@@ -936,7 +936,7 @@ end if;
 	end process tortue_geniale;
 	
 	gripsou:process(CLK) is
-		variable gripsou_step:integer range 0 to 25:=0;
+		variable gripsou_step:integer range 0 to 23:=0;
 		variable input_A:std_logic_vector(31 downto 0):=(others=>'0');
 		variable data_mem:std_logic_vector(7 downto 0);
 		variable winape_offs:std_logic_vector(31 downto 0):=(others=>'0');
@@ -986,7 +986,7 @@ end if;
 								extended:=true;
 							elsif data_mem=x"4D" then
 								extended:=false;
---								gripsou_step:=25; -- debug
+--								gripsou_step:=9; -- debug
 							end if;
 						end if;
 --						if gripsou_address(15 downto 0)/=input_A(15 downto 0) then
@@ -1026,7 +1026,7 @@ end if;
 						end if;
 						input_A:=input_A+1;
 						--if (nb_sides/=1) then
-						--	gripsou_step:=24;
+						--	gripsou_step:=20;
 						--else
 							gripsou_step:=4;
 						--end if;
@@ -1074,8 +1074,6 @@ end if;
 						if input_A>x"0000000F" then
 							gripsou_step:=10;
 						end if;
-					when 8=>NULL;
-					when 9=>NULL;
 					when 10=>
 						input_A:=input_A+1;
 						if input_A>x"0000000014" then
@@ -1101,7 +1099,7 @@ end if;
 						-- C
 						input_A:=input_A+1;
 						if conv_integer(data_mem)/=no_track then -- deraillage
-							gripsou_step:=25;
+							gripsou_step:=9;
 						else
 							gripsou_step:=14;
 						end if;
@@ -1147,8 +1145,8 @@ end if;
 						gripsou_step:=23;
 					when 23=>
 						input_A:=input_A+1;
-						gripsou_step:=24;
-					when 24=>
+						gripsou_step:=20;
+					when 20=>
 						input_A:=input_A+1;
 						no_sect:=no_sect+1;
 						if no_sect>=nb_sects then
@@ -1189,7 +1187,7 @@ end if;
 									no_track:=no_track+1;
 									no_sect:=0;
 									if	no_track=nb_tracks then
-										gripsou_step:=20;
+										gripsou_step:=8;
 									else
 										if winape then
 											gripsou_step:=7;
@@ -1216,8 +1214,8 @@ end if;
 							input_A:=(others=>'0');
 							gripsou_step:=7;
 						end if;
-					when 20=>NULL; -- fin
-					when 25=>NULL; -- deraillage : no_track incorrect
+					when 8=>NULL; -- fin
+					when 9=>NULL; -- deraillage : no_track incorrect
 				end case;
 			end if;
 		end if;

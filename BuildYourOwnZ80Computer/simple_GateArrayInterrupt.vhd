@@ -14,7 +14,8 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 -- ink 0,2,20
 -- speed ink 1,1
 entity simple_GateArrayInterrupt is
-	Generic (LATENCE_MEM_WR:integer:=1;
+	Generic (--LATENCE_MEM_WR:integer:=1;
+	M1_OFFSET:integer :=3;
 	--NB_HSYNC_BY_INTERRUPT:integer:=52; --52; -- 52 normalement 52
 	NB_LINEH_BY_VSYNC:integer:=24+1; --4--5-- VSYNC normalement 4 HSYNC
 	-- continuer sur cette voie, fixer le moment de l'interruption exactement à la fin de la HSYNC
@@ -42,8 +43,8 @@ entity simple_GateArrayInterrupt is
 			  crtc_transmit:out STD_LOGIC:='0';
            int : out  STD_LOGIC:='1';
 			  M1_n : in  STD_LOGIC;
-			  MEM_WR:in std_logic;
-			  WAIT_MEM_n : out  STD_LOGIC:='1';
+			  --MEM_WR:in std_logic;
+			  --WAIT_MEM_n : out  STD_LOGIC:='1';
            WAIT_n : out  STD_LOGIC:='1';
 			  
 			  ram_D : inout  STD_LOGIC_VECTOR (7 downto 0);
@@ -310,8 +311,8 @@ simple_GateArray_process : process(CLK4MHz) is
 
 		variable was_M1_1:boolean:=false;
 		variable waiting:boolean:=false;
-		variable waiting_MEMWR:integer range 0 to LATENCE_MEM_WR:=LATENCE_MEM_WR;
-		variable was_MEMWR_0:boolean:=false;
+		--variable waiting_MEMWR:integer range 0 to LATENCE_MEM_WR:=LATENCE_MEM_WR;
+		--variable was_MEMWR_0:boolean:=false;
 		
 		--(128*1024)/64 2*1024=2^11
 		variable zap_scan:boolean:=true; -- il n'y a pas eu de blank donc ne pas scanner la mémoire
@@ -574,15 +575,15 @@ end if;
 			
 			
 			
-			if was_MEMWR_0 and MEM_WR='1' then
-				waiting_MEMWR:=0;
-			end if;
+			--if was_MEMWR_0 and MEM_WR='1' then
+			--	waiting_MEMWR:=0;
+			--end if;
 			
-			if waiting_MEMWR<LATENCE_MEM_WR then
-				waiting_MEMWR:=waiting_MEMWR+1;
-				WAIT_MEM_n<='0';
-			else
-				WAIT_MEM_n<='1';
+			--if waiting_MEMWR<LATENCE_MEM_WR then
+			--	waiting_MEMWR:=waiting_MEMWR+1;
+				--WAIT_MEM_n<='0';
+			--else
+				--WAIT_MEM_n<='1';
 				if waiting then
 					WAIT_n<='0';
 				else
@@ -590,13 +591,13 @@ end if;
 				end if;
 
 				--z80_synchronise	
-				if M1_n='0' and was_M1_1 and compteur1MHz=0 then
+				if M1_n='0' and was_M1_1 and compteur1MHz=M1_OFFSET then
 					-- M---M---M---
 					-- 012301230123
 					-- cool
 					waiting:=false;
 					WAIT_n<='1';
-				elsif waiting and compteur1MHz=0 then
+				elsif waiting and compteur1MHz=M1_OFFSET then
 					waiting:=false;
 					WAIT_n<='1';
 				elsif waiting then
@@ -620,20 +621,20 @@ end if;
 					-- pas cool
 					WAIT_n<='0';
 					waiting:=true;
-				elsif compteur1MHz=0 and not(waiting) then
+				elsif compteur1MHz=M1_OFFSET and not(waiting) then
 					-- il existe des instruction de plus de 4 Tstate (je confirme)
 				end if;
-			end if;
+			--end if;
 			if M1_n='1' then
 				was_M1_1:=true;
 			else
 				was_M1_1:=false;
 			end if;
-			if MEM_WR='0' then
-				was_MEMWR_0:=true;
-			else
-				was_MEMWR_0:=false;
-			end if;
+			--if MEM_WR='0' then
+			--	was_MEMWR_0:=true;
+			--else
+			--	was_MEMWR_0:=false;
+			--end if;
 
 			
 		end if;

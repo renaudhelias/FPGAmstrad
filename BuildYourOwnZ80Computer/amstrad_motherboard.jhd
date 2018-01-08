@@ -25,5 +25,3 @@ MODULE amstrad_motherboard
 		INSTANCE XLXI_580
 	SUBMODULE joykeyb
 		INSTANCE XLXI_494
-	SUBMODULE please_wait
-		INSTANCE XLXI_568

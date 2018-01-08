@@ -38,13 +38,11 @@ entity ROMselect is
 end ROMselect;
 
 architecture Behavioral of ROMselect is
-	signal init_ROMbank: STD_LOGIC_VECTOR (3 downto 0):=(others=>'0'); -- it's upper ROM number in fact
 begin
-	ROMbank<=init_ROMbank;
 	process(CLK) is
 		variable ROMbank_mem: STD_LOGIC_VECTOR (3 downto 0);
 	begin
-		init_ROMbank<=ROMbank_mem;
+		ROMbank<=ROMbank_mem;
 		if rising_edge(CLK) then
 			if IO_WR='1' and A13='0' then
 				ROMbank_mem(3 downto 0):=D(3 downto 0);
