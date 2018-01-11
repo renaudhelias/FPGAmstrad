@@ -28,7 +28,7 @@
         <signal name="XLXN_732(7:0)" />
         <signal name="crtc_A(14:0)" />
         <signal name="XLXN_736" />
-        <signal name="XLXN_737(22:0)" />
+        <signal name="XLXN_737(20:0)" />
         <signal name="CLK8(2)" />
         <signal name="CLK8(2:0)" />
         <signal name="crtc_A(15:0)" />
@@ -58,7 +58,7 @@
         <port polarity="Output" name="AUDIO_L" />
         <port polarity="Output" name="AUDIO_R" />
         <blockdef name="bootloader_sd">
-            <timestamp>2018-1-7T20:25:43</timestamp>
+            <timestamp>2018-1-11T18:35:47</timestamp>
             <line x2="0" y1="-464" y2="-464" x1="64" />
             <line x2="496" y1="-608" y2="-608" x1="432" />
             <rect width="64" x="432" y="-556" height="24" />
@@ -98,7 +98,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2018-1-8T19:37:10</timestamp>
+            <timestamp>2018-1-11T18:33:10</timestamp>
             <line x2="448" y1="496" y2="496" x1="384" />
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
@@ -143,7 +143,7 @@
             <blockpin signalname="XLXN_750" name="key_reset" />
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="MOSI" name="MOSI" />
-            <blockpin signalname="XLXN_737(22:0)" name="ram_A(22:0)" />
+            <blockpin signalname="XLXN_737(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="SCLK" name="SCLK" />
             <blockpin signalname="XLXN_736" name="ram_W_n" />
             <blockpin signalname="SS_n" name="SS_n" />
@@ -165,7 +165,7 @@
             <blockpin signalname="BLUE3(2:0)" name="BLUE3(2:0)" />
         </block>
         <block symbolname="amstrad_motherboard" name="XLXI_512">
-            <blockpin signalname="XLXN_737(22:0)" name="init_A(22:0)" />
+            <blockpin signalname="XLXN_737(20:0)" name="init_A(20:0)" />
             <blockpin signalname="XLXN_736" name="init_W_n" />
             <blockpin signalname="XLXN_717" name="CLK16MHz" />
             <blockpin signalname="PS2_CLK" name="PS2_CLK" />
@@ -335,7 +335,7 @@
             <wire x2="6960" y1="576" y2="576" x1="6640" />
             <wire x2="6960" y1="576" y2="2880" x1="6960" />
         </branch>
-        <branch name="XLXN_737(22:0)">
+        <branch name="XLXN_737(20:0)">
             <wire x2="6672" y1="16" y2="16" x1="1360" />
             <wire x2="6672" y1="16" y2="256" x1="6672" />
             <wire x2="1360" y1="16" y2="1264" x1="1360" />

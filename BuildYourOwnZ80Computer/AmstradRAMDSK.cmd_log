@@ -4,3 +4,5 @@ vhdtdtfi -lib work AmstradRAMDSK.vhd -prj _BuildYourOwnZ80Computer -o AmstradRAM
 spl2sym -intstyle ise -family spartan6 -w AmstradRAMDSK.spl C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/AmstradRAMDSK.sym 
 vhdtdtfi -lib work AmstradRAMDSK.vhd -prj _BuildYourOwnZ80Computer -o AmstradRAMDSK.spl -module AmstradRAMDSK -template C:/Xilinx/14.7/ISE_DS/ISE//data/splfile.tft -deleteonerror 
 spl2sym -intstyle ise -family spartan6 -w AmstradRAMDSK.spl C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/AmstradRAMDSK.sym 
+vhdtdtfi -lib work AmstradRAMDSK.vhd -prj _BuildYourOwnZ80Computer -o AmstradRAMDSK.spl -module AmstradRAMDSK -template C:/Xilinx/14.7/ISE_DS/ISE//data/splfile.tft -deleteonerror 
+spl2sym -intstyle ise -family spartan6 -w AmstradRAMDSK.spl C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/AmstradRAMDSK.sym 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="bootloader_sd">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-7T20:25:43</timestamp>
+    <timestamp>2018-1-11T18:35:47</timestamp>
     <pin polarity="Input" x="0" y="-464" name="MISO" />
     <pin polarity="Input" x="0" y="-32" name="CLK4MHz" />
     <pin polarity="Input" x="0" y="-288" name="key_reset" />
     <pin polarity="BiDirectional" x="496" y="-544" name="ram_D(7:0)" />
     <pin polarity="Output" x="496" y="-608" name="MOSI" />
-    <pin polarity="Output" x="496" y="-480" name="ram_A(22:0)" />
+    <pin polarity="Output" x="496" y="-480" name="ram_A(20:0)" />
     <pin polarity="Output" x="496" y="-224" name="SCLK" />
     <pin polarity="Output" x="496" y="-160" name="ram_W_n" />
     <pin polarity="Output" x="496" y="-32" name="SS_n" />
@@ -19,7 +19,7 @@
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-288" type="pin key_reset" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-544" type="pin ram_D(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-608" type="pin MOSI" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-480" type="pin ram_A(22:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-480" type="pin ram_A(20:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-224" type="pin SCLK" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-160" type="pin ram_W_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="424" y="-32" type="pin SS_n" />

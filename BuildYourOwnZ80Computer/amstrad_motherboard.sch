@@ -18,11 +18,11 @@
         <signal name="ROMbank(3:0)" />
         <signal name="XLXN_283(7:0)" />
         <signal name="vram_A(17:0)" />
-        <signal name="XLXN_427(19:0)" />
+        <signal name="XLXN_427(20:0)" />
         <signal name="ram_D(7:0)" />
         <signal name="XLXN_542" />
         <signal name="ram_A(20:0)" />
-        <signal name="init_A(22:0)" />
+        <signal name="init_A(20:0)" />
         <signal name="XLXN_555" />
         <signal name="XLXN_556" />
         <signal name="init_W_n" />
@@ -82,7 +82,6 @@
         <signal name="XLXN_826" />
         <signal name="n_crtc_vsync" />
         <signal name="XLXN_806" />
-        <signal name="XLXN_830" />
         <signal name="XLXN_835" />
         <signal name="crtc_W" />
         <signal name="A(15),A(14),A(9),A(8)" />
@@ -106,7 +105,7 @@
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
-        <port polarity="Input" name="init_A(22:0)" />
+        <port polarity="Input" name="init_A(20:0)" />
         <port polarity="Input" name="init_W_n" />
         <port polarity="Input" name="CLK16MHz" />
         <port polarity="Output" name="audio_BC" />
@@ -201,7 +200,7 @@
             <rect width="256" x="64" y="-192" height="256" />
         </blockdef>
         <blockdef name="AmstradRAMDSK">
-            <timestamp>2017-12-27T22:42:5</timestamp>
+            <timestamp>2018-1-11T18:32:30</timestamp>
             <line x2="0" y1="32" y2="32" x1="64" />
             <rect width="64" x="0" y="84" height="24" />
             <line x2="0" y1="96" y2="96" x1="64" />
@@ -328,7 +327,7 @@
             <rect width="288" x="64" y="-256" height="944" />
         </blockdef>
         <blockdef name="simple_DSK">
-            <timestamp>2018-1-4T19:40:14</timestamp>
+            <timestamp>2018-1-11T18:32:24</timestamp>
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
@@ -457,14 +456,14 @@
             <blockpin signalname="XLXN_556" name="O" />
         </block>
         <block symbolname="AmstradRAMDSK" name="XLXI_348">
+            <blockpin signalname="XLXN_621" name="dsk_transmit" />
             <blockpin signalname="XLXN_852" name="crtc_transmit" />
             <blockpin signalname="RESET_n" name="init_done" />
             <blockpin signalname="vram_A(17:0)" name="A(17:0)" />
-            <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
-            <blockpin signalname="init_A(22:0)" name="init_A(22:0)" />
+            <blockpin signalname="XLXN_427(20:0)" name="dsk_A(20:0)" />
+            <blockpin signalname="init_A(20:0)" name="init_A(20:0)" />
             <blockpin signalname="crtc_A(15:0)" name="crtc_A(15:0)" />
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
-            <blockpin signalname="XLXN_621" name="dsk_transmit" />
         </block>
         <block symbolname="ROMselect" name="XLXI_345">
             <blockpin signalname="XLXN_435" name="CLK" />
@@ -561,7 +560,7 @@
             <blockpin signalname="ram_D(7:0)" name="dsk_D(7:0)" />
             <blockpin signalname="XLXN_849" name="dsk_W" />
             <blockpin signalname="XLXN_621" name="dsk_transmit" />
-            <blockpin signalname="XLXN_427(19:0)" name="dsk_A(19:0)" />
+            <blockpin signalname="XLXN_427(20:0)" name="dsk_A(20:0)" />
         </block>
         <block symbolname="inv" name="XLXI_332">
             <blockpin signalname="XLXN_835" name="I" />
@@ -798,7 +797,7 @@
             <wire x2="4368" y1="608" y2="608" x1="3856" />
             <wire x2="4368" y1="608" y2="1936" x1="4368" />
         </branch>
-        <branch name="XLXN_427(19:0)">
+        <branch name="XLXN_427(20:0)">
             <wire x2="3024" y1="2288" y2="3296" x1="3024" />
             <wire x2="6320" y1="3296" y2="3296" x1="3024" />
             <wire x2="3456" y1="2288" y2="2288" x1="3024" />
@@ -827,7 +826,7 @@
             <wire x2="3984" y1="1680" y2="1680" x1="3936" />
             <wire x2="3984" y1="1664" y2="1680" x1="3984" />
         </branch>
-        <branch name="init_A(22:0)">
+        <branch name="init_A(20:0)">
             <wire x2="3536" y1="1792" y2="1792" x1="3280" />
         </branch>
         <branch name="XLXN_555">
@@ -1104,7 +1103,7 @@
         </branch>
         <instance x="1296" y="5088" name="XLXI_256" orien="R0" />
         <instance x="1584" y="5280" name="XLXI_253" orien="R0" />
-        <iomarker fontsize="28" x="3280" y="1792" name="init_A(22:0)" orien="R180" />
+        <iomarker fontsize="28" x="3280" y="1792" name="init_A(20:0)" orien="R180" />
         <iomarker fontsize="28" x="1056" y="3504" name="RESET_n" orien="R0" />
         <iomarker fontsize="28" x="3872" y="1200" name="init_W_n" orien="R180" />
         <iomarker fontsize="28" x="2576" y="1296" name="CLK8(2:0)" orien="R270" />

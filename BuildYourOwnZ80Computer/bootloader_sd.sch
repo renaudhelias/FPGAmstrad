@@ -11,7 +11,7 @@
         <signal name="XLXN_52(7:0)" />
         <signal name="XLXN_55(31:0)" />
         <signal name="ram_D(7:0)" />
-        <signal name="ram_A(22:0)" />
+        <signal name="ram_A(20:0)" />
         <signal name="ram_W" />
         <signal name="XLXN_57" />
         <signal name="INIT_DONE" />
@@ -26,7 +26,7 @@
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
-        <port polarity="Output" name="ram_A(22:0)" />
+        <port polarity="Output" name="ram_A(20:0)" />
         <port polarity="Output" name="SCLK" />
         <port polarity="Output" name="ram_W_n" />
         <port polarity="Output" name="SS_n" />
@@ -57,7 +57,7 @@
             <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2018-1-7T20:25:28</timestamp>
+            <timestamp>2018-1-11T18:35:33</timestamp>
             <line x2="0" y1="224" y2="224" x1="64" />
             <line x2="432" y1="224" y2="224" x1="368" />
             <line x2="0" y1="96" y2="96" x1="64" />
@@ -101,7 +101,7 @@
             <blockpin signalname="ram_W" name="ram_W" />
             <blockpin signalname="XLXN_61" name="spi_do" />
             <blockpin signalname="FILE_LOADED" name="load_init_done" />
-            <blockpin signalname="ram_A(22:0)" name="ram_A(22:0)" />
+            <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="XLXN_55(31:0)" name="spi_A(31:0)" />
         </block>
         <block symbolname="inv" name="XLXI_26">
@@ -136,7 +136,7 @@
         <branch name="ram_D(7:0)">
             <wire x2="2704" y1="672" y2="672" x1="2592" />
         </branch>
-        <branch name="ram_A(22:0)">
+        <branch name="ram_A(20:0)">
             <wire x2="2704" y1="608" y2="608" x1="2592" />
         </branch>
         <branch name="ram_W">
@@ -177,7 +177,7 @@
         <iomarker fontsize="28" x="320" y="752" name="MISO" orien="R180" />
         <iomarker fontsize="28" x="1680" y="784" name="MOSI" orien="R0" />
         <iomarker fontsize="28" x="2704" y="672" name="ram_D(7:0)" orien="R0" />
-        <iomarker fontsize="28" x="2704" y="608" name="ram_A(22:0)" orien="R0" />
+        <iomarker fontsize="28" x="2704" y="608" name="ram_A(20:0)" orien="R0" />
         <iomarker fontsize="28" x="656" y="320" name="SCLK" orien="R180" />
         <iomarker fontsize="28" x="2880" y="448" name="ram_W_n" orien="R270" />
         <iomarker fontsize="28" x="2192" y="1312" name="SS_n" orien="R90" />

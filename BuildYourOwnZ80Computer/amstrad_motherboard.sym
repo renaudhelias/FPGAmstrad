@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-8T19:37:10</timestamp>
-    <pin polarity="Input" x="0" y="-736" name="init_A(22:0)" />
+    <timestamp>2018-1-11T18:33:10</timestamp>
+    <pin polarity="Input" x="0" y="-736" name="init_A(20:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-544" name="CLK16MHz" />
     <pin polarity="Input" x="0" y="-352" name="PS2_CLK" />
@@ -25,7 +25,7 @@
     <pin polarity="Output" x="448" y="-432" name="audio_AB" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="224" y="-776" type="symbol" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-736" type="pin init_A(22:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-736" type="pin init_A(20:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-640" type="pin init_W_n" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-544" type="pin CLK16MHz" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-352" type="pin PS2_CLK" />

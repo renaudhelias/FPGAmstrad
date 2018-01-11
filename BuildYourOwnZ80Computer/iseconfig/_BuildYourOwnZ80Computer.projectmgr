@@ -18,12 +18,14 @@
          <ClosedNode>/amstrad_switch_z80_vga_sd E:|fpga|ZXUNO|V4|8bit|CPC|amstrad_switch_z80_vga_sd.sch/XLXI_512 - amstrad_motherboard</ClosedNode>
          <ClosedNode>/joykeyb E:|fpga|ZXUNO|V4|8bit|CPC|joykeyb.sch</ClosedNode>
       </ClosedNodes>
-      <SelectedItems/>
-      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <SelectedItems>
+         <SelectedItem>amstrad_switch_z80_vga_sd (C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.sch)</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >5</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000268000000020000000000000000000000000200000064ffffffff000000810000000300000002000002680000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
-      <CurrentItem>XLXI_512 - amstrad_motherboard (C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/amstrad_motherboard.sch)</CurrentItem>
+      <CurrentItem>amstrad_switch_z80_vga_sd (C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/amstrad_switch_z80_vga_sd.sch)</CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_SCHEMATIC" guiview="Process" >
       <ClosedNodes>
@@ -76,13 +78,13 @@
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem/>
+         <SelectedItem>Create Schematic Symbol</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000000000000000001af000000010000000100000000000000000000000064ffffffff000000810000000000000001000001af0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem/>
+      <CurrentItem>Create Schematic Symbol</CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="" guiview="Process" >
       <ClosedNodes>
@@ -103,13 +105,13 @@
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem/>
+         <SelectedItem></SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000000000000000001af000000010000000100000000000000000000000064ffffffff000000810000000000000001000001af0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem/>
+      <CurrentItem></CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_XCO" guiview="Process" >
       <ClosedNodes>

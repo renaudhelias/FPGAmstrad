@@ -18,7 +18,7 @@ entity simple_DSK is
            D_command : in  STD_LOGIC_VECTOR (7 downto 0);
            Dout : inout  STD_LOGIC_VECTOR (7 downto 0);
            dsk_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
-           dsk_A : out  STD_LOGIC_VECTOR (19 downto 0);
+           dsk_A : out  STD_LOGIC_VECTOR (20 downto 0);
            dsk_W : out  STD_LOGIC;
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  --M1_n:in STD_LOGIC;
@@ -101,12 +101,13 @@ cortex:process(CLK8(0),reset)
 	end getCHRN;
 	-- retourne le pointeur dans memory
 	function getData(chrn: in chrn_type) return std_logic_vector is
-		variable address:std_logic_vector(19 downto 0); -- simulator Cannot access 'dsk_a' from inside pure function 'getdata'. --dsk_A'range);
+		variable address:std_logic_vector(20 downto 0); -- simulator Cannot access 'dsk_a' from inside pure function 'getdata'. --dsk_A'range);
 		variable pff:std_logic_vector(7 downto 0);
 	begin
 		pff:="0000" & chrn(2)(3 downto 0);
 		pff:=pff-1;
-		address:=chrn(0)(5 downto 0) & chrn(1)(0) & pff(3 downto 0) & "0" & x"00";
+		-- no_side on A(19) for 2MB compatibility of most games.
+		address:=chrn(1)(0) & "1" & chrn(0)(5 downto 0) & pff(3 downto 0) & "0" & x"00";
 		return address;
 	end getData;
 	variable etat:integer range 0 to 4;

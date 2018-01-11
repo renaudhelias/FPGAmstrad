@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="SDRAM_FAT32_LOADER">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-7T20:25:28</timestamp>
+    <timestamp>2018-1-11T18:35:33</timestamp>
     <pin polarity="Input" x="0" y="-352" name="CLK" />
     <pin polarity="Input" x="0" y="96" name="spi_done" />
     <pin polarity="Input" x="0" y="224" name="spi_init_done" />
@@ -11,7 +11,7 @@
     <pin polarity="Output" x="432" y="-352" name="ram_W" />
     <pin polarity="Output" x="432" y="96" name="spi_do" />
     <pin polarity="Output" x="432" y="224" name="load_init_done" />
-    <pin polarity="Output" x="432" y="-160" name="ram_A(22:0)" />
+    <pin polarity="Output" x="432" y="-160" name="ram_A(20:0)" />
     <pin polarity="Output" x="432" y="-32" name="spi_A(31:0)" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="216" y="-392" type="symbol" />
@@ -24,7 +24,7 @@
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="-352" type="pin ram_W" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="96" type="pin spi_do" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="224" type="pin load_init_done" />
-        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="-160" type="pin ram_A(22:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="-160" type="pin ram_A(20:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="360" y="-32" type="pin spi_A(31:0)" />
         <line x2="0" y1="224" y2="224" x1="64" />
         <line x2="432" y1="224" y2="224" x1="368" />

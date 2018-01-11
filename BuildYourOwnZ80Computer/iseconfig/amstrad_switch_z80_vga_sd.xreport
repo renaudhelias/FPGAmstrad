@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2018-01-08T21:33:11</DateModified>
+  <DateModified>2018-01-11T19:51:12</DateModified>
   <ModuleName>amstrad_switch_z80_vga_sd</ModuleName>
-  <SummaryTimeStamp>2018-01-08T20:49:02</SummaryTimeStamp>
+  <SummaryTimeStamp>2018-01-11T19:49:29</SummaryTimeStamp>
   <SavedFilePath>C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer/iseconfig/amstrad_switch_z80_vga_sd.xreport</SavedFilePath>
   <ImplementationReportsDirectory>C:/Users/Joe/Desktop/mist-git/FPGAmstrad/FPGAmstrad/BuildYourOwnZ80Computer\</ImplementationReportsDirectory>
   <DateInitialized>2017-11-19T16:50:56</DateInitialized>
