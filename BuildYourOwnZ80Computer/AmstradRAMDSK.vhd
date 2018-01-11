@@ -51,10 +51,6 @@ begin
 ram_A(13 downto 0)<= init_A(13 downto 0) when init_done='0' else dsk_A(13 downto 0) when dsk_transmit='1' else crtc_A(13 downto 0) when crtc_transmit='1' else A(13 downto 0); -- address is solving
 ram_A(17 downto 14)<= init_A(17 downto 14) when init_done='0' else dsk_A(17 downto 14) when dsk_transmit='1' else "10" & crtc_A(15 downto 14) when crtc_transmit='1' else A(17 downto 14); -- address is solving
 ram_A(20 downto 18)<= init_A(20 downto 18) when init_done='0' else dsk_A(20 downto 18) when dsk_transmit='1' else (others=>'0'); -- address is solving
--- simulating 2MB RAM with 4MB.
---ram_A(19 downto 18)<= init_A(19 downto 18) when init_done='0' else dsk_A(19 downto 18) when dsk_transmit='1' else (others=>'0'); -- address is solving
---ram_A(20)<='0';
-
 --death byte
 --ram_A(22 downto 21)<=(others=>'1');
 -- sim

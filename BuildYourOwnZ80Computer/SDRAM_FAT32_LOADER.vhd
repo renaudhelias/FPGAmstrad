@@ -962,6 +962,7 @@ end if;
 		variable gripsou_ram_A_mem:std_logic_vector(gripsou_ram_A'range);
 		type sector_order_type is array(0 to 14) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
+		variable no_trak_mem:std_logic_vector(5 downto 0);
 	begin
 		--is_ucpm<=ucpm;
 		gripsou_ram_A<=gripsou_ram_A_mem;
@@ -1080,7 +1081,14 @@ end if;
 							gripsou_step:=11;
 						end if;
 					when 11=>
+						no_trak_mem:=conv_std_logic_vector(no_track,6);
 						nb_sects:=conv_integer(data_mem);
+						--00 RAM ROM
+						--11 00 dsk NOT NOT
+						--10 01 dsk NOT NOT
+						--01 10 dsk NOT NOT
+						no_trak_mem(5):=not(no_trak_mem(5));
+						no_trak_mem(4):=not(no_trak_mem(4));
 						input_A:=input_A+1;
 --						if nb_sects/=10 then
 --							gripsou_step:=28;
@@ -1169,7 +1177,7 @@ end if;
 						end if;
 					when 18=> -- data transmit
 						-- no_side on A(19) for 2MB compatibility of most games.
-						gripsou_ram_A_mem:=conv_std_logic_vector(no_side,1) & "1" & conv_std_logic_vector(no_track,6) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
+						gripsou_ram_A_mem:="0" & conv_std_logic_vector(no_side,1) & no_trak_mem(5 downto 0) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
 						--if no_track<32 then -- 2^5=32 donc de 0 à 31, donc moins de 40 !
 							gripsou_ram_W<='1';
 						--end if;

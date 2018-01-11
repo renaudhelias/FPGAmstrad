@@ -106,8 +106,12 @@ cortex:process(CLK8(0),reset)
 	begin
 		pff:="0000" & chrn(2)(3 downto 0);
 		pff:=pff-1;
-		-- no_side on A(19) for 2MB compatibility of most games.
-		address:=chrn(1)(0) & "1" & chrn(0)(5 downto 0) & pff(3 downto 0) & "0" & x"00";
+		-- no_side on A(18) for 512KB compatibility of most games.
+		--00 RAM ROM
+		--11 00 dsk NOT NOT
+		--10 01 dsk NOT NOT
+		--01 10 dsk NOT NOT
+		address:="0" & chrn(1)(0) & not(chrn(0)(5)) & not(chrn(0)(4)) & chrn(0)(3 downto 0) & pff(3 downto 0) & "0" & x"00";
 		return address;
 	end getData;
 	variable etat:integer range 0 to 4;
