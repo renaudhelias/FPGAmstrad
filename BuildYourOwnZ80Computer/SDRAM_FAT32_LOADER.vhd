@@ -1079,6 +1079,7 @@ end if;
 						if input_A>x"000000FF" then --==============================================
 							gripsou_step:=7;
 							no_track:=0;
+							no_side:=0;
 							input_A:=(others=>'0'); -- rembobine
 							winape_offs:=(others=>'0'); -- rembobine
 						end if;
@@ -1130,13 +1131,12 @@ end if;
 						end if;
 					when 14=>
 						-- H
-						no_side:=conv_integer(data_mem);
 						input_A:=input_A+1;
-						--if no_side/=0 then
-						--	gripsou_step:=29;
-						--else
+						if conv_integer(data_mem)/=no_side then -- deraillage
+							gripsou_step:=9;
+						else
 							gripsou_step:=15;
-						--end if;
+						end if;
 					when 15=>
 						-- R
 						--sectID:=data_mem;
@@ -1207,32 +1207,34 @@ end if;
 						--else
 							input_A:=input_A+1;
 							if input_A>=SECTOR_SIZE then
-								no_sect:=no_sect+1;
 								winape_offs:=winape_offs+input_A;
 								input_A:=(others=>'0');
-								if	no_sect=nb_sects then
+								if	no_sect<nb_sects-1 then
+									no_sect:=no_sect+1;
+								elsif no_side<nb_sides-1 then
+									no_side:=no_side+1;
+									gripsou_step:=8;
+								elsif no_track<nb_tracks-1 then
+									no_side:=0;
 									no_track:=no_track+1;
-									no_sect:=0;
-									if	no_track=nb_tracks then
-										gripsou_step:=8;
-									else
-										if winape then
-											gripsou_step:=7;
-										else
-											--if winape_offs=track_size(no_track) then
-											if winape_offs=track_size then
-												winape_offs:=(others=>'0');
-												gripsou_step:=7;
-											else
-												gripsou_step:=19;
-											end if;
-										end if;
-									end if;
+									gripsou_step:=8;
 								else
-									gripsou_step:=18;
+									gripsou_step:=9;
 								end if;
 							end if;
 						--end if;
+					when 8=>
+						if winape then
+							gripsou_step:=7;
+						else
+							--if winape_offs=track_size(no_track) then
+							if winape_offs=track_size then
+								winape_offs:=(others=>'0');
+								gripsou_step:=7;
+							else
+								gripsou_step:=19;
+							end if;
+						end if;
 					when 19=> -- not winape
 						winape_offs:=winape_offs+1;
 						--if winape_offs=track_size(no_track) then
@@ -1241,8 +1243,7 @@ end if;
 							input_A:=(others=>'0');
 							gripsou_step:=7;
 						end if;
-					when 8=>NULL; -- fin
-					when 9=>NULL; -- deraillage : no_track incorrect
+					when 9=>NULL; -- fin ou deraillage : no_track incorrect
 				end case;
 			end if;
 		end if;
