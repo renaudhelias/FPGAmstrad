@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-12T17:56:21</timestamp>
+    <timestamp>2018-1-13T13:59:47</timestamp>
     <pin polarity="Input" x="0" y="-736" name="init_A(20:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-544" name="CLK16MHz" />
@@ -10,6 +10,7 @@
     <pin polarity="Input" x="0" y="-160" name="RESET_n" />
     <pin polarity="Input" x="448" y="-96" name="JOYSTICK1(6:0)" />
     <pin polarity="Input" x="0" y="112" name="CLK_PWM" />
+    <pin polarity="Input" x="0" y="496" name="dsk_info(5:0)" />
     <pin polarity="BiDirectional" x="448" y="-160" name="ram_D(7:0)" />
     <pin polarity="Output" x="448" y="-544" name="CLK8(2:0)" />
     <pin polarity="Output" x="448" y="-608" name="ram_A(20:0)" />
@@ -23,7 +24,6 @@
     <pin polarity="Output" x="448" y="400" name="palette_D(7:0)" />
     <pin polarity="Output" x="448" y="496" name="key_reset" />
     <pin polarity="Output" x="448" y="-432" name="audio_AB" />
-    <pin polarity="Input" x="0" y="496" name="dsk_info(4:0)" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="224" y="-776" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-736" type="pin init_A(20:0)" />
@@ -34,6 +34,7 @@
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-160" type="pin RESET_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-96" type="pin JOYSTICK1(6:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="112" type="pin CLK_PWM" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="496" type="pin dsk_info(5:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-160" type="pin ram_D(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-544" type="pin CLK8(2:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-608" type="pin ram_A(20:0)" />
@@ -77,7 +78,6 @@
         <line x2="448" y1="-400" y2="-400" x1="384" />
         <line x2="0" y1="112" y2="112" x1="64" />
         <rect width="320" x="64" y="-768" height="1292" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="496" type="pin dsk_info(4:0)" />
         <rect width="64" x="0" y="484" height="24" />
         <line x2="0" y1="496" y2="496" x1="64" />
     </graph>

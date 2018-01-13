@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="simple_DSK">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-12T17:55:33</timestamp>
+    <timestamp>2018-1-13T13:59:17</timestamp>
     <pin polarity="Input" x="0" y="-416" name="reset" />
     <pin polarity="Input" x="0" y="-352" name="A0" />
     <pin polarity="Input" x="0" y="-288" name="IO_RD" />
@@ -9,7 +9,7 @@
     <pin polarity="Input" x="0" y="-160" name="CLK8(2:0)" />
     <pin polarity="Input" x="0" y="-96" name="A10_A8_A7(2:0)" />
     <pin polarity="Input" x="0" y="-32" name="D_command(7:0)" />
-    <pin polarity="Input" x="0" y="32" name="dsk_info(4:0)" />
+    <pin polarity="Input" x="0" y="32" name="dsk_info(5:0)" />
     <pin polarity="BiDirectional" x="480" y="-160" name="Dout(7:0)" />
     <pin polarity="BiDirectional" x="480" y="-96" name="dsk_D(7:0)" />
     <pin polarity="Output" x="480" y="-480" name="dsk_W" />
@@ -24,7 +24,7 @@
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-160" type="pin CLK8(2:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-96" type="pin A10_A8_A7(2:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-32" type="pin D_command(7:0)" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="32" type="pin dsk_info(4:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="32" type="pin dsk_info(5:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="408" y="-160" type="pin Dout(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="408" y="-96" type="pin dsk_D(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="408" y="-480" type="pin dsk_W" />

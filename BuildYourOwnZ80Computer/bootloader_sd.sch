@@ -23,7 +23,7 @@
         <signal name="CLK4MHz" />
         <signal name="FILE_LOADED" />
         <signal name="key_reset" />
-        <signal name="dsk_info(4:0)" />
+        <signal name="dsk_info(5:0)" />
         <port polarity="Input" name="MISO" />
         <port polarity="Output" name="MOSI" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
@@ -34,7 +34,7 @@
         <port polarity="Input" name="CLK4MHz" />
         <port polarity="Output" name="FILE_LOADED" />
         <port polarity="Input" name="key_reset" />
-        <port polarity="Output" name="dsk_info(4:0)" />
+        <port polarity="Output" name="dsk_info(5:0)" />
         <blockdef name="SDRAM_SPIMASTER">
             <timestamp>2017-12-30T16:55:6</timestamp>
             <line x2="384" y1="160" y2="160" x1="320" />
@@ -59,7 +59,7 @@
             <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <blockdef name="SDRAM_FAT32_LOADER">
-            <timestamp>2018-1-12T17:53:45</timestamp>
+            <timestamp>2018-1-13T13:56:48</timestamp>
             <line x2="0" y1="224" y2="224" x1="64" />
             <line x2="432" y1="224" y2="224" x1="368" />
             <line x2="0" y1="96" y2="96" x1="64" />
@@ -107,7 +107,7 @@
             <blockpin signalname="FILE_LOADED" name="load_init_done" />
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
             <blockpin signalname="XLXN_55(31:0)" name="spi_A(31:0)" />
-            <blockpin signalname="dsk_info(4:0)" name="dsk_info(4:0)" />
+            <blockpin signalname="dsk_info(5:0)" name="dsk_info(5:0)" />
         </block>
         <block symbolname="inv" name="XLXI_26">
             <blockpin signalname="ram_W" name="I" />
@@ -232,9 +232,9 @@
         <iomarker fontsize="28" x="2128" y="480" name="key_reset" orien="R180" />
         <iomarker fontsize="28" x="2880" y="304" name="ram_W_n" orien="R270" />
         <instance x="2640" y="448" name="XLXI_26" orien="R0" />
-        <branch name="dsk_info(4:0)">
+        <branch name="dsk_info(5:0)">
             <wire x2="2624" y1="512" y2="512" x1="2592" />
         </branch>
-        <iomarker fontsize="28" x="2624" y="512" name="dsk_info(4:0)" orien="R0" />
+        <iomarker fontsize="28" x="2624" y="512" name="dsk_info(5:0)" orien="R0" />
     </sheet>
 </drawing>

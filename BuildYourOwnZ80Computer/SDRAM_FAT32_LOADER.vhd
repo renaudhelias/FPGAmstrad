@@ -30,8 +30,7 @@ entity SDRAM_FAT32_LOADER is
 			  spi_init_done : in STD_LOGIC;
 			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
-			  dsk_info:out std_logic_vector(4 downto 0);
-			  --is_ucpm:out std_logic:='0';
+			  dsk_info:out std_logic_vector(5 downto 0);
 			  key_reset:in std_logic
 			  );
 			  	--attribute keep : string;
@@ -966,15 +965,14 @@ end if;
 		variable gripsou_ram_A_mem:std_logic_vector(gripsou_ram_A'range);
 		type sector_order_type is array(0 to 14) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
-		variable sector_zone:std_logic_vector(3 downto 0);
-		variable is_track80:std_logic;
+		variable dsk_info_mem:std_logic_vector(5 downto 0);
 		variable no_track_mem:std_logic_vector(6 downto 0);
 	begin
 		--is_ucpm<=ucpm;
 		gripsou_ram_A<=gripsou_ram_A_mem;
 		gripsou_ram_D<=data_mem;
 		
-		dsk_info<=is_track80 & sector_zone(3 downto 0);
+		dsk_info<=dsk_info_mem;
 
 		if falling_edge(CLK) then
 			--leds<=conv_std_logic_vector(gripsou_step,8);
@@ -1024,9 +1022,9 @@ end if;
 					when 2=>
 						nb_tracks:=conv_integer(data_mem);
 						if nb_tracks<32+16 then
-							is_track80:='0';
+							dsk_info_mem(4):='0'; -- is40tracks
 						else
-							is_track80:='1';
+							dsk_info_mem(4):='1'; -- is80tracks
 						end if;
 						input_A:=input_A+1;
 --						if (nb_tracks/=42) then
@@ -1037,6 +1035,7 @@ end if;
 					when 3=>
 						if input_A=x"00000031" then
 							nb_sides:=conv_integer(data_mem);
+							dsk_info_mem(5):=not(data_mem(0));
 						end if;
 						input_A:=input_A+1;
 						--if (nb_sides/=1) then
@@ -1101,7 +1100,7 @@ end if;
 						--11 00 dsk NOT NOT
 						--10 01 dsk NOT NOT
 						--01 10 dsk NOT NOT
-						if is_track80='1' then
+						if dsk_info_mem(4)='1' then -- is80tracks
 							-- changement de formule => 2MB RAM
 							no_track_mem(6):=not(no_track_mem(6));
 						end if;
@@ -1148,7 +1147,7 @@ end if;
 						--else
 							gripsou_step:=16;
 						--end if;
-						sector_zone:=data_mem(7 downto 4);
+						dsk_info_mem(3 downto 0):=data_mem(7 downto 4);
 --						if data_mem>=x"C1" then
 --							is_ucpm<='0';
 --						else

@@ -20,7 +20,7 @@ entity simple_DSK is
            dsk_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
            dsk_A : out  STD_LOGIC_VECTOR (20 downto 0);
            dsk_W : out  STD_LOGIC;
-			  dsk_info:in std_logic_vector(4 downto 0);
+			  dsk_info:in std_logic_vector(5 downto 0);
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  --M1_n:in STD_LOGIC;
 			  dsk_transmit : out STD_LOGIC -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
@@ -36,7 +36,7 @@ architecture Behavioral of simple_DSK is
 	constant COMMAND_BUSY : STD_LOGIC_VECTOR (7 downto 0):=x"10";
 	constant EXEC_MODE : STD_LOGIC_VECTOR (7 downto 0):=x"20";
 
-	signal status:STD_LOGIC_VECTOR (7 downto 0):=REQ_MASTER;
+	signal status:STD_LOGIC_VECTOR (7 downto 0);
 	
 	constant ST0_SEEK_END : std_logic_vector(7 downto 0):=x"20";
 	
@@ -52,7 +52,7 @@ architecture Behavioral of simple_DSK is
 	constant PHASE_EXECUTION_WRITE:integer range 0 to 4:=3;
 	constant PHASE_RESULT:integer range 0 to 4:=4;
 
-	signal phase:integer range 0 to 4:=PHASE_ATTENTE_COMMANDE;
+	signal phase:integer range 0 to 4;
 
 	
 begin
@@ -70,6 +70,7 @@ status <= REQ_MASTER when phase = PHASE_ATTENTE_COMMANDE
 cortex:process(CLK8(0),reset)
 	variable current_track:integer range 0 to MAX_TRACKS-1;
 	variable current_sector:integer range 0 to MAX_SECTORS-1;
+	variable dsk_info_mem:std_logic_vector(dsk_info'range);
 	variable current_byte:integer;
 	--type sector_size_type is array(0 to 4) of integer;
 	--constant SECTOR_SIZES:sector_size_type:=(128,256,512,1024,2048);--(x"80",x"100",x"200",x"400",x"800",x"1000",x"1800");
@@ -88,17 +89,19 @@ cortex:process(CLK8(0),reset)
 	-- track 0 ou +
 	-- sector 0 ou +
 	-- return [sectTrack,sectSize,sectId,sectSize]
-	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1;dsk_info:std_logic_vector(3 downto 0)) return chrn_type is
+	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1;dsk_info:std_logic_vector(5 downto 0)) return chrn_type is
 		variable chrn:chrn_type;
 		variable sector_zone_mem:std_logic_vector(7 downto 0);
+		variable side_mem:std_logic_vector(7 downto 0);
 	begin
 		sector_zone_mem:= dsk_info(3 downto 0) & x"1";
+		side_mem:="0000000" & dsk_info(5);
 		--return (track_id(track),x"00",sector_ids_of_tracks(track,sector),sector_sizes_of_tracks(track,sector));
 -- "C:/Users/freemac/BuildYourOwnZ80Computer/simple_DSK.vhd" line 170: Index value(s) does not match array range, simulation mismatch.
 		--if ucpm='1' then
 		--	chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"41",x"02");
 		--else
-			chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+ sector_zone_mem,x"02");
+			chrn:=(conv_std_logic_vector(track,8),side_mem,conv_std_logic_vector(sector,8)+ sector_zone_mem,x"02");
 		--end if;
 		return chrn;
 	end getCHRN;
@@ -126,6 +129,7 @@ cortex:process(CLK8(0),reset)
 	end getData;
 	variable etat:integer range 0 to 4;
 	variable command:std_logic_vector(7 downto 0);
+	variable check_dsk_face:boolean;
 	variable dsk_A_mem:STD_LOGIC_VECTOR (dsk_A'range);
 	variable data:std_logic_vector(7 downto 0);
 	variable was_concerned:boolean:=false;
@@ -138,11 +142,10 @@ begin
 		dsk_A<=(others=>'0');
 		current_track:=0;
 		current_sector:=0;
-		current_byte:=0;
 		command_restant:=0;
 		exec_restant:=0;
 		result_restant:=0;
-		--phase <=PHASE_ATTENTE_COMMANDE;
+		phase <=PHASE_ATTENTE_COMMANDE;
 		etat:=ETAT_OSEF;
 		dsk_transmit<='0';
 		dsk_D<=(others=>'Z');
@@ -208,7 +211,7 @@ if do_update then
 						end if;
 						if etat=ETAT_READ then
 							--dsk_transmit<='1';
-							chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
+							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -221,7 +224,7 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
+								chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							end if;
 							dsk_A_mem:=getData(chrn,dsk_info(4))+current_byte;
 							dsk_A<=dsk_A_mem;
@@ -245,7 +248,7 @@ if do_update then
 							exec_restant_write:=exec_restant_write-1;
 						end if;
 						if etat=ETAT_WRITE then
-							chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
+							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -258,7 +261,7 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
+								chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							end if;
 							dsk_A_mem:=getData(chrn,dsk_info(4))+current_byte;
 							dsk_A<=dsk_A_mem;
@@ -337,12 +340,26 @@ if do_update then
 						exec_restant_write:=0;
 						result_restant:=0;
 						etat:=ETAT_OSEF;
+						check_dsk_face:=true;
+						dsk_info_mem:=dsk_info;
 						phase<=PHASE_ATTENTE_COMMANDE;
 						-- MT MF et SK (les trois premiers bits de D on s'en fou)
 						command:=D_command and x"1f";
 						case command is
+							when x"02" => -- read diagnostic
+								command_restant:=8; -- dont EOT qui détermine jusqu'où il faut lire buffer
+								etat:=ETAT_READ_DIAGNOSTIC;
+								phase<=PHASE_COMMAND;
 							when x"03" => -- specify
 								command_restant:=2;
+								phase<=PHASE_COMMAND;
+							when x"05" => -- write data
+								command_restant:=8;
+								etat:=ETAT_WRITE;
+								phase<=PHASE_COMMAND;
+							when x"06" => -- read
+								command_restant:=8;
+								etat:=ETAT_READ;
 								phase<=PHASE_COMMAND;
 							when x"07" => -- recalibrate
 								command_restant:=1;
@@ -350,6 +367,7 @@ if do_update then
 								-- goto track 0
 								current_track:=0;
 								current_sector:=0;
+								dsk_info_mem(5):='0'; -- side 0
 							when x"08" => -- sense interrupt status : status information about the FDC at the end of operation
 								result_restant:=2;
 								phase<=PHASE_RESULT;
@@ -357,8 +375,9 @@ if do_update then
 								results(0):=conv_std_logic_vector(current_track,8); -- PCN : Present Cylinder Number
 							when x"0a" => -- read id
 								command_restant:=1; -- select drive/side : osef
-								chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
+								chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 								result_restant:=7;
+								--etat:=ETAT_READ_ID; -- sort of ETAT_OSEF
 								phase<=PHASE_COMMAND;
 								results(6):=ST0_SEEK_END;
 								results(5):=x"00"; -- ST1
@@ -367,25 +386,12 @@ if do_update then
 								results(2):=chrn(1);
 								results(1):=chrn(2);
 								results(0):=chrn(3);
-							when x"02" => -- read diagnostic
-								etat:=ETAT_READ_DIAGNOSTIC;
-								phase<=PHASE_COMMAND;
-								command_restant:=8; -- dont EOT qui détermine jusqu'où il faut lire buffer
-							when x"06" => -- read
-								command_restant:=8;
-								etat:=ETAT_READ;
-								phase<=PHASE_COMMAND;
 							when x"0f" => -- seek : changement de track
-								phase<=PHASE_COMMAND;
 								command_restant:=2;
 								etat:=ETAT_SEEK;
-
-
-							when x"05" => -- write data
-								command_restant:=8;
 								phase<=PHASE_COMMAND;
-								etat:=ETAT_WRITE;
-								
+
+
 								
 								
 							when others => --BIZARRE
@@ -394,6 +400,11 @@ if do_update then
 						if command_restant>0 then
 							command_restant:=command_restant-1;
 							params(command_restant):=D_command;
+							if check_dsk_face then
+								check_dsk_face:=false;
+								-- HD : physical HEAD
+								dsk_info_mem(5):=D_command(2) and dsk_info_mem(5); -- HD US1 US0
+							end if;
 						end if;
 						if command_restant=0 then
 							if etat=ETAT_READ_DIAGNOSTIC then
