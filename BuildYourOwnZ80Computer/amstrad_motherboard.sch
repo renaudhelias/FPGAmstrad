@@ -102,6 +102,7 @@
         <signal name="audio_AB" />
         <signal name="XLXN_861(7:0)" />
         <signal name="XLXN_862" />
+        <signal name="dsk_info(4:0)" />
         <port polarity="Output" name="CLK8(2:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Output" name="ram_A(20:0)" />
@@ -123,6 +124,7 @@
         <port polarity="Input" name="CLK_PWM" />
         <port polarity="Output" name="key_reset" />
         <port polarity="Output" name="audio_AB" />
+        <port polarity="Input" name="dsk_info(4:0)" />
         <blockdef name="vcc">
             <timestamp>2000-1-1T10:10:10</timestamp>
             <line x2="64" y1="-32" y2="-64" x1="64" />
@@ -327,7 +329,9 @@
             <rect width="288" x="64" y="-256" height="944" />
         </blockdef>
         <blockdef name="simple_DSK">
-            <timestamp>2018-1-11T18:32:24</timestamp>
+            <timestamp>2018-1-12T17:55:33</timestamp>
+            <rect width="64" x="0" y="20" height="24" />
+            <line x2="0" y1="32" y2="32" x1="64" />
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <line x2="0" y1="-352" y2="-352" x1="64" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
@@ -345,8 +349,8 @@
             <line x2="480" y1="-160" y2="-160" x1="416" />
             <rect width="64" x="416" y="-108" height="24" />
             <line x2="480" y1="-96" y2="-96" x1="416" />
-            <rect width="352" x="64" y="-512" height="628" />
             <line x2="480" y1="-352" y2="-352" x1="416" />
+            <rect width="352" x="64" y="-512" height="572" />
         </blockdef>
         <blockdef name="YM2149">
             <timestamp>2018-1-5T20:10:34</timestamp>
@@ -556,6 +560,7 @@
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="A(10),A(8),A(7)" name="A10_A8_A7(2:0)" />
             <blockpin signalname="D(7:0)" name="D_command(7:0)" />
+            <blockpin signalname="dsk_info(4:0)" name="dsk_info(4:0)" />
             <blockpin signalname="XLXN_283(7:0)" name="Dout(7:0)" />
             <blockpin signalname="ram_D(7:0)" name="dsk_D(7:0)" />
             <blockpin signalname="XLXN_849" name="dsk_W" />
@@ -1434,5 +1439,9 @@
         </branch>
         <instance x="1280" y="3264" name="AmstradT80" orien="R0">
         </instance>
+        <branch name="dsk_info(4:0)">
+            <wire x2="5824" y1="3184" y2="3184" x1="5792" />
+        </branch>
+        <iomarker fontsize="28" x="5792" y="3184" name="dsk_info(4:0)" orien="R180" />
     </sheet>
 </drawing>

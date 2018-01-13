@@ -5,8 +5,8 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity simple_DSK is
 	Generic (
-		MAX_SECTORS:integer:=9;
-		MAX_TRACKS:integer:=40 -- 40 par face 79+1
+		MAX_SECTORS:integer:=16;--9;
+		MAX_TRACKS:integer:=128--40 -- 40 par face 79+1
 	);
     Port ( --CLK_bourin : in STD_LOGIC; -- horloge d'indexation
            CLK8 : in STD_LOGIC_VECTOR (2 downto 0);
@@ -20,6 +20,7 @@ entity simple_DSK is
            dsk_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
            dsk_A : out  STD_LOGIC_VECTOR (20 downto 0);
            dsk_W : out  STD_LOGIC;
+			  dsk_info:in std_logic_vector(4 downto 0);
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  --M1_n:in STD_LOGIC;
 			  dsk_transmit : out STD_LOGIC -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
@@ -87,22 +88,25 @@ cortex:process(CLK8(0),reset)
 	-- track 0 ou +
 	-- sector 0 ou +
 	-- return [sectTrack,sectSize,sectId,sectSize]
-	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1) return chrn_type is
+	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1;dsk_info:std_logic_vector(3 downto 0)) return chrn_type is
 		variable chrn:chrn_type;
+		variable sector_zone_mem:std_logic_vector(7 downto 0);
 	begin
+		sector_zone_mem:= dsk_info(3 downto 0) & x"1";
 		--return (track_id(track),x"00",sector_ids_of_tracks(track,sector),sector_sizes_of_tracks(track,sector));
 -- "C:/Users/freemac/BuildYourOwnZ80Computer/simple_DSK.vhd" line 170: Index value(s) does not match array range, simulation mismatch.
 		--if ucpm='1' then
 		--	chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"41",x"02");
 		--else
-			chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+x"C1",x"02");
+			chrn:=(conv_std_logic_vector(track,8),x"00",conv_std_logic_vector(sector,8)+ sector_zone_mem,x"02");
 		--end if;
 		return chrn;
 	end getCHRN;
 	-- retourne le pointeur dans memory
-	function getData(chrn: in chrn_type) return std_logic_vector is
+	function getData(chrn: in chrn_type;dsk_info:std_logic) return std_logic_vector is
 		variable address:std_logic_vector(20 downto 0); -- simulator Cannot access 'dsk_a' from inside pure function 'getdata'. --dsk_A'range);
 		variable pff:std_logic_vector(7 downto 0);
+		variable track80:std_logic;
 	begin
 		pff:="0000" & chrn(2)(3 downto 0);
 		pff:=pff-1;
@@ -111,7 +115,13 @@ cortex:process(CLK8(0),reset)
 		--11 00 dsk NOT NOT
 		--10 01 dsk NOT NOT
 		--01 10 dsk NOT NOT
-		address:="0" & chrn(1)(0) & not(chrn(0)(5)) & not(chrn(0)(4)) & chrn(0)(3 downto 0) & pff(3 downto 0) & "0" & x"00";
+		if dsk_info='1' then
+			-- changement de formule
+			track80:=not(chrn(0)(6));
+		else
+			track80:='0';
+		end if;
+		address:= track80 & chrn(1)(0) & not(chrn(0)(5)) & not(chrn(0)(4)) & chrn(0)(3 downto 0) & pff(3 downto 0) & "0" & x"00";
 		return address;
 	end getData;
 	variable etat:integer range 0 to 4;
@@ -198,7 +208,7 @@ if do_update then
 						end if;
 						if etat=ETAT_READ then
 							--dsk_transmit<='1';
-							chrn:=getCHRN(current_track,current_sector);
+							chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -211,9 +221,9 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector);
+								chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
 							end if;
-							dsk_A_mem:=getData(chrn)+current_byte;
+							dsk_A_mem:=getData(chrn,dsk_info(4))+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_transmit<='1';
 							current_byte:=current_byte+1;
@@ -235,7 +245,7 @@ if do_update then
 							exec_restant_write:=exec_restant_write-1;
 						end if;
 						if etat=ETAT_WRITE then
-							chrn:=getCHRN(current_track,current_sector);
+							chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -248,9 +258,9 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector);
+								chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
 							end if;
-							dsk_A_mem:=getData(chrn)+current_byte;
+							dsk_A_mem:=getData(chrn,dsk_info(4))+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_W<='1';
 							data:=D_command;
@@ -347,7 +357,7 @@ if do_update then
 								results(0):=conv_std_logic_vector(current_track,8); -- PCN : Present Cylinder Number
 							when x"0a" => -- read id
 								command_restant:=1; -- select drive/side : osef
-								chrn:=getCHRN(current_track,current_sector);
+								chrn:=getCHRN(current_track,current_sector,dsk_info(3 downto 0));
 								result_restant:=7;
 								phase<=PHASE_COMMAND;
 								results(6):=ST0_SEEK_END;

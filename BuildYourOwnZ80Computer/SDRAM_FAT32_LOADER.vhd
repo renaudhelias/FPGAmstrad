@@ -12,9 +12,11 @@ entity SDRAM_FAT32_LOADER is
 		ROM_COUNT:integer:=3; -- attention ya du code en dur : "if files_loaded="11111" then"
 		TEST_DSK_OFF:std_logic:='0'; -- si 1 alors ne cherche pas de disquette, si 0 alors cherche une disquette
 		--BLOCK_SIZE:integer:=4096 -- bytes
-		BLOCK_SIZE_MAXIMUM:integer:=65536 --4096; -- bytes
+		BLOCK_SIZE_MAXIMUM:integer:=65536; --4096; -- bytes
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400C00" -- in byte
 		--FAT32_SECTOR0_OFFSET:STD_LOGIC_VECTOR (31 downto 0):=x"00400000" -- in byte
+		GRIPSOU_MAX_SECTORS:integer:=16;
+		GRIPSOU_MAX_TRACKS:integer:=128
 	);
     Port ( CLK:in STD_LOGIC;
            --file_select:in std_logic_vector(7 downto 0);
@@ -28,6 +30,7 @@ entity SDRAM_FAT32_LOADER is
 			  spi_init_done : in STD_LOGIC;
 			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
+			  dsk_info:out std_logic_vector(4 downto 0);
 			  --is_ucpm:out std_logic:='0';
 			  key_reset:in std_logic
 			  );
@@ -942,31 +945,36 @@ end if;
 		variable winape_offs:std_logic_vector(31 downto 0):=(others=>'0');
 		variable extended:boolean:=false;
 		variable winape:boolean:=false;
-		variable nb_tracks:integer range 0 to 63:=0; -- super cauldron has 42 tracks !!!
-		variable no_track:integer range 0 to 63:=0; -- force simple face
+		variable nb_tracks:integer range 0 to GRIPSOU_MAX_TRACKS-1:=0; -- super cauldron has 42 tracks !!! DOSD2 has 80 tracks.
+		variable no_track:integer range 0 to GRIPSOU_MAX_TRACKS-1:=0; -- force simple face
 		variable nb_sides:integer range 0 to 3:=1;
 		variable no_side:integer range 0 to 3:=0;
-		variable nb_sects:integer range 0 to 14:=9; -- super cauldron has 10 sectors !!
+		variable nb_sects:integer range 0 to GRIPSOU_MAX_SECTORS-1:=9; -- super cauldron has 10 sectors !!
 		--variable sectID:std_logic_vector(7 downto 0);
-		variable no_sect:integer range 0 to 14;
+		variable no_sect:integer range 0 to GRIPSOU_MAX_SECTORS-1;
+
 		--type track_size_type is array(0 to 39) of std_logic_vector(15 downto 0);
 		--variable track_size:track_size_type;
 		variable track_size:std_logic_vector(15 downto 0);
 		--variable ucpm:std_logic:='0';
-		type sector_sizes_type is array(0 to 6) of std_logic_vector(15 downto 0);
+		--type sector_sizes_type is array(0 to 6) of std_logic_vector(15 downto 0);
 		--constant SECTOR_SIZE:sector_sizes_type:=(x"0080",x"0100",x"0200",x"0400",x"0800",x"1000",x"1800");
 		constant SECTOR_SIZE:std_logic_vector(15 downto 0):=x"0200";
-		variable sectSize:std_logic_vector(15 downto 0);
+		--variable sectSize:std_logic_vector(15 downto 0);
 		--variable sector_countdown:integer range 0 to 9;
 		--variable track_countdown:integer range 0 to 40*2;
 		variable gripsou_ram_A_mem:std_logic_vector(gripsou_ram_A'range);
 		type sector_order_type is array(0 to 14) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
-		variable no_trak_mem:std_logic_vector(5 downto 0);
+		variable sector_zone:std_logic_vector(3 downto 0);
+		variable is_track80:std_logic;
+		variable no_track_mem:std_logic_vector(6 downto 0);
 	begin
 		--is_ucpm<=ucpm;
 		gripsou_ram_A<=gripsou_ram_A_mem;
 		gripsou_ram_D<=data_mem;
+		
+		dsk_info<=is_track80 & sector_zone(3 downto 0);
 
 		if falling_edge(CLK) then
 			--leds<=conv_std_logic_vector(gripsou_step,8);
@@ -1015,6 +1023,11 @@ end if;
 						end if;
 					when 2=>
 						nb_tracks:=conv_integer(data_mem);
+						if nb_tracks<32+16 then
+							is_track80:='0';
+						else
+							is_track80:='1';
+						end if;
 						input_A:=input_A+1;
 --						if (nb_tracks/=42) then
 --							gripsou_step:=26; --debug
@@ -1081,14 +1094,19 @@ end if;
 							gripsou_step:=11;
 						end if;
 					when 11=>
-						no_trak_mem:=conv_std_logic_vector(no_track,6);
+						no_track_mem:=conv_std_logic_vector(no_track,7);
 						nb_sects:=conv_integer(data_mem);
+						-- formule pour 512KB
 						--00 RAM ROM
 						--11 00 dsk NOT NOT
 						--10 01 dsk NOT NOT
 						--01 10 dsk NOT NOT
-						no_trak_mem(5):=not(no_trak_mem(5));
-						no_trak_mem(4):=not(no_trak_mem(4));
+						if is_track80='1' then
+							-- changement de formule => 2MB RAM
+							no_track_mem(6):=not(no_track_mem(6));
+						end if;
+						no_track_mem(5):=not(no_track_mem(5));
+						no_track_mem(4):=not(no_track_mem(4));
 						input_A:=input_A+1;
 --						if nb_sects/=10 then
 --							gripsou_step:=28;
@@ -1130,6 +1148,7 @@ end if;
 						--else
 							gripsou_step:=16;
 						--end if;
+						sector_zone:=data_mem(7 downto 4);
 --						if data_mem>=x"C1" then
 --							is_ucpm<='0';
 --						else
@@ -1137,7 +1156,7 @@ end if;
 --						end if;
 					when 16=>
 						-- N
-						sectSize:=SECTOR_SIZE; --(conv_integer(data_mem)); -- must be 2 then 512
+						--sectSize:=SECTOR_SIZE; --(conv_integer(data_mem)); -- must be 2 then 512
 						input_A:=input_A+1;
 						
 						--if data_mem/=x"02" then
@@ -1170,14 +1189,14 @@ end if;
 						if input_A>x"000000FF" then --=============================================
 							gripsou_step:=18;
 							no_sect:=0;
-							no_side:=0;
+							--no_side:=0;
 							--no_track:=0;
 							winape_offs:=winape_offs+input_A;
 							input_A:=(others=>'0');
 						end if;
 					when 18=> -- data transmit
 						-- no_side on A(19) for 2MB compatibility of most games.
-						gripsou_ram_A_mem:="0" & conv_std_logic_vector(no_side,1) & no_trak_mem(5 downto 0) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
+						gripsou_ram_A_mem:=no_track_mem(6) & conv_std_logic_vector(no_side,1) & no_track_mem(5 downto 0) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
 						--if no_track<32 then -- 2^5=32 donc de 0 à 31, donc moins de 40 !
 							gripsou_ram_W<='1';
 						--end if;
@@ -1188,7 +1207,7 @@ end if;
 						--	gripsou_step:=33;
 						--else
 							input_A:=input_A+1;
-							if input_A>=sectSize then
+							if input_A>=SECTOR_SIZE then
 								no_sect:=no_sect+1;
 								winape_offs:=winape_offs+input_A;
 								input_A:=(others=>'0');

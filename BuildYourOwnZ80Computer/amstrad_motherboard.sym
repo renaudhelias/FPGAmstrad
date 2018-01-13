@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-11T18:33:10</timestamp>
+    <timestamp>2018-1-12T17:56:21</timestamp>
     <pin polarity="Input" x="0" y="-736" name="init_A(20:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-544" name="CLK16MHz" />
@@ -23,6 +23,7 @@
     <pin polarity="Output" x="448" y="400" name="palette_D(7:0)" />
     <pin polarity="Output" x="448" y="496" name="key_reset" />
     <pin polarity="Output" x="448" y="-432" name="audio_AB" />
+    <pin polarity="Input" x="0" y="496" name="dsk_info(4:0)" />
     <graph>
         <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="224" y="-776" type="symbol" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-736" type="pin init_A(20:0)" />
@@ -75,6 +76,9 @@
         <line x2="448" y1="-432" y2="-432" x1="384" />
         <line x2="448" y1="-400" y2="-400" x1="384" />
         <line x2="0" y1="112" y2="112" x1="64" />
-        <rect width="320" x="64" y="-768" height="1288" />
+        <rect width="320" x="64" y="-768" height="1292" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="496" type="pin dsk_info(4:0)" />
+        <rect width="64" x="0" y="484" height="24" />
+        <line x2="0" y1="496" y2="496" x1="64" />
     </graph>
 </symbol>

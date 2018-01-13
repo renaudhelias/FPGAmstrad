@@ -39,6 +39,8 @@
         <signal name="AUDIO_L" />
         <signal name="AUDIO_R" />
         <signal name="XLXN_750" />
+        <signal name="XLXN_751(4:0)" />
+        <signal name="XLXN_752(4:0)" />
         <port polarity="BiDirectional" name="ram_D(7:0)" />
         <port polarity="Input" name="CLK50MHz" />
         <port polarity="Input" name="MISO" />
@@ -58,7 +60,9 @@
         <port polarity="Output" name="AUDIO_L" />
         <port polarity="Output" name="AUDIO_R" />
         <blockdef name="bootloader_sd">
-            <timestamp>2018-1-11T18:35:47</timestamp>
+            <timestamp>2018-1-12T17:54:29</timestamp>
+            <rect width="64" x="432" y="20" height="24" />
+            <line x2="496" y1="32" y2="32" x1="432" />
             <line x2="0" y1="-464" y2="-464" x1="64" />
             <line x2="496" y1="-608" y2="-608" x1="432" />
             <rect width="64" x="432" y="-556" height="24" />
@@ -70,8 +74,8 @@
             <line x2="496" y1="-160" y2="-160" x1="432" />
             <line x2="496" y1="-32" y2="-32" x1="432" />
             <line x2="0" y1="-32" y2="-32" x1="64" />
-            <rect width="368" x="64" y="-704" height="752" />
             <line x2="0" y1="-288" y2="-288" x1="64" />
+            <rect width="368" x="64" y="-704" height="816" />
         </blockdef>
         <blockdef name="amstrad_video">
             <timestamp>2018-1-4T21:5:33</timestamp>
@@ -98,7 +102,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2018-1-11T18:33:10</timestamp>
+            <timestamp>2018-1-12T17:56:21</timestamp>
             <line x2="448" y1="496" y2="496" x1="384" />
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
@@ -128,7 +132,9 @@
             <line x2="448" y1="-432" y2="-432" x1="384" />
             <line x2="448" y1="-400" y2="-400" x1="384" />
             <line x2="0" y1="112" y2="112" x1="64" />
-            <rect width="320" x="64" y="-768" height="1288" />
+            <rect width="320" x="64" y="-768" height="1292" />
+            <rect width="64" x="0" y="484" height="24" />
+            <line x2="0" y1="496" y2="496" x1="64" />
         </blockdef>
         <blockdef name="divideby3">
             <timestamp>2017-12-30T17:17:25</timestamp>
@@ -148,6 +154,7 @@
             <blockpin signalname="XLXN_736" name="ram_W_n" />
             <blockpin signalname="SS_n" name="SS_n" />
             <blockpin signalname="RESET_n" name="FILE_LOADED" />
+            <blockpin signalname="XLXN_751(4:0)" name="dsk_info(4:0)" />
         </block>
         <block symbolname="amstrad_video" name="XLXI_511">
             <blockpin signalname="XLXN_731" name="crtc_W" />
@@ -186,6 +193,7 @@
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
             <blockpin signalname="XLXN_750" name="key_reset" />
             <blockpin signalname="AUDIO_L" name="audio_AB" />
+            <blockpin signalname="XLXN_751(4:0)" name="dsk_info(4:0)" />
         </block>
         <block symbolname="divideby3" name="XLXI_514">
             <blockpin signalname="CLK50MHz" name="CLK50MHz" />
@@ -365,5 +373,13 @@
         </branch>
         <instance x="608" y="1248" name="XLXI_514" orien="R0">
         </instance>
+        <branch name="XLXN_751(4:0)">
+            <wire x2="1424" y1="2496" y2="2496" x1="1376" />
+            <wire x2="1376" y1="2496" y2="2704" x1="1376" />
+            <wire x2="3184" y1="2704" y2="2704" x1="1376" />
+            <wire x2="6720" y1="2704" y2="2704" x1="3184" />
+            <wire x2="6720" y1="768" y2="768" x1="6640" />
+            <wire x2="6720" y1="768" y2="2704" x1="6720" />
+        </branch>
     </sheet>
 </drawing>
