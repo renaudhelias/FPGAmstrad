@@ -946,8 +946,7 @@ end if;
 		variable winape:boolean:=false;
 		variable nb_tracks:integer range 0 to GRIPSOU_MAX_TRACKS-1:=0; -- super cauldron has 42 tracks !!! DOSD2 has 80 tracks.
 		variable no_track:integer range 0 to GRIPSOU_MAX_TRACKS-1:=0; -- force simple face
-		variable nb_sides:integer range 0 to 3:=1;
-		variable no_side:integer range 0 to 3:=0;
+		variable no_side:std_logic;
 		variable nb_sects:integer range 0 to GRIPSOU_MAX_SECTORS-1:=9; -- super cauldron has 10 sectors !!
 		--variable sectID:std_logic_vector(7 downto 0);
 		variable no_sect:integer range 0 to GRIPSOU_MAX_SECTORS-1;
@@ -981,7 +980,7 @@ end if;
 				input_A:=(others=>'0');
 				gripsou_step:=0;
 				no_track:=0;
-				no_side:=0;
+				no_side:='0';
 				no_sect:=0;
 			end if;
 			if gripsou_write='1' and switch_transmit_gripsou=SWITCH_GRIPSOU then
@@ -1027,22 +1026,13 @@ end if;
 							dsk_info_mem(4):='1'; -- is80tracks
 						end if;
 						input_A:=input_A+1;
---						if (nb_tracks/=42) then
---							gripsou_step:=26; --debug
---						else
-							gripsou_step:=3;
---						end if;
+						gripsou_step:=3;
 					when 3=>
 						if input_A=x"00000031" then
-							nb_sides:=conv_integer(data_mem);
 							dsk_info_mem(5):=not(data_mem(0));
 						end if;
 						input_A:=input_A+1;
-						--if (nb_sides/=1) then
-						--	gripsou_step:=20;
-						--else
-							gripsou_step:=4;
-						--end if;
+						gripsou_step:=4;
         			when 4=>
 						if input_A=x"00000032" then
 --							for i in 0 to 39 loop
@@ -1079,7 +1069,7 @@ end if;
 						if input_A>x"000000FF" then --==============================================
 							gripsou_step:=7;
 							no_track:=0;
-							no_side:=0;
+							no_side:='0';
 							input_A:=(others=>'0'); -- rembobine
 							winape_offs:=(others=>'0'); -- rembobine
 						end if;
@@ -1132,7 +1122,7 @@ end if;
 					when 14=>
 						-- H
 						input_A:=input_A+1;
-						if conv_integer(data_mem)/=no_side then -- deraillage
+						if data_mem(0)/=no_side then -- deraillage
 							gripsou_step:=9;
 						else
 							gripsou_step:=15;
@@ -1195,7 +1185,7 @@ end if;
 						end if;
 					when 18=> -- data transmit
 						-- no_side on A(19) for 2MB compatibility of most games.
-						gripsou_ram_A_mem:=no_track_mem(6) & conv_std_logic_vector(no_side,1) & no_track_mem(5 downto 0) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
+						gripsou_ram_A_mem:=no_track_mem(6) & no_side & no_track_mem(5 downto 0) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
 						--if no_track<32 then -- 2^5=32 donc de 0 à 31, donc moins de 40 !
 							gripsou_ram_W<='1';
 						--end if;
@@ -1207,34 +1197,36 @@ end if;
 						--else
 							input_A:=input_A+1;
 							if input_A>=SECTOR_SIZE then
+								no_sect:=no_sect+1;
 								winape_offs:=winape_offs+input_A;
 								input_A:=(others=>'0');
-								if	no_sect<nb_sects-1 then
-									no_sect:=no_sect+1;
-								elsif no_side<nb_sides-1 then
-									no_side:=no_side+1;
-									gripsou_step:=8;
-								elsif no_track<nb_tracks-1 then
-									no_side:=0;
-									no_track:=no_track+1;
-									gripsou_step:=8;
+								if	no_sect=nb_sects then
+									if no_side/=dsk_info_mem(5) then
+										no_side:=not(no_side);
+									else
+										no_track:=no_track+1;
+									end if;
+									no_sect:=0;
+									if	no_track=nb_tracks then
+										gripsou_step:=8;
+									else
+										if winape then
+											gripsou_step:=7;
+										else
+											--if winape_offs=track_size(no_track) then
+											if winape_offs=track_size then
+												winape_offs:=(others=>'0');
+												gripsou_step:=7;
+											else
+												gripsou_step:=19;
+											end if;
+										end if;
+									end if;
 								else
-									gripsou_step:=9;
+									gripsou_step:=18;
 								end if;
 							end if;
 						--end if;
-					when 8=>
-						if winape then
-							gripsou_step:=7;
-						else
-							--if winape_offs=track_size(no_track) then
-							if winape_offs=track_size then
-								winape_offs:=(others=>'0');
-								gripsou_step:=7;
-							else
-								gripsou_step:=19;
-							end if;
-						end if;
 					when 19=> -- not winape
 						winape_offs:=winape_offs+1;
 						--if winape_offs=track_size(no_track) then
@@ -1243,7 +1235,8 @@ end if;
 							input_A:=(others=>'0');
 							gripsou_step:=7;
 						end if;
-					when 9=>NULL; -- fin ou deraillage : no_track incorrect
+					when 8=>NULL; -- fin
+					when 9=>NULL; -- deraillage : no_track incorrect
 				end case;
 			end if;
 		end if;

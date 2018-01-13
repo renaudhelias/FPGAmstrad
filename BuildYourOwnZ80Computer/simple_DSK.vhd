@@ -28,6 +28,10 @@ entity simple_DSK is
 			  --is_ucpm : in std_logic
 			  --indexing_done:out std_logic
 			  );
+			  	attribute keep : string;
+				attribute keep of dsk_info : signal is "TRUE";
+				attribute clock_signal : string;
+				attribute clock_signal of dsk_info : signal is "NO";
 end simple_DSK;
 
 architecture Behavioral of simple_DSK is
@@ -226,7 +230,7 @@ if do_update then
 								current_byte:=0;
 								chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							end if;
-							dsk_A_mem:=getData(chrn,dsk_info(4))+current_byte;
+							dsk_A_mem:=getData(chrn,dsk_info_mem(4))+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_transmit<='1';
 							current_byte:=current_byte+1;
@@ -263,7 +267,7 @@ if do_update then
 								current_byte:=0;
 								chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							end if;
-							dsk_A_mem:=getData(chrn,dsk_info(4))+current_byte;
+							dsk_A_mem:=getData(chrn,dsk_info_mem(4))+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_W<='1';
 							data:=D_command;
