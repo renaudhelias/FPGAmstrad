@@ -135,7 +135,7 @@ data_out<=data_block_out;
 parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_block_in(3) xor data_block_in(4) xor data_block_in(5) xor data_block_in(6) xor data_block_in(7);
 	
 	native_send_cmd : process(SCLK) is
-		variable step_cmd:integer range 0 to 10:=0;
+		variable step_cmd:integer range 0 to 7:=0;
 		variable cursor:integer range 0 to 7:=0;
 		variable cursor_send:integer range 0 to buffer_send'length-1:=0;
 		variable cursor_response:integer range 0 to buffer_response'length-1:=0;
@@ -183,7 +183,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 			
 			if ram_T then
 				if not(ram_Tdone) then
-					step_cmd:=10; -- overrun
+					step_cmd:=7; -- overrun
 				else
 					step_cmd:=0;
 				end if;
@@ -290,7 +290,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 									ram_Tdone<=true;
 									check_crc16<=true;
 								else
-									step_cmd:=9;
+									step_cmd:=7;
 									--ram_Tdone<=true;--SDCS_mem:='0';
 									--check_crc16<=false;
 								end if;
@@ -298,10 +298,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 								cursor_crc16:=cursor_crc16+1;
 							end if;
 						when 6=>NULL; -- transmit done
-						when 7=>NULL; -- error token (from read data_block)
-						when 8=>NULL; -- error : incertain following message
-						when 9=>NULL; -- CRC16 failed
-						when 10=>NULL; -- overrun
+						when 7=>NULL; -- error
 					end case;
 				end if;
 			--end if;
@@ -454,8 +451,8 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 		return (buffer_response(39 downto 32) and "11111110")="00000000";
 	end function;
 	
-		variable init_step:integer range 0 to 18:=0;
-		variable read_step:integer range 0 to 6:=0;
+		variable init_step:integer range 0 to 11:=0;
+		variable read_step:integer range 0 to 3:=0;
 		variable write_step: integer range 0 to 3:=0;
 		variable address_loaded:STD_LOGIC_VECTOR(32-BLOCK_SQRT-1 downto 0):=(others=>'1'); -- à multiplier par 8 du coup ?
 		variable wanted_address:STD_LOGIC_VECTOR(31 downto 0);
@@ -499,7 +496,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 								-- voir page 54 pour le CRC7...
 								send_cmd(SEND_IF_CONF,"00000000000000000000" & VHS & check_pattern_8bit);
 							else
-								init_step:=10;
+								init_step:=11;
 							end if;
 						when 3 =>
 							-- osef error
@@ -539,46 +536,39 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 									ccs:='0';
 								else
 									-- v2.x high capacity or Extended capacity SD memory card
-									init_step:=17;
+									init_step:=10;
 									ccs:='1';
 									send_cmd(SET_BLOCKLEN,conv_std_logic_vector(BLOCK_SIZE,32));
 								end if;
 							else
-								init_step:=12;
+								init_step:=11;
 							end if;
 						when 8 => -- CCS 0 - addresses by byte
 							if check_ok then
-								init_step:=15;
+								init_step:=9;
 								send_cmd(CRC_ON_OFF,x"00000001");
 							else
-								init_step:=14;
+								init_step:=11;
 							end if;
-						when 9 =>NULL; -- CCS 1 - addresses by block512
-						when 10=>NULL; -- check failed
-						when 11=>NULL; -- check failed
-						when 12=>NULL; -- check failed
-						when 13=>NULL; -- CCS 0 - BLOCKLEN=512 addresses by bytes
-						when 14=>NULL; -- check failed
-						when 15=> -- CRC on
+						when 9=> -- CRC on
 							if check_ok then
 								init_done:='1';
-								if ccs='0' then
-									init_step:=13;
-								else
-									init_step:=9;
-								end if;
+								--if ccs='0' then
+									-- CCS 0 - BLOCKLEN=512 addresses by bytes
+								--else
+									-- CCS 1 - addresses by block512
+								--end if;
 							else
-								init_step:=16;
+								init_step:=11;
 							end if;
-						when 16=>NULL; -- check failed
-						when 17=> -- set block len force
+						when 10=> -- set block len force
 							if check_ok then
 								send_cmd(CRC_ON_OFF,x"00000001");
-								init_step:=15;
+								init_step:=9;
 							else
-								init_step:=18;
+								init_step:=11;
 							end if;
-					when 18=>NULL; -- check failed
+						when 11=>NULL; -- error
 				end case;
 				
 			else
@@ -607,7 +597,7 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 						wanted_address:=address(31 downto BLOCK_SQRT) & "0" & "00000000"; -- block de 512    *8 = &"00000000"
 					end if;
 					if spi_Rdone_i='0' then
-						read_step:=6; -- over run
+						read_step:=2; -- over run
 					end if;
 				end if;
 					if spi_Rdone_i='0' then
@@ -645,16 +635,13 @@ parity(0)<=data_block_in(0) xor data_block_in(1) xor data_block_in(2) xor data_b
 										read_step:=3;
 										address_loaded_safe:=true;
 									else
-										read_step:=5; -- retry
+										read_step:=2; -- retry
 									end if;
 								else
 									read_step:=2;
 								end if;
-							when 2=>NULL; -- check read failed
+							when 2=>NULL; -- error
 							when 3=>NULL; -- read done ok
-							when 4=>NULL; -- non utilisé x) (debug said address of byte was > 512)
-							when 5=>NULL; -- crc16 failed
-							when 6=>NULL; -- over run (on a demandé trop tôt un run)
 								
 						end case;
 					end if;

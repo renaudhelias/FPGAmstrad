@@ -99,7 +99,7 @@ cortex:process(CLK8(0),reset)
 		variable side_mem:std_logic_vector(7 downto 0);
 	begin
 		sector_zone_mem:= dsk_info(3 downto 0) & x"1";
-		side_mem:="0000000" & dsk_info(5);
+		side_mem:="0000000" & dsk_info(4);
 		--return (track_id(track),x"00",sector_ids_of_tracks(track,sector),sector_sizes_of_tracks(track,sector));
 -- "C:/Users/freemac/BuildYourOwnZ80Computer/simple_DSK.vhd" line 170: Index value(s) does not match array range, simulation mismatch.
 		--if ucpm='1' then
@@ -215,7 +215,6 @@ if do_update then
 						end if;
 						if etat=ETAT_READ then
 							--dsk_transmit<='1';
-							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -228,9 +227,9 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							end if;
-							dsk_A_mem:=getData(chrn,dsk_info_mem(4))+current_byte;
+							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
+							dsk_A_mem:=getData(chrn,dsk_info_mem(5))+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_transmit<='1';
 							current_byte:=current_byte+1;
@@ -252,7 +251,6 @@ if do_update then
 							exec_restant_write:=exec_restant_write-1;
 						end if;
 						if etat=ETAT_WRITE then
-							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							--if current_byte>=SECTOR_SIZES(chrn(3)) then
 							if current_byte>=SECTOR_SIZE then
 								current_sector:=current_sector+1;
@@ -265,9 +263,9 @@ if do_update then
 									end if;
 								end if;
 								current_byte:=0;
-								chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
 							end if;
-							dsk_A_mem:=getData(chrn,dsk_info_mem(4))+current_byte;
+							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
+							dsk_A_mem:=getData(chrn,dsk_info_mem(5))+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_W<='1';
 							data:=D_command;
@@ -371,7 +369,7 @@ if do_update then
 								-- goto track 0
 								current_track:=0;
 								current_sector:=0;
-								dsk_info_mem(5):='0'; -- side 0
+								dsk_info_mem(4):='0'; -- side 0
 							when x"08" => -- sense interrupt status : status information about the FDC at the end of operation
 								result_restant:=2;
 								phase<=PHASE_RESULT;
@@ -407,7 +405,7 @@ if do_update then
 							if check_dsk_face then
 								check_dsk_face:=false;
 								-- HD : physical HEAD
-								dsk_info_mem(5):=D_command(2) and dsk_info_mem(5); -- HD US1 US0
+								dsk_info_mem(4):=D_command(2) and dsk_info_mem(4); -- HD US1 US0
 							end if;
 						end if;
 						if command_restant=0 then
