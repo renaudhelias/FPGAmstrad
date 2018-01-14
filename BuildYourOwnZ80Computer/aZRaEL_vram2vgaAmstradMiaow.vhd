@@ -52,7 +52,7 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 	 -- Lorsqu'on lance lignes.bas on peut ensuite déplacer le curseur pour compter
 	 -- mode 1 :
 	 --   On a 40 caractères par lignes en mode 1, un caractère fait 8 pixels de large
-	 CHAR_WIDTH:integer:=16; -- c'est stupide en fait c'est l'octet, car le crtc pond des adresses et non une sortie RGB normalement xD
+	 --CHAR_WIDTH:integer:=16; -- c'est stupide en fait c'est l'octet, car le crtc pond des adresses et non une sortie RGB normalement xD
 	 -- On a 320x200pixels=64000pixels=16000 octets utilisés
 	 --  or on scanne &FFFF+1-&C000=16384 octets... donc il y a des trous x)
 	 -- 
@@ -110,7 +110,7 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 				  VRAM_HDsp:integer:=800; --suivant les mode, le nombre de pixels affichés est constant !
 				  VRAM_VDsp:integer:=300; --600/2
 				  --DEBUG_LEDS_W:integer:=32
-				  BUG_DELAY_ADDRESS:integer:=8+8+2;
+				  BUG_DELAY_ADDRESS:integer:=8+8; -- un caractère en mode 1
 				  --BUG_DELAY_DATA:integer:=0;--2;
 				  BUG_DELAY_PALETTE:integer:=1
 		  );
@@ -183,7 +183,10 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 	signal GREEN_FF:std_logic_vector(1 downto 0);
 	signal BLUE_FF:std_logic_vector(1 downto 0);
 	--signal debug_leds_i:std_logic_vector(7 downto 0);
+	
+	
 begin
+
 
 RED3<= RED_FF & "1" when RED_FF>"00" else "000";
 GREEN3<= GREEN_FF & "1" when GREEN_FF>"00" else "000";
@@ -211,17 +214,17 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
 	variable etat_rgb : integer range 0 to 2:=DO_NOTHING_OUT;
-	variable color : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
+	--variable color : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
 	variable color_patch : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
 	variable cursor_pixel : integer range 0 to NB_PIXEL_PER_OCTET_MAX-1;
 	variable v:integer range 0 to 256-1;
-	variable h:integer range 0 to CHAR_WIDTH*128*8-1;
+	variable h:integer range 0 to 8*128*8-1;
 	variable new_h:integer range 0 to 128*8-1;
-	variable NB_PIXEL_PER_OCTET:integer range NB_PIXEL_PER_OCTET_MIN to NB_PIXEL_PER_OCTET_MAX;
-	variable MA:STD_LOGIC_VECTOR(13 downto 0);
-	variable CA:STD_LOGIC_VECTOR(0 downto 0); -- sqrt(CHAR_WIDTH/8)-1 ?
-	variable no_char:integer range 0 to CHAR_WIDTH/8-1;
-	
+	--variable NB_PIXEL_PER_OCTET:integer range NB_PIXEL_PER_OCTET_MIN to NB_PIXEL_PER_OCTET_MAX;
+	variable MA:STD_LOGIC_VECTOR(14 downto 0);
+	--variable CA:STD_LOGIC_VECTOR(0 downto 0); -- sqrt(CHAR_WIDTH/8)-1 ?
+	--variable no_char:integer range 0 to 16/8-1;
+	--variable DATA_mem:std_logic_vector(7 downto 0);
 	--variable debug_leds_mem_cursor:integer range 0 to 7:=0;
 	
 	type pen_type is array(15 downto 0) of std_logic_vector(5 downto 0);
@@ -256,35 +259,30 @@ begin
 	if rising_edge(CLK_25MHz) then
 		
 		if MODE_select="00" then
-			NB_PIXEL_PER_OCTET:=2;
+			-- 2 pixel per octet
+			case cursor_pixel is
+				when 0 =>
+					color_patch:=DATA(3) & DATA(1) & DATA(2) & DATA(0);
+				when others =>
+					color_patch:=DATA(7) & DATA(5) & DATA(6) & DATA(4);
+			end case;
 		elsif MODE_select="01" then
-			NB_PIXEL_PER_OCTET:=4;
-		elsif MODE_select="10" then
-			NB_PIXEL_PER_OCTET:=8;
+			-- 4 pixel per octet
+			case cursor_pixel is
+				when 0 =>
+					color_patch:="00" & DATA(1) & DATA(0);
+				when 1 =>
+					color_patch:="00" & DATA(3) & DATA(2);
+				when 2 =>
+					color_patch:="00" & DATA(5) & DATA(4);
+				when others=>
+					color_patch:="00" & DATA(7) & DATA(6);
+			end case;
 		else
-			NB_PIXEL_PER_OCTET:=2;
+			-- 8 pixel per octet
+			color_patch:="000" & DATA(7-cursor_pixel);
 		end if;
-
-		color:=(others=>'0');
-		for i in 2**(MODE_MAX)-1 downto 0 loop
-			if (MODE_select="00" and i<=3)
-			or (MODE_select="01" and i<=1)
-			or (MODE_select="10" and i<=0) then
-				color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel));
-			end if;
-		end loop;
-		if MODE_select="00" then
-			color_patch:=color(3) & color(1) & color(2) & color(0); -- pas relou xD
-			pen_mem:=pen(conv_integer(color_patch));
-		elsif MODE_select="01" then
-			color_patch:="00" & color(3 downto 2);
-			pen_mem:=pen(conv_integer(color_patch));
-		else --if MODE_select="10" then
-			color_patch:="000" & color(3);
-			pen_mem:=pen(conv_integer(color_patch));
-		--else -- MODE 11
-		--	pen_mem:=PEN_MODE_11;
-		end if;
+		pen_mem:=pen(conv_integer(color_patch));
 --		elsif etat_rgb = DO_LED_ON then
 --			pen_mem:=PEN_LED_ON;
 --		elsif etat_rgb = DO_LED_OFF then
@@ -347,29 +345,29 @@ begin
 			--v:=(vertical_counter+VDecal_negatif)/(VZoom);
 			v:=vertical_counter/VZoom;
 			h:=horizontal_counter+HDecal_negatif-BUG_DELAY_ADDRESS;
-			no_char:=(h / 8) mod (CHAR_WIDTH/8);
+			--no_char:=(h / 8) mod (16/8);
 			-- 640×200 pixels with 2 colours ("Mode 2", 80 text columns) donc bien 8 pixels physique par octets
-			if NB_PIXEL_PER_OCTET=2 then
+			if MODE_select="00" then
+				-- 2 pixel per octet
 				cursor_pixel:=((h mod 8) / 4) mod 8;
-				--cursor_pixel:=((h mod 8) / 4) mod 8;
-			elsif NB_PIXEL_PER_OCTET=4 then
+			elsif MODE_select="01" then
+				-- 4 pixel per octet
 				cursor_pixel:=((h mod 8) / 2) mod 8; -- ok
-				--cursor_pixel:=((h mod 8) / 2) mod 8; -- ok
-			elsif NB_PIXEL_PER_OCTET=8 then
+			else
+				-- 8 pixel per octet
 				cursor_pixel:=((h mod 8) / 1) mod 8;
-				--cursor_pixel:=((h mod 8) / 1) mod 8;
 			end if;
-			new_h:=h/CHAR_WIDTH; -- véritablement un octet représente physique 8 pixels, 
+			new_h:=h/8; -- véritablement un octet représente physique 8 pixels, 
 			if is_full_vertical_BORDER then
 				etat_rgb:=DO_BORDER;
 			else
 				etat_rgb:=DO_READ;
 			end if;
 
-			MA:=conv_std_logic_vector(v*(VRAM_HDsp/CHAR_WIDTH),14);
+			MA:=conv_std_logic_vector(v*(VRAM_HDsp/8),15);
 			MA:=new_h+MA;
-			CA:=conv_std_logic_vector(no_char,1);
-			ADDRESS<=MA(13 downto 0) & CA(0);
+			--CA:=conv_std_logic_vector(no_char,1);
+			ADDRESS<=MA(14 downto 0);-- & CA(0);
 		else
 			ADDRESS<= (others=>'0');
 			etat_rgb:=DO_NOTHING_OUT;

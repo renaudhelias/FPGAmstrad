@@ -20,7 +20,7 @@ entity simple_DSK is
            dsk_D : inout  STD_LOGIC_VECTOR (7 downto 0); -- pour l'indexation DSK<=>simple_DSK
            dsk_A : out  STD_LOGIC_VECTOR (20 downto 0);
            dsk_W : out  STD_LOGIC;
-			  dsk_info:in std_logic_vector(5 downto 0);
+			  dsk_info:in std_logic_vector(4 downto 0);
 			  --phase_color : out STD_LOGIC_VECTOR (2 downto 0);
 			  --M1_n:in STD_LOGIC;
 			  dsk_transmit : out STD_LOGIC -- direct transmission between DSK and Z80 following dsk_A/dsk_R/dsk_W
@@ -93,7 +93,7 @@ cortex:process(CLK8(0),reset)
 	-- track 0 ou +
 	-- sector 0 ou +
 	-- return [sectTrack,sectSize,sectId,sectSize]
-	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1;dsk_info:std_logic_vector(5 downto 0)) return chrn_type is
+	function getCHRN (track: in integer range 0 to MAX_TRACKS-1;sector: in integer range 0 to MAX_SECTORS-1;dsk_info:std_logic_vector(4 downto 0)) return chrn_type is
 		variable chrn:chrn_type;
 		variable sector_zone_mem:std_logic_vector(7 downto 0);
 		variable side_mem:std_logic_vector(7 downto 0);
@@ -110,10 +110,9 @@ cortex:process(CLK8(0),reset)
 		return chrn;
 	end getCHRN;
 	-- retourne le pointeur dans memory
-	function getData(chrn: in chrn_type;dsk_info:std_logic) return std_logic_vector is
+	function getData(chrn: in chrn_type) return std_logic_vector is
 		variable address:std_logic_vector(20 downto 0); -- simulator Cannot access 'dsk_a' from inside pure function 'getdata'. --dsk_A'range);
 		variable pff:std_logic_vector(7 downto 0);
-		variable track80:std_logic;
 	begin
 		pff:="0000" & chrn(2)(3 downto 0);
 		pff:=pff-1;
@@ -122,13 +121,8 @@ cortex:process(CLK8(0),reset)
 		--11 00 dsk NOT NOT
 		--10 01 dsk NOT NOT
 		--01 10 dsk NOT NOT
-		if dsk_info='1' then
-			-- changement de formule
-			track80:=not(chrn(0)(6));
-		else
-			track80:='0';
-		end if;
-		address:= track80 & chrn(1)(0) & not(chrn(0)(5)) & not(chrn(0)(4)) & chrn(0)(3 downto 0) & pff(3 downto 0) & "0" & x"00";
+		-- changement de formule
+		address:= chrn(1)(0) & not(chrn(0)(6)) & not(chrn(0)(5)) & not(chrn(0)(4)) & chrn(0)(3 downto 0) & pff(3 downto 0) & "0" & x"00";
 		return address;
 	end getData;
 	variable etat:integer range 0 to 4;
@@ -229,7 +223,7 @@ if do_update then
 								current_byte:=0;
 							end if;
 							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
-							dsk_A_mem:=getData(chrn,dsk_info_mem(5))+current_byte;
+							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_transmit<='1';
 							current_byte:=current_byte+1;
@@ -265,7 +259,7 @@ if do_update then
 								current_byte:=0;
 							end if;
 							chrn:=getCHRN(current_track,current_sector,dsk_info_mem);
-							dsk_A_mem:=getData(chrn,dsk_info_mem(5))+current_byte;
+							dsk_A_mem:=getData(chrn)+current_byte;
 							dsk_A<=dsk_A_mem;
 							dsk_W<='1';
 							data:=D_command;

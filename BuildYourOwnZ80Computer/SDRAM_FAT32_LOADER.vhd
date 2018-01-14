@@ -30,7 +30,7 @@ entity SDRAM_FAT32_LOADER is
 			  spi_init_done : in STD_LOGIC;
 			  --leds:out STD_LOGIC_VECTOR(7 downto 0);
 			  load_init_done:out std_logic;
-			  dsk_info:out std_logic_vector(5 downto 0);
+			  dsk_info:out std_logic_vector(4 downto 0);
 			  key_reset:in std_logic
 			  );
 			  	--attribute keep : string;
@@ -964,7 +964,7 @@ end if;
 		variable gripsou_ram_A_mem:std_logic_vector(gripsou_ram_A'range);
 		type sector_order_type is array(0 to 14) of integer range 0 to 8;
 		variable sector_order:sector_order_type;
-		variable dsk_info_mem:std_logic_vector(5 downto 0);
+		variable dsk_info_mem:std_logic_vector(4 downto 0);
 		variable no_track_mem:std_logic_vector(6 downto 0);
 	begin
 		--is_ucpm<=ucpm;
@@ -1020,11 +1020,6 @@ end if;
 						end if;
 					when 2=>
 						nb_tracks:=conv_integer(data_mem);
-						if nb_tracks<32+16 then
-							dsk_info_mem(5):='0'; -- is40tracks
-						else
-							dsk_info_mem(5):='1'; -- is80tracks
-						end if;
 						input_A:=input_A+1;
 						gripsou_step:=3;
 					when 3=>
@@ -1091,10 +1086,8 @@ end if;
 						--11 00 dsk NOT NOT
 						--10 01 dsk NOT NOT
 						--01 10 dsk NOT NOT
-						if dsk_info_mem(5)='1' then -- is80tracks
-							-- changement de formule => 2MB RAM
-							no_track_mem(6):=not(no_track_mem(6));
-						end if;
+						-- changement de formule => 2MB RAM or 512KB RAM
+						no_track_mem(6):=not(no_track_mem(6));
 						no_track_mem(5):=not(no_track_mem(5));
 						no_track_mem(4):=not(no_track_mem(4));
 						input_A:=input_A+1;
@@ -1185,7 +1178,7 @@ end if;
 						end if;
 					when 18=> -- data transmit
 						-- no_side on A(19) for 2MB compatibility of most games.
-						gripsou_ram_A_mem:=no_track_mem(6) & no_side & no_track_mem(5 downto 0) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
+						gripsou_ram_A_mem:=no_side & no_track_mem(6 downto 0) & conv_std_logic_vector(sector_order(no_sect),4) & input_A(8 downto 0);
 						--if no_track<32 then -- 2^5=32 donc de 0 à 31, donc moins de 40 !
 							gripsou_ram_W<='1';
 						--end if;

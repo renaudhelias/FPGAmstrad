@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_motherboard">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-13T22:58:39</timestamp>
+    <timestamp>2018-1-14T16:48:55</timestamp>
     <pin polarity="Input" x="0" y="-736" name="init_A(20:0)" />
     <pin polarity="Input" x="0" y="-640" name="init_W_n" />
     <pin polarity="Input" x="0" y="-544" name="CLK16MHz" />
@@ -10,7 +10,7 @@
     <pin polarity="Input" x="0" y="-160" name="RESET_n" />
     <pin polarity="Input" x="448" y="-96" name="JOYSTICK1(6:0)" />
     <pin polarity="Input" x="0" y="112" name="CLK_PWM" />
-    <pin polarity="Input" x="0" y="496" name="dsk_info(5:0)" />
+    <pin polarity="Input" x="0" y="496" name="dsk_info(4:0)" />
     <pin polarity="BiDirectional" x="448" y="-160" name="ram_D(7:0)" />
     <pin polarity="Output" x="448" y="-544" name="CLK8(2:0)" />
     <pin polarity="Output" x="448" y="-608" name="ram_A(20:0)" />
@@ -34,7 +34,7 @@
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-160" type="pin RESET_n" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-96" type="pin JOYSTICK1(6:0)" />
         <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="112" type="pin CLK_PWM" />
-        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="496" type="pin dsk_info(5:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="496" type="pin dsk_info(4:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-160" type="pin ram_D(7:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-544" type="pin CLK8(2:0)" />
         <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="376" y="-608" type="pin ram_A(20:0)" />

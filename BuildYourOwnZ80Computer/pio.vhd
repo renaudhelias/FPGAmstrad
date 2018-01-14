@@ -407,7 +407,7 @@ begin
 			END IF;
 			DO <= DO_mem;
 		else
-			DO_mem:=x"FF";
+			--DO_mem:=x"FF";
 			DO <= (others=>'Z');
 		END IF;
 		

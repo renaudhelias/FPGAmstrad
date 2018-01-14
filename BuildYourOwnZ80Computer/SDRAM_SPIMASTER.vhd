@@ -53,7 +53,7 @@ architecture Behavioral of SDRAM_SPIMASTER is
 	
 	constant APP_CMD:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(55,6); -- à lancer avant une ACMD
 	constant SD_SEND_OP_COND:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(41,6); -- mieux que SEND_OP_COND
-	constant SEND_OP_COND:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(1,6);
+	--constant SEND_OP_COND:STD_LOGIC_VECTOR (5 downto 0):=conv_std_logic_vector(1,6);
 	
 	
 	signal ram_T:boolean:=false;
