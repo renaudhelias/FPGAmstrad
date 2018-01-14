@@ -110,8 +110,8 @@ entity aZRaEL_vram2vgaAmstradMiaow is
 				  VRAM_HDsp:integer:=800; --suivant les mode, le nombre de pixels affichés est constant !
 				  VRAM_VDsp:integer:=300; --600/2
 				  --DEBUG_LEDS_W:integer:=32
-				  BUG_DELAY_ADDRESS:integer:=8+8;
-				  BUG_DELAY_DATA:integer:=2;
+				  BUG_DELAY_ADDRESS:integer:=8+8+2;
+				  --BUG_DELAY_DATA:integer:=0;--2;
 				  BUG_DELAY_PALETTE:integer:=1
 		  );
     Port ( DATA : in  STD_LOGIC_VECTOR (7 downto 0); -- buffer
@@ -135,10 +135,6 @@ architecture Behavioral of aZRaEL_vram2vgaAmstradMiaow is
 	--constant DO_LED_ON: integer range 0 to 3:=2;
 	--constant DO_LED_OFF: integer range 0 to 3:=3;
 	
-	constant DO_NOTHING : STD_LOGIC:='0';
-	constant DO_HSYNC : STD_LOGIC:='1';
-	constant DO_VSYNC : STD_LOGIC:='1';
-
 	--constant VDecal_negatif:integer:=(600-480)/2;
 	constant HDecal_negatif:integer:=(800-640)/2;
 	
@@ -209,23 +205,15 @@ aZRaEL_vram2vgaAmstrad_process : process(CLK_25MHz) is
 	--constant PALETTE_H_OFFSET:integer:=16+1; --HTot/HardHZoom-16-1;
 	--constant PALETTE_V_OFFSET:integer:=0; --VTot;
 	variable palette_action:integer range 0 to 2:=0;
-	variable palette_action_retard:integer range 0 to 2:=0;
 	constant DO_MODE:integer:=1;
 	constant DO_COLOR:integer:=2;
 	variable palette_color:integer range 0 to 16-1;
-	variable palette_color_retard:integer range 0 to 16-1:=0;
 	variable palette_A_mem:std_logic_vector(palette_A'range):=(others=>'0');
 	
 	variable etat_rgb : integer range 0 to 2:=DO_NOTHING_OUT;
-	variable etat_rgb_retard : integer range 0 to 2:=DO_NOTHING_OUT;
-	variable etat_hsync : STD_LOGIC:=DO_NOTHING;
-	variable etat_hsync_retard : STD_LOGIC:=DO_NOTHING;
-	variable etat_vsync : STD_LOGIC:=DO_NOTHING;
-	variable etat_vsync_retard : STD_LOGIC:=DO_NOTHING;
 	variable color : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
 	variable color_patch : STD_LOGIC_VECTOR(2**(MODE_MAX)-1 downto 0);
 	variable cursor_pixel : integer range 0 to NB_PIXEL_PER_OCTET_MAX-1;
-	variable cursor_pixel_retard : integer range 0 to NB_PIXEL_PER_OCTET_MAX-1;
 	variable v:integer range 0 to 256-1;
 	variable h:integer range 0 to CHAR_WIDTH*128*8-1;
 	variable new_h:integer range 0 to 128*8-1;
@@ -277,13 +265,12 @@ begin
 			NB_PIXEL_PER_OCTET:=2;
 		end if;
 
-		cursor_pixel_retard:=cursor_pixel;
 		color:=(others=>'0');
 		for i in 2**(MODE_MAX)-1 downto 0 loop
 			if (MODE_select="00" and i<=3)
 			or (MODE_select="01" and i<=1)
 			or (MODE_select="10" and i<=0) then
-				color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel_retard));
+				color(3-i):=DATA(i*NB_PIXEL_PER_OCTET+(NB_PIXEL_PER_OCTET-1-cursor_pixel));
 			end if;
 		end loop;
 		if MODE_select="00" then
@@ -302,39 +289,31 @@ begin
 --			pen_mem:=PEN_LED_ON;
 --		elsif etat_rgb = DO_LED_OFF then
 --			pen_mem:=PEN_LED_OFF;
-		if etat_rgb_retard = DO_BORDER then
+		if etat_rgb = DO_BORDER then
 			pen_mem:=border_mem;
-		elsif etat_rgb_retard /= DO_READ then
+		elsif etat_rgb /= DO_READ then
 			pen_mem:=PEN_NONE;
 		end if;
-		etat_rgb_retard:=etat_rgb;
 		
-		if etat_hsync_retard = DO_HSYNC then
-			--hsync<='1' xor nhsync;
+		
+		
+		if horizontal_counter>=HSS and horizontal_counter<HSE then
 			hsync_mem:='1' xor nhsync;
 		else
-			--hsync<='0' xor nhsync;
 			hsync_mem:='0' xor nhsync;
 		end if;
-		etat_hsync_retard:=etat_hsync;
-		if etat_vsync_retard = DO_VSYNC then
-			--vsync<='1' xor nvsync;
+		if vertical_counter>=VSS and vertical_counter<VSE then
 			vsync_mem:='1' xor nvsync;
 		else
-			--vsync<='0' xor nvsync;
 			vsync_mem:='0' xor nvsync;
 		end if;
-		etat_vsync_retard:=etat_vsync;
 
---puis la palette c'est celle du 800x600... pas du 640x400
--- puis c'est trop petit cet RAM, à peine de quoi afficher 60 lignes en 33o par palette et 100 lignes en 32*5bit+2bit
---donc il faudrai au minimum tripler la mémoire si on la joue serré, ou au maximum multiplier par 5
---Number of RAMB16s: 18 out of      20   90% => on peut triper la mémoire mais pas plus
 
-		
---		MODE_select<="10"; -- para pruebas
 
-		if palette_action_retard=DO_MODE then
+
+		-- palette a un offset par rapport aux pixels affichés, donc OK
+
+		if palette_action=DO_MODE then
 			MODE_select<=palette_D(1 downto 0);
 			border_mem:=palette(conv_integer(palette_D(7 downto 3)));
 			if palette_D(2)='1' then
@@ -342,15 +321,27 @@ begin
 			else
 				is_full_vertical_BORDER:=false;
 			end if;
-		elsif palette_action_retard=DO_COLOR then
+		elsif palette_action=DO_COLOR then
 			--WARNING:PhysDesignRules:367 - The signal <XLXI_511/XLXI_476/Mram_pen_RAMD_D1_O>
 			--is incomplete. The signal does not drive any load pins in the design.
 		
-			pen(palette_color_retard):=palette(conv_integer(palette_D(4 downto 0)));
+			pen(palette_color):=palette(conv_integer(palette_D(4 downto 0)));
 		end if;
-		palette_action_retard:=palette_action;
-		palette_color_retard:=palette_color;
 
+
+		-- rendering D of A, A++, A->D
+		
+		horizontal_counter:=horizontal_counter+1;
+		if horizontal_counter>=HTot then
+			horizontal_counter:=0;
+		end if;
+		if horizontal_counter=0 then
+			vertical_counter:=vertical_counter+1;
+			if vertical_counter>=VTot then
+				vertical_counter:=0;
+			end if;
+		end if;
+		
 		
 		if horizontal_counter<HDsp and vertical_counter<VDsp then
 			--v:=(vertical_counter+VDecal_negatif)/(VZoom);
@@ -359,13 +350,13 @@ begin
 			no_char:=(h / 8) mod (CHAR_WIDTH/8);
 			-- 640×200 pixels with 2 colours ("Mode 2", 80 text columns) donc bien 8 pixels physique par octets
 			if NB_PIXEL_PER_OCTET=2 then
-				cursor_pixel:=(((h-BUG_DELAY_DATA+8) mod 8) / 4) mod 8;
+				cursor_pixel:=((h mod 8) / 4) mod 8;
 				--cursor_pixel:=((h mod 8) / 4) mod 8;
 			elsif NB_PIXEL_PER_OCTET=4 then
-				cursor_pixel:=(((h-BUG_DELAY_DATA+8) mod 8) / 2) mod 8; -- ok
+				cursor_pixel:=((h mod 8) / 2) mod 8; -- ok
 				--cursor_pixel:=((h mod 8) / 2) mod 8; -- ok
 			elsif NB_PIXEL_PER_OCTET=8 then
-				cursor_pixel:=(((h-BUG_DELAY_DATA+8) mod 8) / 1) mod 8;
+				cursor_pixel:=((h mod 8) / 1) mod 8;
 				--cursor_pixel:=((h mod 8) / 1) mod 8;
 			end if;
 			new_h:=h/CHAR_WIDTH; -- véritablement un octet représente physique 8 pixels, 
@@ -384,28 +375,6 @@ begin
 			etat_rgb:=DO_NOTHING_OUT;
 		end if;
 		
-		
-		if horizontal_counter>=HSS and horizontal_counter<HSE then
-			etat_hsync:=DO_HSYNC;
-		else
-			etat_hsync:=DO_NOTHING;
-		end if;
-		if vertical_counter>=VSS and vertical_counter<VSE then
-			etat_vsync:=DO_VSYNC;
-		else
-			etat_vsync:=DO_NOTHING;
-		end if;
-
-		horizontal_counter:=horizontal_counter+1;
-		if horizontal_counter>=HTot then
-			horizontal_counter:=0;
-		end if;
-		if horizontal_counter=0 then
-			vertical_counter:=vertical_counter+1;
-			if vertical_counter>=VTot then
-				vertical_counter:=0;
-			end if;
-		end if;
 		
 		
 		if vertical_counter mod 2 = 0 then
@@ -432,8 +401,7 @@ begin
 		end if;
 		palette_A<=palette_A_mem;
 		
-		
-		
+
 		
 		
 		
