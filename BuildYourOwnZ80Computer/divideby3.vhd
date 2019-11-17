@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity divideby3 is
     Port ( CLK50MHz : in  STD_LOGIC;
-           CLK25MHz : out  STD_LOGIC; -- divide by 2
+           --CLK25MHz : out  STD_LOGIC; -- divide by 2
            CLK16MHz : out  STD_LOGIC -- divide by 3
 			  );
 end divideby3;
@@ -52,13 +52,13 @@ begin
 		end if;
 	end process;
 	
-	process(CLK50MHz) is
-	variable CLK25MHz_mem:std_logic:='0';
-	begin
-		if falling_edge(CLK50MHz) then
-			CLK25MHz_mem:=not(CLK25MHz_mem);
-			CLK25MHz<=CLK25MHz_mem;
-		end if;
-	end process;
+	--process(CLK50MHz) is
+	--variable CLK25MHz_mem:std_logic:='0';
+	--begin
+	--	if falling_edge(CLK50MHz) then
+	--		CLK25MHz_mem:=not(CLK25MHz_mem);
+	--		CLK25MHz<=CLK25MHz_mem;
+	--	end if;
+	--end process;
 end Behavioral;
 

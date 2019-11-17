@@ -4,6 +4,7 @@ summary.log
 xilinx_syncram_dp.asy
 xilinx_syncram_dp.gise
 xilinx_syncram_dp.ngc
+xilinx_syncram_dp.sym
 xilinx_syncram_dp.vhd
 xilinx_syncram_dp.vho
 xilinx_syncram_dp.xco

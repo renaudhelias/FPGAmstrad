@@ -22,7 +22,7 @@
 --    devices, or systems.  Use in such applications are expressly            --
 --    prohibited.                                                             --
 --                                                                            --
---    (c) Copyright 1995-2017 Xilinx, Inc.                                    --
+--    (c) Copyright 1995-2019 Xilinx, Inc.                                    --
 --    All rights reserved.                                                    --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ END COMPONENT;
       c_has_mem_output_regs_a => 0,
       c_has_mem_output_regs_b => 0,
       c_has_mux_output_regs_a => 0,
-      c_has_mux_output_regs_b => 1,
+      c_has_mux_output_regs_b => 0,
       c_has_regcea => 0,
       c_has_regceb => 0,
       c_has_rsta => 0,
@@ -131,7 +131,7 @@ END COMPONENT;
       c_web_width => 1,
       c_write_depth_a => 8192,
       c_write_depth_b => 8192,
-      c_write_mode_a => "WRITE_FIRST",
+      c_write_mode_a => "NO_CHANGE",
       c_write_mode_b => "NO_CHANGE",
       c_write_width_a => 8,
       c_write_width_b => 8,

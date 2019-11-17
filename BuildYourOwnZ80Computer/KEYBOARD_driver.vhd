@@ -16,7 +16,7 @@ entity KEYBOARD_driver is
 end KEYBOARD_driver;
 
 architecture Behavioral of KEYBOARD_driver is
-		type amstrad_decode_type is array(0 to 15,0 to 7) of STD_LOGIC_VECTOR(7 downto 0); --integer range 0 to 127;
+		type amstrad_decode_type is array(0 to 9,0 to 7) of STD_LOGIC_VECTOR(7 downto 0); --integer range 0 to 127;
 		constant RESET_KEY:STD_LOGIC_VECTOR(7 downto 0):=x"7D"; -- page up
 		constant NO_KEY:STD_LOGIC_VECTOR(7 downto 0):=x"FF"; -- x"00" is also another candidate of "NO_KEY" in PC 102 keyboard
 	constant amstrad_decode:amstrad_decode_type:=(
@@ -29,13 +29,13 @@ architecture Behavioral of KEYBOARD_driver is
 			(x"36",x"2E",x"2D",x"2C",x"34",x"2B",x"32",x"2A"), --  6 ligne 13 6_ 5_ R T G F B V
 			(x"25",x"26",x"24",x"1D",x"1B",x"23",x"21",x"22"), --  7 ligne 12 4_ 3_ E W S D C X
 			(x"16",x"1E",x"76",x"15",x"0D",x"1C",x"58",x"1A"), --  8 ligne 11 1_ 2_ ESC Q TAB A CAPSLOCK Z
-			(NO_KEY,NO_KEY,NO_KEY,NO_KEY,NO_KEY,NO_KEY,NO_KEY,x"66"), --  9 ligne 2 DEL
-			(others=>NO_KEY), -- 10 osef
-			(others=>NO_KEY), -- 11 osef
-			(others=>NO_KEY), -- 12 osef
-			(others=>NO_KEY), -- 13 osef
-			(others=>NO_KEY), -- 14 osef
-			(others=>NO_KEY) -- 15 osef
+			(NO_KEY,NO_KEY,NO_KEY,NO_KEY,NO_KEY,NO_KEY,NO_KEY,x"66") --  9 ligne 2 DEL
+			--(others=>NO_KEY), -- 10 osef
+			--(others=>NO_KEY), -- 11 osef
+			--(others=>NO_KEY), -- 12 osef
+			--(others=>NO_KEY), -- 13 osef
+			--(others=>NO_KEY), -- 14 osef
+			--(others=>NO_KEY) -- 15 osef
 			
 			);
 	type keyb_type is array(7 downto 0) of std_logic_vector(7 downto 0);
@@ -47,7 +47,6 @@ begin
 	keybscan : process(CLK)
 		variable keyb_mem:keyb_type:=(others=>(others=>'0'));
 	begin
-		keyb<=keyb_mem;
 		if rising_edge(CLK) then
 			if unpress='1' then
 				for i in keyb'range loop
@@ -81,6 +80,8 @@ begin
 					keyb_mem:=(others=>(others=>'0'));
 				end if;
 			end if;
+			keyb<=keyb_mem;
+
 		end if;
 	end process;
 			
@@ -88,7 +89,6 @@ begin
 	key_reset_scan : process(CLK)
 		variable key_reset_mem:std_logic:='0';
 	begin
-		key_reset<=key_reset_mem;
 		if rising_edge(CLK) then
 			if RESET_KEY=keycode(7 downto 0) then
 				if unpress='1' then
@@ -97,6 +97,7 @@ begin
 					key_reset_mem:='1';
 				end if;
 			end if;
+			key_reset<=key_reset_mem;
 		end if;
 	end process;
 

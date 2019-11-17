@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="amstrad_video">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2018-1-4T21:5:33</timestamp>
+    <timestamp>2019-11-16T19:8:18</timestamp>
     <pin polarity="Input" x="0" y="-480" name="crtc_W" />
     <pin polarity="Input" x="0" y="-416" name="crtc_D(7:0)" />
     <pin polarity="Input" x="0" y="-352" name="crtc_A(14:0)" />

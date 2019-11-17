@@ -19,10 +19,10 @@
         <signal name="VSYNC" />
         <signal name="XLXN_693(14:0)" />
         <signal name="XLXN_694(12:0)" />
+        <signal name="XLXN_705(7:0)" />
         <signal name="RED3(2:0)" />
         <signal name="GREEN3(2:0)" />
         <signal name="BLUE3(2:0)" />
-        <signal name="XLXN_705(7:0)" />
         <port polarity="Input" name="crtc_W" />
         <port polarity="Input" name="crtc_D(7:0)" />
         <port polarity="Input" name="crtc_A(14:0)" />
@@ -67,7 +67,13 @@
             <line x2="384" y1="-352" y2="-352" x1="320" />
         </blockdef>
         <blockdef name="aZRaEL_vram2vgaAmstradMiaow">
-            <timestamp>2017-12-30T14:25:33</timestamp>
+            <timestamp>2019-11-16T18:57:24</timestamp>
+            <rect width="64" x="448" y="20" height="24" />
+            <line x2="512" y1="32" y2="32" x1="448" />
+            <rect width="64" x="448" y="84" height="24" />
+            <line x2="512" y1="96" y2="96" x1="448" />
+            <rect width="64" x="448" y="148" height="24" />
+            <line x2="512" y1="160" y2="160" x1="448" />
             <line x2="0" y1="-416" y2="-416" x1="64" />
             <rect width="64" x="0" y="-236" height="24" />
             <line x2="0" y1="-224" y2="-224" x1="64" />
@@ -79,13 +85,7 @@
             <line x2="512" y1="-288" y2="-288" x1="448" />
             <rect width="64" x="448" y="-236" height="24" />
             <line x2="512" y1="-224" y2="-224" x1="448" />
-            <rect width="64" x="448" y="-172" height="24" />
-            <line x2="512" y1="-160" y2="-160" x1="448" />
-            <rect width="64" x="448" y="-108" height="24" />
-            <line x2="512" y1="-96" y2="-96" x1="448" />
-            <rect width="64" x="448" y="-44" height="24" />
-            <line x2="512" y1="-32" y2="-32" x1="448" />
-            <rect width="384" x="64" y="-444" height="444" />
+            <rect width="384" x="64" y="-444" height="636" />
         </blockdef>
         <block symbolname="VRAM32Ko_Amstrad" name="XLXI_474">
             <blockpin signalname="CLK4MHz" name="vram_CLK" />
@@ -113,9 +113,9 @@
             <blockpin signalname="HSYNC" name="HSYNC" />
             <blockpin signalname="XLXN_693(14:0)" name="ADDRESS(14:0)" />
             <blockpin signalname="XLXN_694(12:0)" name="PALETTE_A(12:0)" />
-            <blockpin signalname="RED3(2:0)" name="RED3(2:0)" />
-            <blockpin signalname="GREEN3(2:0)" name="GREEN3(2:0)" />
-            <blockpin signalname="BLUE3(2:0)" name="BLUE3(2:0)" />
+            <blockpin signalname="RED3(2:0)" name="RED(2:0)" />
+            <blockpin signalname="GREEN3(2:0)" name="GREEN(2:0)" />
+            <blockpin signalname="BLUE3(2:0)" name="BLUE(2:0)" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
@@ -196,22 +196,22 @@
             <wire x2="320" y1="672" y2="672" x1="224" />
             <wire x2="320" y1="672" y2="880" x1="320" />
         </branch>
-        <branch name="RED3(2:0)">
-            <wire x2="2240" y1="880" y2="880" x1="1984" />
-        </branch>
-        <branch name="GREEN3(2:0)">
-            <wire x2="2240" y1="944" y2="944" x1="1984" />
-        </branch>
-        <iomarker fontsize="28" x="2240" y="880" name="RED3(2:0)" orien="R0" />
-        <iomarker fontsize="28" x="2240" y="944" name="GREEN3(2:0)" orien="R0" />
-        <branch name="BLUE3(2:0)">
-            <wire x2="2240" y1="1008" y2="1008" x1="1984" />
-        </branch>
-        <iomarker fontsize="28" x="2240" y="1008" name="BLUE3(2:0)" orien="R0" />
         <branch name="XLXN_705(7:0)">
             <wire x2="1152" y1="880" y2="880" x1="928" />
             <wire x2="1152" y1="816" y2="880" x1="1152" />
             <wire x2="1472" y1="816" y2="816" x1="1152" />
         </branch>
+        <branch name="RED3(2:0)">
+            <wire x2="2240" y1="1072" y2="1072" x1="1984" />
+        </branch>
+        <branch name="GREEN3(2:0)">
+            <wire x2="2240" y1="1136" y2="1136" x1="1984" />
+        </branch>
+        <branch name="BLUE3(2:0)">
+            <wire x2="2240" y1="1200" y2="1200" x1="1984" />
+        </branch>
+        <iomarker fontsize="28" x="2240" y="1072" name="RED3(2:0)" orien="R0" />
+        <iomarker fontsize="28" x="2240" y="1136" name="GREEN3(2:0)" orien="R0" />
+        <iomarker fontsize="28" x="2240" y="1200" name="BLUE3(2:0)" orien="R0" />
     </sheet>
 </drawing>

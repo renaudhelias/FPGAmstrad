@@ -18,7 +18,6 @@
         <signal name="RED3(2:0)" />
         <signal name="VSYNC" />
         <signal name="HSYNC" />
-        <signal name="XLXN_646" />
         <signal name="XLXN_717" />
         <signal name="ram_W_n" />
         <signal name="ram_A(20:0)" />
@@ -77,7 +76,7 @@
             <rect width="368" x="64" y="-704" height="816" />
         </blockdef>
         <blockdef name="amstrad_video">
-            <timestamp>2018-1-4T21:5:33</timestamp>
+            <timestamp>2019-11-16T19:8:18</timestamp>
             <rect width="64" x="0" y="20" height="24" />
             <line x2="0" y1="32" y2="32" x1="64" />
             <rect width="64" x="0" y="84" height="24" />
@@ -101,7 +100,7 @@
             <rect width="336" x="64" y="-640" height="880" />
         </blockdef>
         <blockdef name="amstrad_motherboard">
-            <timestamp>2018-1-14T16:48:55</timestamp>
+            <timestamp>2019-11-17T16:3:44</timestamp>
             <line x2="448" y1="496" y2="496" x1="384" />
             <line x2="448" y1="272" y2="272" x1="384" />
             <rect width="64" x="384" y="324" height="24" />
@@ -136,10 +135,9 @@
             <line x2="0" y1="496" y2="496" x1="64" />
         </blockdef>
         <blockdef name="divideby3">
-            <timestamp>2017-12-30T17:17:25</timestamp>
+            <timestamp>2019-11-16T15:35:8</timestamp>
             <rect width="256" x="64" y="-128" height="128" />
             <line x2="0" y1="-96" y2="-96" x1="64" />
-            <line x2="384" y1="-96" y2="-96" x1="320" />
             <line x2="384" y1="-32" y2="-32" x1="320" />
         </blockdef>
         <block symbolname="bootloader_sd" name="XLXI_462">
@@ -160,7 +158,7 @@
             <blockpin signalname="XLXN_732(7:0)" name="crtc_D(7:0)" />
             <blockpin signalname="crtc_A(14:0)" name="crtc_A(14:0)" />
             <blockpin signalname="CLK8(2)" name="CLK4MHz" />
-            <blockpin signalname="XLXN_646" name="CLK25MHz" />
+            <blockpin signalname="CLK50MHz" name="CLK25MHz" />
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
             <blockpin signalname="XLXN_745(12:0)" name="palette_A(12:0)" />
             <blockpin signalname="XLXN_744" name="palette_W" />
@@ -183,7 +181,6 @@
             <blockpin signalname="ram_D(7:0)" name="ram_D(7:0)" />
             <blockpin signalname="CLK8(2:0)" name="CLK8(2:0)" />
             <blockpin signalname="ram_A(20:0)" name="ram_A(20:0)" />
-            <blockpin signalname="AUDIO_R" name="audio_BC" />
             <blockpin signalname="crtc_A(15:0)" name="crtc_A(15:0)" />
             <blockpin signalname="XLXN_731" name="crtc_W" />
             <blockpin signalname="ram_W_n" name="ram_W_n" />
@@ -193,10 +190,10 @@
             <blockpin signalname="XLXN_746(7:0)" name="palette_D(7:0)" />
             <blockpin signalname="XLXN_750" name="key_reset" />
             <blockpin signalname="AUDIO_L" name="audio_AB" />
+            <blockpin signalname="AUDIO_R" name="audio_BC" />
         </block>
         <block symbolname="divideby3" name="XLXI_514">
             <blockpin signalname="CLK50MHz" name="CLK50MHz" />
-            <blockpin signalname="XLXN_646" name="CLK25MHz" />
             <blockpin signalname="XLXN_717" name="CLK16MHz" />
         </block>
     </netlist>
@@ -239,15 +236,14 @@
         </branch>
         <iomarker fontsize="28" x="4848" y="880" name="VSYNC" orien="R0" />
         <iomarker fontsize="28" x="4832" y="992" name="HSYNC" orien="R0" />
-        <branch name="XLXN_646">
-            <wire x2="1200" y1="1152" y2="1152" x1="992" />
-            <wire x2="3840" y1="928" y2="928" x1="1200" />
-            <wire x2="3840" y1="928" y2="1456" x1="3840" />
-            <wire x2="4320" y1="1456" y2="1456" x1="3840" />
-            <wire x2="1200" y1="928" y2="1152" x1="1200" />
-        </branch>
         <branch name="CLK50MHz">
-            <wire x2="608" y1="1152" y2="1152" x1="384" />
+            <wire x2="560" y1="1152" y2="1152" x1="384" />
+            <wire x2="608" y1="1152" y2="1152" x1="560" />
+            <wire x2="2032" y1="848" y2="848" x1="560" />
+            <wire x2="3168" y1="848" y2="848" x1="2032" />
+            <wire x2="3168" y1="848" y2="1456" x1="3168" />
+            <wire x2="4320" y1="1456" y2="1456" x1="3168" />
+            <wire x2="560" y1="848" y2="1152" x1="560" />
         </branch>
         <branch name="ram_W_n">
             <wire x2="1936" y1="1264" y2="1264" x1="1872" />

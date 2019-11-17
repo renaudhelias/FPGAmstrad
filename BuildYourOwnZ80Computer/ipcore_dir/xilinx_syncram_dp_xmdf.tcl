@@ -223,6 +223,10 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path xilinx_syncr
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type ngc
 incr fcount
 
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path xilinx_syncram_dp.sym
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type symbol
+incr fcount
+
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path xilinx_syncram_dp.vhd
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type vhdl
 incr fcount

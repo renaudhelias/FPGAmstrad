@@ -24,7 +24,7 @@ entity simple_GateArrayInterrupt is
   VRAM_HDsp:integer:=800/16; -- des mots de 16bit, contenant plus ou moins de pixels... pensons en référence mode 2, du 800x600 mode 2
   VRAM_VDsp:integer:=600/2;
   VRAM_Hoffset:integer:=12; -- 63*16-46*16
-  VRAM_Voffset:integer:=14+(600/2-480/2)/2 -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
+  VRAM_Voffset:integer:=14 --+(600/2-480/2)/2 -- n'influe pas sur superposition rupture-ink image (car eux dépendent du temps), influe seulement sur position image sur l'écran
   --VDecal_negatif:integer:=(600-480)/2
 	);
     Port ( CLK8 : in  STD_LOGIC_VECTOR(2 downto 0);
@@ -97,7 +97,7 @@ architecture Behavioral of simple_GateArrayInterrupt is
 
 	type pen_type is array(15 downto 0) of integer range 0 to 31;
 	signal pen:pen_type; --:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
-	signal border:integer range 0 to 31;
+	--signal border:integer range 0 to 31;
 	--signal crtc_A_i:STD_LOGIC_VECTOR (15 downto 0); -- test A/D
 begin
 
@@ -152,9 +152,8 @@ ctrcConfig_process:process(CLK4MHz,reset) is
 	variable border_ink:STD_LOGIC;
 	variable ink_color:STD_LOGIC_VECTOR(4 downto 0);
 	variable pen_mem:pen_type;--:=(4,12,21,28,24,29,12,5,13,22,6,23,30,0,31,14);
-	variable border_mem:integer range 0 to 31;
+	--variable border_mem:integer range 0 to 31;
 begin
-	pen<=pen_mem;
 	if reset='1' then
 		Dout<=(others=>'Z'); -- relax
 	elsif rising_edge(CLK4MHz) then
@@ -170,9 +169,9 @@ begin
 					if border_ink='0' then
 						pen_mem(conv_integer(ink)):=conv_integer(ink_color);
 						pen<=pen_mem;
-					else
-						border_mem:=conv_integer(ink_color);
-						border<=border_mem;
+					--else
+					--	border_mem:=conv_integer(ink_color);
+					--	border<=border_mem;
 					end if;
 				end if;
 			end if;
@@ -243,41 +242,44 @@ begin
 			else
 				-- A9_READ
 				Dout<=(others=>'1');
-				if A15_A14_A9_A8(0)='1' then
-					if reg_select32 = x"0A" then -- R10
-						Dout<=registres(10) and x"7f"; -- applying the write mask here
-					elsif reg_select32 = x"0B" then -- R11
-						Dout<=registres(11) and x"1f"; -- applying the write mask here
-					elsif reg_select32 = x"0C" then -- R12
-						--CRTC0 HD6845S/MC6845: Start Address Registers (R12 and R13) can be read.
-						Dout<=registres(12) and x"3f";  -- applying the write mask here
-					elsif reg_select32 = x"0D" then -- R13
-						Dout<=registres(13); -- type 0
-						--CRTC0 HD6845S/MC6845: Start Address Registers (R12 and R13) can be read.
-					elsif reg_select32 = x"0E" then -- R14
-						Dout<=registres(14) and x"3f"; -- applying the write mask here
-					elsif reg_select32 = x"0F" then -- R15	
-						Dout<=registres(15);-- all types
-					elsif reg_select32 = x"10" then -- R16
-						--	Light Pen Address (read only, don't dependant on write !!!) - "Emulator Sucks"
-						Dout<=x"00"; --registres(16) and x"3f";-- all types
-					elsif reg_select32 = x"11" then -- R17
-						--	Light Pen Address (read only, don't dependant on write !!!) - "Emulator Sucks"
-						Dout<=x"00"; --registres(17);-- all types
-					elsif reg_select32 = x"FF" then
-						-- registers 18-30 read as 0 on type1, register 31 reads as 0x0ff.
-						Dout<=x"FF";
-					else
-						-- 1. On type 0 and 1, if a Write Only register is read from, "0" is returned.
-						-- registers 18-31 read as 0, on type 0 and 2.
-						-- registers 18-30 read as 0 on type1
-						Dout<=x"00";
-					end if;
-				end if;
+--				if A15_A14_A9_A8(0)='1' then
+--					if reg_select32 = x"0A" then -- R10
+--						Dout<=registres(10) and x"7f"; -- applying the write mask here
+--					elsif reg_select32 = x"0B" then -- R11
+--						Dout<=registres(11) and x"1f"; -- applying the write mask here
+--					elsif reg_select32 = x"0C" then -- R12
+--						--CRTC0 HD6845S/MC6845: Start Address Registers (R12 and R13) can be read.
+--						Dout<=registres(12) and x"3f";  -- applying the write mask here
+--					elsif reg_select32 = x"0D" then -- R13
+--						Dout<=registres(13); -- type 0
+--						--CRTC0 HD6845S/MC6845: Start Address Registers (R12 and R13) can be read.
+--					elsif reg_select32 = x"0E" then -- R14
+--						Dout<=registres(14) and x"3f"; -- applying the write mask here
+--					elsif reg_select32 = x"0F" then -- R15	
+--						Dout<=registres(15);-- all types
+--					elsif reg_select32 = x"10" then -- R16
+--						--	Light Pen Address (read only, don't dependant on write !!!) - "Emulator Sucks"
+--						Dout<=x"00"; --registres(16) and x"3f";-- all types
+--					elsif reg_select32 = x"11" then -- R17
+--						--	Light Pen Address (read only, don't dependant on write !!!) - "Emulator Sucks"
+--						Dout<=x"00"; --registres(17);-- all types
+--					elsif reg_select32 = x"FF" then
+--						-- registers 18-30 read as 0 on type1, register 31 reads as 0x0ff.
+--						Dout<=x"FF";
+--					else
+--						-- 1. On type 0 and 1, if a Write Only register is read from, "0" is returned.
+--						-- registers 18-31 read as 0, on type 0 and 2.
+--						-- registers 18-30 read as 0 on type1
+--						Dout<=x"00";
+--					end if;
+--				end if;
 			end if;
 		else
 			Dout<=(others=>'Z');
 		end if;
+		
+		pen<=pen_mem;
+
 	end if;
 end process ctrcConfig_process;
 
@@ -543,11 +545,11 @@ end if;
 				palette_A<=palette_A_mem(12 downto 0);
 				--if bug_has_top_disp then
 				--	palette_D_mem:="000000" & MODE_select;
-				if dispH='1' and dispV='1' then
+				--if dispH='1' and dispV='1' then
 					palette_D_mem:="000000" & MODE_select;
-				else
-					palette_D_mem:=conv_std_logic_vector(border,5) & "1" & MODE_select;
-				end if;
+				--else
+				--	palette_D_mem:=conv_std_logic_vector(border,5) & "1" & MODE_select;
+				--end if;
 				palette_D<=palette_D_mem;
 				if palette_A_mem(13)='0' then
 					palette_W<='1';
